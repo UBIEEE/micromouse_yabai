@@ -7231,6 +7231,12 @@
 		(uuid "c678ea47-e39c-4e8f-a7db-a10d02179a48")
 	)
 	(junction
+		(at 303.53 205.74)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "c7cf71e3-e866-4a6a-abe3-411327c303f8")
+	)
+	(junction
 		(at 128.27 185.42)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -7458,7 +7464,7 @@
 	)
 	(wire
 		(pts
-			(xy 288.29 205.74) (xy 314.96 205.74)
+			(xy 288.29 205.74) (xy 303.53 205.74)
 		)
 		(stroke
 			(width 0)
@@ -7515,16 +7521,6 @@
 			(type default)
 		)
 		(uuid "03415360-c03f-4923-9774-4dfb404960fa")
-	)
-	(wire
-		(pts
-			(xy 300.99 212.09) (xy 300.99 213.36)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "043febd8-fd9f-475c-a96e-f3f6bdaea04a")
 	)
 	(wire
 		(pts
@@ -10298,6 +10294,16 @@
 	)
 	(wire
 		(pts
+			(xy 303.53 210.82) (xy 303.53 205.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "bd7d0d1f-1d56-4f23-9324-3895131c56a8")
+	)
+	(wire
+		(pts
 			(xy 95.25 40.64) (xy 95.25 50.8)
 		)
 		(stroke
@@ -10415,16 +10421,6 @@
 			(type default)
 		)
 		(uuid "c45c062b-1170-415f-a2c4-2e6efc816ae4")
-	)
-	(wire
-		(pts
-			(xy 303.53 210.82) (xy 303.53 213.36)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "c5a603f3-4a77-4d56-a1a8-5c26cf57c75a")
 	)
 	(wire
 		(pts
@@ -10715,6 +10711,16 @@
 			(type default)
 		)
 		(uuid "d4c694e0-7f16-4d18-b2bf-57b2f591f376")
+	)
+	(wire
+		(pts
+			(xy 303.53 205.74) (xy 314.96 205.74)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "d4cedfd9-f4db-4567-a63d-dd94c69bb191")
 	)
 	(wire
 		(pts
@@ -11105,16 +11111,6 @@
 			(type default)
 		)
 		(uuid "f71db556-8c23-4cbe-9df9-a1887cd3e235")
-	)
-	(wire
-		(pts
-			(xy 300.99 213.36) (xy 303.53 213.36)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "f83f5d7d-132e-4728-824f-1b2a3f08f104")
 	)
 	(wire
 		(pts
@@ -17829,71 +17825,6 @@
 			(project "micromouse"
 				(path "/f865c82b-e5c4-410c-8bc5-ca3a55596e18"
 					(reference "Q10")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
-		(lib_id "power:+3V3")
-		(at 300.99 212.09 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(uuid "8115a31b-a74d-4c80-afa7-437648737ab9")
-		(property "Reference" "#PWR047"
-			(at 300.99 215.9 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Value" "+3V3"
-			(at 300.99 208.28 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-			)
-		)
-		(property "Footprint" ""
-			(at 300.99 212.09 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" ""
-			(at 300.99 212.09 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Power symbol creates a global label with name \"+3V3\""
-			(at 300.99 212.09 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "e0e2a74c-fd4a-4cff-9132-1b55a9730f72")
-		)
-		(instances
-			(project "micromouse"
-				(path "/f865c82b-e5c4-410c-8bc5-ca3a55596e18"
-					(reference "#PWR047")
 					(unit 1)
 				)
 			)
