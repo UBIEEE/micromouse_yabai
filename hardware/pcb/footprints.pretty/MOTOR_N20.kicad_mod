@@ -183,6 +183,17 @@
 		(uuid "beff62bf-dc3f-4561-b5b7-b974009bddc2")
 	)
 	(fp_rect
+		(start 24 -17.5)
+		(end 25 0)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(fill none)
+		(layer "Dwgs.User")
+		(uuid "5781464b-d52f-4f22-91da-a42160a32836")
+	)
+	(fp_rect
 		(start 24 -10.25)
 		(end 26 -10)
 		(stroke
@@ -227,15 +238,115 @@
 		(uuid "8a31d2f9-35d7-4ed6-870c-88d90994da51")
 	)
 	(fp_rect
+		(start 26.5 -10.75)
+		(end 29.5 -1.25)
+		(stroke
+			(width 0.1)
+			(type solid)
+		)
+		(fill none)
+		(layer "Dwgs.User")
+		(uuid "ecbe23e9-3cde-4b87-900e-adebdd6d4e5d")
+	)
+	(fp_line
 		(start 0 -12.5)
-		(end 21.75 0.5)
+		(end 0 0.5)
 		(stroke
 			(width 0.05)
 			(type default)
 		)
-		(fill none)
 		(layer "F.CrtYd")
-		(uuid "0ac66fec-7de8-4f1e-b33b-ebb5ab299768")
+		(uuid "c93dbfe1-b156-47c0-9104-20b89e409876")
+	)
+	(fp_line
+		(start 23 -18)
+		(end 26 -18)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(layer "F.CrtYd")
+		(uuid "bf6bb71f-2a4d-49a4-a9b9-90fcff89f426")
+	)
+	(fp_line
+		(start 23 -12.5)
+		(end 0 -12.5)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(layer "F.CrtYd")
+		(uuid "e841572d-417b-4ea0-a9c9-12faf52845c8")
+	)
+	(fp_line
+		(start 23 -12.5)
+		(end 23 -18)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(layer "F.CrtYd")
+		(uuid "d8837dec-ee5a-4f25-aadb-ae3357b7ff89")
+	)
+	(fp_line
+		(start 26 -18)
+		(end 26 -9.5)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(layer "F.CrtYd")
+		(uuid "14535bd0-0406-4ca6-8c0a-6afd2a1edc58")
+	)
+	(fp_line
+		(start 26 -9.5)
+		(end 30 -9.5)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(layer "F.CrtYd")
+		(uuid "2df6a849-bf3f-4bd8-af4c-af52a0ce03cd")
+	)
+	(fp_line
+		(start 26 -2.5)
+		(end 26 0.5)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(layer "F.CrtYd")
+		(uuid "3610e909-f1b9-4077-9076-0a541da1b018")
+	)
+	(fp_line
+		(start 26 0.5)
+		(end 0 0.5)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(layer "F.CrtYd")
+		(uuid "0591946d-3aa4-4182-83de-dcdd02cfb60c")
+	)
+	(fp_line
+		(start 30 -9.5)
+		(end 30 -2.5)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(layer "F.CrtYd")
+		(uuid "8eaef808-fbd5-41ae-87e1-a220d6b937fa")
+	)
+	(fp_line
+		(start 30 -2.5)
+		(end 26 -2.5)
+		(stroke
+			(width 0.05)
+			(type default)
+		)
+		(layer "F.CrtYd")
+		(uuid "8b0d87b7-e859-4063-a066-0b643fb2a19f")
 	)
 	(fp_text user "${REFERENCE}"
 		(at 0 2.5 0)
