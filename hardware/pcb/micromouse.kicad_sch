@@ -11225,6 +11225,18 @@
 		(uuid 0b379df1-72a6-40aa-abf2-0648e34fd182)
 	)
 	(rectangle
+		(start 165.1 50.8)
+		(end 203.2 76.2)
+		(stroke
+			(width 0.25)
+			(type dot)
+		)
+		(fill
+			(type none)
+		)
+		(uuid 16f5ce7b-ea36-44f8-84a4-bcad19e8a754)
+	)
+	(rectangle
 		(start 342.9 12.7)
 		(end 406.4 88.9)
 		(stroke
@@ -11262,7 +11274,7 @@
 	)
 	(rectangle
 		(start 165.1 12.7)
-		(end 203.2 76.2)
+		(end 203.2 38.1)
 		(stroke
 			(width 0.25)
 			(type dot)
@@ -11405,6 +11417,20 @@
 			)
 		)
 		(uuid "283a4261-dbd5-4b42-9853-0924d6ffc94a")
+	)
+	(text "Tooling Holes"
+		(exclude_from_sim no)
+		(at 167.64 55.88 0)
+		(effects
+			(font
+				(size 2.5 2.5)
+				(thickness 0.5)
+				(bold yes)
+				(color 0 128 255 1)
+			)
+			(justify left)
+		)
+		(uuid "2d8797ca-a5df-4de0-a48f-f9d530f0ea9b")
 	)
 	(text "RF Front-End and Antenna"
 		(exclude_from_sim no)
@@ -12855,7 +12881,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Inductor_SMD:L_0402_1005Metric_Pad0.77x0.64mm_HandSolder"
+		(property "Footprint" "Inductor_SMD:L_0402_1005Metric"
 			(at 73.66 62.23 0)
 			(effects
 				(font
@@ -12874,6 +12900,15 @@
 			)
 		)
 		(property "Description" "Inductor"
+			(at 73.66 62.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C77103"
 			(at 73.66 62.23 0)
 			(effects
 				(font
@@ -12944,6 +12979,15 @@
 			)
 		)
 		(property "Description" "Resistor"
+			(at 252.73 259.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C4177"
 			(at 252.73 259.08 0)
 			(effects
 				(font
@@ -13089,6 +13133,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" "C17955"
+			(at 152.4 252.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "ac88f5b5-7474-4073-9fbb-90ff7d5bb635")
 		)
@@ -13159,6 +13212,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" "C25905"
+			(at 83.82 180.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "80d83771-b498-4de6-ae06-20ef7bfcad2c")
 		)
@@ -13220,6 +13282,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 213.36 172.72 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C15195"
 			(at 213.36 172.72 0)
 			(effects
 				(font
@@ -13298,6 +13369,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" "C307331"
+			(at 39.37 44.45 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "b3b3107b-87b1-48ff-ae8b-c971af2e7798")
 		)
@@ -13308,6 +13388,79 @@
 			(project "micromouse"
 				(path "/f865c82b-e5c4-410c-8bc5-ca3a55596e18"
 					(reference "C5")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole")
+		(at 194.31 25.4 0)
+		(unit 1)
+		(exclude_from_sim yes)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "14a2d1d3-fc0b-4483-b7fd-9c3aa3e3d393")
+		(property "Reference" "H8"
+			(at 196.85 24.1299 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "M2"
+			(at 196.85 26.6699 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_2.2mm_M2"
+			(at 194.31 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 194.31 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole without connection"
+			(at 194.31 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" ""
+			(at 194.31 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(instances
+			(project "micromouse"
+				(path "/f865c82b-e5c4-410c-8bc5-ca3a55596e18"
+					(reference "H8")
 					(unit 1)
 				)
 			)
@@ -13360,6 +13513,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 45.72 66.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C19666"
 			(at 45.72 66.04 0)
 			(effects
 				(font
@@ -13430,6 +13592,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 367.03 149.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C307331"
 			(at 367.03 149.86 0)
 			(effects
 				(font
@@ -13640,6 +13811,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" "C13585"
+			(at 250.19 49.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "485ddad3-5e8f-449a-b086-28ecbfc4d5db")
 		)
@@ -13699,6 +13879,15 @@
 			)
 		)
 		(property "Description" "Four pin crystal, GND on pins 2 and 4"
+			(at 378.46 39.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" ""
 			(at 378.46 39.37 0)
 			(effects
 				(font
@@ -13840,6 +14029,15 @@
 			)
 		)
 		(property "Description" "NPN phototransistor, collector/emitter"
+			(at 177.8 245.11 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" ""
 			(at 177.8 245.11 0)
 			(effects
 				(font
@@ -14184,6 +14382,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" "C45783"
+			(at 308.61 49.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "9b623b75-f121-4ce7-a18b-f04c0faf68b4")
 		)
@@ -14254,6 +14461,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" ""
+			(at 250.19 245.11 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "d07b5d5d-5dda-4e69-a48d-0d251587247a")
 		)
@@ -14314,6 +14530,15 @@
 			)
 		)
 		(property "Description" ""
+			(at 314.96 203.2 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C129328"
 			(at 314.96 203.2 0)
 			(effects
 				(font
@@ -14492,6 +14717,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" ""
+			(at 393.7 196.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(instances
 			(project "micromouse"
 				(path "/f865c82b-e5c4-410c-8bc5-ca3a55596e18"
@@ -14547,6 +14781,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 82.55 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C15849"
 			(at 82.55 27.94 0)
 			(effects
 				(font
@@ -14625,6 +14868,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" "C307331"
+			(at 73.66 44.45 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "dffd85f0-2f6b-45c9-8009-cabc71979888")
 		)
@@ -14685,6 +14937,15 @@
 			)
 		)
 		(property "Description" "Push button switch, generic, two pins"
+			(at 392.43 144.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" ""
 			(at 392.43 144.78 0)
 			(effects
 				(font
@@ -14828,6 +15089,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" "C307331"
+			(at 280.67 48.26 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "fefbe811-47c0-42fb-9f65-42d38bb6c8f8")
 		)
@@ -14869,7 +15139,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Inductor_SMD:L_0805_2012Metric_Pad1.15x1.40mm_HandSolder"
+		(property "Footprint" "Inductor_SMD:L_0805_2012Metric"
 			(at 288.29 44.45 0)
 			(effects
 				(font
@@ -14888,6 +15158,15 @@
 			)
 		)
 		(property "Description" "Inductor"
+			(at 288.29 44.45 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C383369"
 			(at 288.29 44.45 0)
 			(effects
 				(font
@@ -14966,6 +15245,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" ""
+			(at 226.06 245.11 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "2180cbb0-1ada-4ddf-b293-6011a055807d")
 		)
@@ -15028,6 +15316,15 @@
 			)
 		)
 		(property "Description" "Resistor"
+			(at 92.71 180.34 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C25905"
 			(at 92.71 180.34 0)
 			(effects
 				(font
@@ -15237,6 +15534,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" "C307331"
+			(at 120.65 44.45 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "93bda1b4-a687-40a1-8064-26120fad217a")
 		)
@@ -15302,6 +15608,15 @@
 			)
 		)
 		(property "Description" "Very low capacitance ESD protection diode, 2 data-line, SOT-23-6"
+			(at 116.84 182.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C2687116"
 			(at 116.84 182.88 0)
 			(effects
 				(font
@@ -15460,6 +15775,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" "C15127"
+			(at 231.14 46.99 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "68f97f2d-4550-4dd6-bb41-19def59b5846")
 		)
@@ -15598,6 +15922,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" "C25905"
+			(at 356.87 149.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "7f1481fd-ed56-4b50-9d8a-db9af7ea6299")
 		)
@@ -15615,7 +15948,7 @@
 	)
 	(symbol
 		(lib_id "Mechanical:MountingHole")
-		(at 182.88 33.02 0)
+		(at 170.18 25.4 0)
 		(unit 1)
 		(exclude_from_sim yes)
 		(in_bom no)
@@ -15624,7 +15957,7 @@
 		(fields_autoplaced yes)
 		(uuid "4f9066eb-a1d3-4b05-937a-853f59536377")
 		(property "Reference" "H1"
-			(at 185.42 31.7499 0)
+			(at 172.72 24.1299 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15633,7 +15966,7 @@
 			)
 		)
 		(property "Value" "M2"
-			(at 185.42 34.2899 0)
+			(at 172.72 26.6699 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15642,7 +15975,7 @@
 			)
 		)
 		(property "Footprint" "MountingHole:MountingHole_2.2mm_M2"
-			(at 182.88 33.02 0)
+			(at 170.18 25.4 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15651,7 +15984,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 182.88 33.02 0)
+			(at 170.18 25.4 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15660,7 +15993,16 @@
 			)
 		)
 		(property "Description" "Mounting Hole without connection"
-			(at 182.88 33.02 0)
+			(at 170.18 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" ""
+			(at 170.18 25.4 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15723,6 +16065,15 @@
 			)
 		)
 		(property "Description" "Resistor"
+			(at 195.58 193.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C25744"
 			(at 195.58 193.04 0)
 			(effects
 				(font
@@ -15801,6 +16152,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" "C25779"
+			(at 295.91 49.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "026d5b60-4376-43d0-ae38-b3f04b7554e1")
 		)
@@ -15861,6 +16221,15 @@
 			)
 		)
 		(property "Description" ""
+			(at 288.29 110.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" ""
 			(at 288.29 110.49 0)
 			(effects
 				(font
@@ -15945,6 +16314,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" "C4177"
+			(at 228.6 259.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "635fbcd0-4246-4727-8179-16f5a2008330")
 		)
@@ -16006,6 +16384,15 @@
 			)
 		)
 		(property "Description" "Resistor"
+			(at 138.43 267.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C25905"
 			(at 138.43 267.97 0)
 			(effects
 				(font
@@ -16076,6 +16463,15 @@
 			)
 		)
 		(property "Description" "Buzzer, polarized"
+			(at 207.01 102.87 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" ""
 			(at 207.01 102.87 0)
 			(effects
 				(font
@@ -16234,6 +16630,79 @@
 		)
 	)
 	(symbol
+		(lib_id "Mechanical:MountingHole")
+		(at 194.31 33.02 0)
+		(unit 1)
+		(exclude_from_sim yes)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "592eb4bd-29c1-4416-af9d-8828999167df")
+		(property "Reference" "H9"
+			(at 196.85 31.7499 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "M2"
+			(at 196.85 34.2899 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "MountingHole:MountingHole_2.2mm_M2"
+			(at 194.31 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 194.31 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole without connection"
+			(at 194.31 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" ""
+			(at 194.31 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(instances
+			(project "micromouse"
+				(path "/f865c82b-e5c4-410c-8bc5-ca3a55596e18"
+					(reference "H9")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:C")
 		(at 370.84 69.85 0)
 		(mirror y)
@@ -16280,6 +16749,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 370.84 69.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C32949"
 			(at 370.84 69.85 0)
 			(effects
 				(font
@@ -16350,6 +16828,15 @@
 			)
 		)
 		(property "Description" "ST Debug Connector, standard ARM Cortex-M SWD and JTAG interface plus UART"
+			(at 40.64 187.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" ""
 			(at 40.64 187.96 0)
 			(effects
 				(font
@@ -16529,6 +17016,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" "C2150"
+			(at 193.04 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "db6fe216-bcb3-49fc-be36-dfe217f276bc")
 		)
@@ -16602,6 +17098,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" "C17955"
+			(at 76.2 252.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "b90ad570-2334-477d-b33d-814533cd3c5e")
 		)
@@ -16664,6 +17169,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 62.23 44.45 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C307331"
 			(at 62.23 44.45 0)
 			(effects
 				(font
@@ -16819,7 +17333,7 @@
 	)
 	(symbol
 		(lib_id "Mechanical:MountingHole")
-		(at 182.88 40.64 0)
+		(at 170.18 33.02 0)
 		(unit 1)
 		(exclude_from_sim yes)
 		(in_bom no)
@@ -16828,7 +17342,7 @@
 		(fields_autoplaced yes)
 		(uuid "621a22f5-e45f-40f2-8050-0ca13279b3da")
 		(property "Reference" "H3"
-			(at 185.42 39.3699 0)
+			(at 172.72 31.7499 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16837,7 +17351,7 @@
 			)
 		)
 		(property "Value" "M2"
-			(at 185.42 41.9099 0)
+			(at 172.72 34.2899 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16846,7 +17360,7 @@
 			)
 		)
 		(property "Footprint" "MountingHole:MountingHole_2.2mm_M2"
-			(at 182.88 40.64 0)
+			(at 170.18 33.02 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16855,7 +17369,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 182.88 40.64 0)
+			(at 170.18 33.02 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16864,7 +17378,16 @@
 			)
 		)
 		(property "Description" "Mounting Hole without connection"
-			(at 182.88 40.64 0)
+			(at 170.18 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" ""
+			(at 170.18 33.02 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -16936,6 +17459,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" "C25744"
+			(at 295.91 59.69 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "8362e522-1075-4c05-8a37-3e80db58160a")
 		)
@@ -16997,6 +17529,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 288.29 210.82 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C307331"
 			(at 288.29 210.82 0)
 			(effects
 				(font
@@ -17134,6 +17675,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 50.8 44.45 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C307331"
 			(at 50.8 44.45 0)
 			(effects
 				(font
@@ -17610,6 +18160,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" "C25905"
+			(at 62.23 267.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "dbe53e6b-5497-45a0-89f4-fa1b4ff7ef76")
 		)
@@ -17671,6 +18230,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 199.39 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C307331"
 			(at 199.39 165.1 0)
 			(effects
 				(font
@@ -17748,6 +18316,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" ""
+			(at 393.7 222.25 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(instances
 			(project "micromouse"
 				(path "/f865c82b-e5c4-410c-8bc5-ca3a55596e18"
@@ -17804,6 +18381,15 @@
 			)
 		)
 		(property "Description" "NPN transistor, base/emitter/collector"
+			(at 149.86 262.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C2150"
 			(at 149.86 262.89 0)
 			(effects
 				(font
@@ -17885,6 +18471,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" "C2150"
+			(at 35.56 262.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "f49338a1-6c86-4c51-8485-047777df54ff")
 		)
@@ -17950,6 +18545,15 @@
 			)
 		)
 		(property "Description" "Light emitting diode"
+			(at 38.1 243.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" ""
 			(at 38.1 243.84 0)
 			(effects
 				(font
@@ -18094,6 +18698,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" ""
+			(at 365.76 217.17 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "334e1966-78cf-4057-a4cd-2bc5fc1c5c4b")
 		)
@@ -18175,6 +18788,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" "C25905"
+			(at 24.13 267.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "5ee73e88-3b9a-4598-977e-d56aa698b9f1")
 		)
@@ -18234,6 +18856,15 @@
 			)
 		)
 		(property "Description" "Resistor"
+			(at 377.19 144.78 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C25076"
 			(at 377.19 144.78 0)
 			(effects
 				(font
@@ -18304,6 +18935,15 @@
 		)
 		(property "Description" ""
 			(at 353.06 189.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" ""
+			(at 365.76 191.77 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -18390,6 +19030,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" "C32346"
+			(at 378.46 64.77 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "d9a3a8cb-6650-4ffb-b568-b35beae7d313")
 		)
@@ -18400,6 +19049,79 @@
 			(project "micromouse"
 				(path "/f865c82b-e5c4-410c-8bc5-ca3a55596e18"
 					(reference "X2")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole")
+		(at 171.45 69.85 0)
+		(unit 1)
+		(exclude_from_sim yes)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "926c73f0-9df4-4b62-9c8e-dde60adf4177")
+		(property "Reference" "H6"
+			(at 173.99 68.5799 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "1.152mm"
+			(at 173.99 71.1199 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "footprints:JLC_TOOLING_HOLE"
+			(at 171.45 69.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 171.45 69.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole without connection"
+			(at 171.45 69.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" ""
+			(at 171.45 69.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(instances
+			(project "micromouse"
+				(path "/f865c82b-e5c4-410c-8bc5-ca3a55596e18"
+					(reference "H6")
 					(unit 1)
 				)
 			)
@@ -18452,6 +19174,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 27.94 44.45 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C19666"
 			(at 27.94 44.45 0)
 			(effects
 				(font
@@ -18592,6 +19323,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" "C25076"
+			(at 377.19 120.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "04900ecc-f185-4c26-a866-7dfe2a903382")
 		)
@@ -18654,6 +19394,15 @@
 			)
 		)
 		(property "Description" "Resistor"
+			(at 204.47 259.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C4177"
 			(at 204.47 259.08 0)
 			(effects
 				(font
@@ -18731,6 +19480,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" "C25744"
+			(at 186.69 193.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "f992ea00-cf2d-4327-8a6b-30874f75627d")
 		)
@@ -18799,6 +19557,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" "C486062"
+			(at 261.62 44.45 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "809905ac-9a55-40d6-a835-dbb17f5a9899")
 		)
@@ -18821,6 +19588,79 @@
 			(project "micromouse"
 				(path "/f865c82b-e5c4-410c-8bc5-ca3a55596e18"
 					(reference "U1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole")
+		(at 186.69 63.5 0)
+		(unit 1)
+		(exclude_from_sim yes)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "a07ee3d9-2276-4fdc-abdd-656cb24b67d5")
+		(property "Reference" "H7"
+			(at 189.23 62.2299 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "1.152mm"
+			(at 189.23 64.7699 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "footprints:JLC_TOOLING_HOLE"
+			(at 186.69 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 186.69 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole without connection"
+			(at 186.69 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" ""
+			(at 186.69 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(instances
+			(project "micromouse"
+				(path "/f865c82b-e5c4-410c-8bc5-ca3a55596e18"
+					(reference "H7")
 					(unit 1)
 				)
 			)
@@ -18873,6 +19713,15 @@
 			)
 		)
 		(property "Description" "Light emitting diode"
+			(at 114.3 243.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" ""
 			(at 114.3 243.84 0)
 			(effects
 				(font
@@ -18951,6 +19800,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" "C17955"
+			(at 38.1 252.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "40c0dfd6-12dc-4827-90c5-9d052718e2a2")
 		)
@@ -19012,6 +19870,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 320.04 49.53 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C45783"
 			(at 320.04 49.53 0)
 			(effects
 				(font
@@ -19224,6 +20091,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" ""
+			(at 269.24 110.49 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "5cc983ff-7109-49e2-ada5-8b7185bd1032")
 		)
@@ -19376,7 +20252,7 @@
 	)
 	(symbol
 		(lib_id "Mechanical:MountingHole")
-		(at 182.88 55.88 0)
+		(at 179.07 33.02 0)
 		(unit 1)
 		(exclude_from_sim yes)
 		(in_bom no)
@@ -19385,7 +20261,7 @@
 		(fields_autoplaced yes)
 		(uuid "a6e8e273-c3ed-462d-8d07-231e9a565e15")
 		(property "Reference" "H4"
-			(at 185.42 54.6099 0)
+			(at 181.61 31.7499 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19394,7 +20270,7 @@
 			)
 		)
 		(property "Value" "M2"
-			(at 185.42 57.1499 0)
+			(at 181.61 34.2899 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19403,7 +20279,7 @@
 			)
 		)
 		(property "Footprint" "MountingHole:MountingHole_2.2mm_M2"
-			(at 182.88 55.88 0)
+			(at 179.07 33.02 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19412,7 +20288,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 182.88 55.88 0)
+			(at 179.07 33.02 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19421,7 +20297,16 @@
 			)
 		)
 		(property "Description" "Mounting Hole without connection"
-			(at 182.88 55.88 0)
+			(at 179.07 33.02 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" ""
+			(at 179.07 33.02 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -19485,6 +20370,15 @@
 			)
 		)
 		(property "Description" "Resistor"
+			(at 195.58 102.87 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C11702"
 			(at 195.58 102.87 0)
 			(effects
 				(font
@@ -19695,6 +20589,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" "C307331"
+			(at 367.03 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "003bb605-5166-4c5f-b898-2fbe82bc1f36")
 		)
@@ -19705,6 +20608,79 @@
 			(project "micromouse"
 				(path "/f865c82b-e5c4-410c-8bc5-ca3a55596e18"
 					(reference "C22")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
+		(lib_id "Mechanical:MountingHole")
+		(at 171.45 63.5 0)
+		(unit 1)
+		(exclude_from_sim yes)
+		(in_bom no)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "afb6c23a-6c35-46e1-aec6-a3210a1378be")
+		(property "Reference" "H5"
+			(at 173.99 62.2299 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "1.152mm"
+			(at 173.99 64.7699 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "footprints:JLC_TOOLING_HOLE"
+			(at 171.45 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 171.45 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Mounting Hole without connection"
+			(at 171.45 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" ""
+			(at 171.45 63.5 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(instances
+			(project "micromouse"
+				(path "/f865c82b-e5c4-410c-8bc5-ca3a55596e18"
+					(reference "H5")
 					(unit 1)
 				)
 			)
@@ -19898,6 +20874,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" "C307331"
+			(at 302.26 193.04 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "bba48eb9-cc09-46fd-8eca-f6b620f32fcd")
 		)
@@ -19960,6 +20945,15 @@
 			)
 		)
 		(property "Description" "Resistor"
+			(at 356.87 125.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C25905"
 			(at 356.87 125.73 0)
 			(effects
 				(font
@@ -20234,6 +21228,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" ""
+			(at 392.43 120.65 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "563a842c-68f6-4ae8-ae77-523053331425")
 		)
@@ -20368,6 +21371,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" "C3288646"
+			(at 234.95 162.56 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "5"
 			(uuid "0981b844-1e6d-4f6c-a451-427b475179db")
 		)
@@ -20453,6 +21465,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 133.35 44.45 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C19666"
 			(at 133.35 44.45 0)
 			(effects
 				(font
@@ -20595,6 +21616,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" "C15195"
+			(at 93.98 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "5b233f74-6a55-4832-b9f0-388aa2257802")
 		)
@@ -20656,6 +21686,15 @@
 			)
 		)
 		(property "Description" "Resistor"
+			(at 100.33 267.97 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C25905"
 			(at 100.33 267.97 0)
 			(effects
 				(font
@@ -20799,6 +21838,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" "C17955"
+			(at 114.3 252.73 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "3f2c43df-1020-4e44-b9ba-9fba9237571b")
 		)
@@ -20884,7 +21932,7 @@
 	)
 	(symbol
 		(lib_id "Mechanical:MountingHole")
-		(at 182.88 48.26 0)
+		(at 179.07 25.4 0)
 		(unit 1)
 		(exclude_from_sim yes)
 		(in_bom no)
@@ -20893,7 +21941,7 @@
 		(fields_autoplaced yes)
 		(uuid "c6a3f8a5-18a9-4fad-990a-198c51d6cbb4")
 		(property "Reference" "H2"
-			(at 185.42 46.9899 0)
+			(at 181.61 24.1299 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -20902,7 +21950,7 @@
 			)
 		)
 		(property "Value" "M2"
-			(at 185.42 49.5299 0)
+			(at 181.61 26.6699 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -20911,7 +21959,7 @@
 			)
 		)
 		(property "Footprint" "MountingHole:MountingHole_2.2mm_M2"
-			(at 182.88 48.26 0)
+			(at 179.07 25.4 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -20920,7 +21968,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 182.88 48.26 0)
+			(at 179.07 25.4 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -20929,7 +21977,16 @@
 			)
 		)
 		(property "Description" "Mounting Hole without connection"
-			(at 182.88 48.26 0)
+			(at 179.07 25.4 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" ""
+			(at 179.07 25.4 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -21058,6 +22115,15 @@
 			)
 		)
 		(property "Description" "Resistor"
+			(at 182.88 114.3 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C25076"
 			(at 182.88 114.3 0)
 			(effects
 				(font
@@ -21337,6 +22403,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" "C307331"
+			(at 33.02 60.96 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "e356ed78-2c7b-418f-931d-00307703d59c")
 		)
@@ -21474,6 +22549,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" "C1015"
+			(at 74.93 24.13 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "475be007-b2f6-4aab-8d43-02fb948bea61")
 		)
@@ -21544,6 +22628,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" ""
+			(at 201.93 245.11 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "e3445ff2-cc2b-492a-a498-83e880c834c4")
 		)
@@ -21606,6 +22699,15 @@
 			)
 		)
 		(property "Description" "Resistor"
+			(at 180.34 259.08 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C4177"
 			(at 180.34 259.08 0)
 			(effects
 				(font
@@ -21751,6 +22853,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" ""
+			(at 76.2 243.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "ab2ecd39-7bf0-4416-be50-bc8460558f4e")
 		)
@@ -21813,6 +22924,15 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
+			(at 260.35 115.57 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" ""
 			(at 260.35 115.57 0)
 			(effects
 				(font
@@ -21955,6 +23075,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" "C307331"
+			(at 116.84 27.94 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "869cd989-c674-4f29-949f-4fd1e602f6b0")
 		)
@@ -22017,6 +23146,15 @@
 			)
 		)
 		(property "Description" "NPN transistor, base/emitter/collector"
+			(at 111.76 262.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C2150"
 			(at 111.76 262.89 0)
 			(effects
 				(font
@@ -22163,6 +23301,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" ""
+			(at 152.4 243.84 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "1"
 			(uuid "e6f7e61d-37a3-4fac-b235-75c61bb6cbd5")
 		)
@@ -22225,6 +23372,15 @@
 			)
 		)
 		(property "Description" "USB 2.0-only 16P Type-C Receptacle connector"
+			(at 144.78 182.88 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C2681552"
 			(at 144.78 182.88 0)
 			(effects
 				(font
@@ -22413,6 +23569,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" "C23630"
+			(at 186.69 165.1 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "a0170f41-fd3a-49e8-a82f-74cf3c43cb65")
 		)
@@ -22540,6 +23705,15 @@
 			)
 		)
 		(property "Description" "Schottky diode"
+			(at 242.57 39.37 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C8678"
 			(at 242.57 39.37 0)
 			(effects
 				(font
@@ -22685,6 +23859,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" "C32949"
+			(at 386.08 69.85 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "55f87f68-4420-4b61-a9a3-4a407126faf8")
 		)
@@ -22748,6 +23931,15 @@
 			)
 		)
 		(property "Description" "STMicroelectronics Arm Cortex-M4 MCU, 1024KB flash, 256KB RAM, 64 MHz, 1.71-3.6V, 30 GPIO, UFQFPN48"
+			(at 102.87 92.71 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C404023"
 			(at 102.87 92.71 0)
 			(effects
 				(font
@@ -22931,7 +24123,7 @@
 				(justify left)
 			)
 		)
-		(property "Value" "Antenna"
+		(property "Value" "AMCA31-2R450G-S1F-T3"
 			(at 317.5 107.3149 0)
 			(effects
 				(font
@@ -22959,6 +24151,15 @@
 			)
 		)
 		(property "Description" "Antenna"
+			(at 314.96 105.41 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" ""
 			(at 314.96 105.41 0)
 			(effects
 				(font
@@ -23026,6 +24227,15 @@
 			)
 		)
 		(property "Description" "NPN transistor, base/emitter/collector"
+			(at 73.66 262.89 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C2150"
 			(at 73.66 262.89 0)
 			(effects
 				(font
@@ -23106,6 +24316,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" "C307331"
+			(at 85.09 44.45 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "b846dff1-e6c1-45e5-afa5-1ff705c7fa1c")
 		)
@@ -23176,6 +24395,15 @@
 				(hide yes)
 			)
 		)
+		(property "LCSC Part #" ""
+			(at 278.13 115.57 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
 		(pin "2"
 			(uuid "5c790f0b-f492-4d8a-bc19-3c91fbb5921c")
 		)
@@ -23216,7 +24444,7 @@
 				)
 			)
 		)
-		(property "Footprint" "Inductor_SMD:L_0805_2012Metric_Pad1.05x1.20mm_HandSolder"
+		(property "Footprint" "Inductor_SMD:L_0805_2012Metric"
 			(at 60.96 62.23 0)
 			(effects
 				(font
@@ -23235,6 +24463,15 @@
 			)
 		)
 		(property "Description" "Inductor"
+			(at 60.96 62.23 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" "C1046"
 			(at 60.96 62.23 0)
 			(effects
 				(font
@@ -23441,6 +24678,15 @@
 			)
 		)
 		(property "Description" "Generic connector, single row, 01x02, script generated"
+			(at 312.42 149.86 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "LCSC Part #" ""
 			(at 312.42 149.86 0)
 			(effects
 				(font
