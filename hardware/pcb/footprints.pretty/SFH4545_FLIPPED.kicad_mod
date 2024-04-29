@@ -137,15 +137,15 @@
 		(remove_unused_layers no)
 		(uuid "6d6d58f5-ef1a-4c6d-b9c3-0a2998566eb5")
 	)
-	(model "${KIPRJMOD}/models/SFH_4545.step"
+	(model "${KIPRJMOD}/models/SFH_4545_FLIPPED.step"
 		(offset
-			(xyz 0 0 0)
+			(xyz 0 -1.58 3)
 		)
 		(scale
 			(xyz 1 1 1)
 		)
 		(rotate
-			(xyz -90 0 180)
+			(xyz 0 0 0)
 		)
 	)
 )

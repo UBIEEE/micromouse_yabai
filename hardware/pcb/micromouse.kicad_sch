@@ -1194,7 +1194,7 @@
 				)
 			)
 		)
-		(symbol "Device:Antenna"
+		(symbol "Device:Antenna_Chip"
 			(pin_numbers hide)
 			(pin_names
 				(offset 1.016) hide)
@@ -1202,7 +1202,7 @@
 			(in_bom yes)
 			(on_board yes)
 			(property "Reference" "AE"
-				(at -1.905 1.905 0)
+				(at 0 5.08 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1210,8 +1210,8 @@
 					(justify right)
 				)
 			)
-			(property "Value" "Antenna"
-				(at -1.905 0 0)
+			(property "Value" "Antenna_Chip"
+				(at 0 3.175 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1220,7 +1220,7 @@
 				)
 			)
 			(property "Footprint" ""
-				(at 0 0 0)
+				(at -2.54 4.445 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1229,7 +1229,7 @@
 				)
 			)
 			(property "Datasheet" "~"
-				(at 0 0 0)
+				(at -2.54 4.445 0)
 				(effects
 					(font
 						(size 1.27 1.27)
@@ -1237,7 +1237,7 @@
 					(hide yes)
 				)
 			)
-			(property "Description" "Antenna"
+			(property "Description" "Ceramic chip antenna with pin for PCB trace"
 				(at 0 0 0)
 				(effects
 					(font
@@ -1255,10 +1255,10 @@
 					(hide yes)
 				)
 			)
-			(symbol "Antenna_0_1"
+			(symbol "Antenna_Chip_0_1"
 				(polyline
 					(pts
-						(xy 0 2.54) (xy 0 -3.81)
+						(xy -2.54 0) (xy -2.54 -0.635)
 					)
 					(stroke
 						(width 0.254)
@@ -1270,7 +1270,91 @@
 				)
 				(polyline
 					(pts
-						(xy 1.27 2.54) (xy 0 -2.54) (xy -1.27 2.54)
+						(xy -2.54 0) (xy -1.27 0)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 0) (xy 2.54 0)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 1.27 1.27) (xy 1.27 -1.27)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 2.54 -0.635) (xy 2.54 0)
+					)
+					(stroke
+						(width 0)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 2.54 6.985) (xy 2.54 -1.905)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -1.27 1.27) (xy -1.27 -1.27) (xy -1.27 0)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy 3.81 6.985) (xy 2.54 1.905) (xy 1.27 6.985)
+					)
+					(stroke
+						(width 0.254)
+						(type default)
+					)
+					(fill
+						(type none)
+					)
+				)
+				(polyline
+					(pts
+						(xy -0.635 1.27) (xy 0.635 1.27) (xy 0.635 -1.27) (xy -0.635 -1.27) (xy -0.635 1.27)
 					)
 					(stroke
 						(width 0.254)
@@ -1281,11 +1365,11 @@
 					)
 				)
 			)
-			(symbol "Antenna_1_1"
+			(symbol "Antenna_Chip_1_1"
 				(pin input line
-					(at 0 -5.08 90)
+					(at -2.54 -2.54 90)
 					(length 2.54)
-					(name "A"
+					(name "FEED"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -1293,6 +1377,24 @@
 						)
 					)
 					(number "1"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+				)
+				(pin passive line
+					(at 2.54 -2.54 90)
+					(length 2.54)
+					(name "PCB_Trace"
+						(effects
+							(font
+								(size 1.27 1.27)
+							)
+						)
+					)
+					(number "2"
 						(effects
 							(font
 								(size 1.27 1.27)
@@ -6877,7 +6979,7 @@
 		(uuid "0c0ce5af-6a4b-4688-a62d-11eba785ac3a")
 	)
 	(junction
-		(at 213.36 167.64)
+		(at 212.09 167.64)
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "1898f93f-d6c7-41d2-8eb5-c404bd0b00c4")
@@ -6893,6 +6995,12 @@
 		(diameter 0)
 		(color 0 0 0 0)
 		(uuid "209cfc26-1997-4ce3-bed9-857a8a6958ba")
+	)
+	(junction
+		(at 222.25 167.64)
+		(diameter 0)
+		(color 0 0 0 0)
+		(uuid "23798b7b-f398-4740-a4ca-e5059f12af13")
 	)
 	(junction
 		(at 186.69 160.02)
@@ -7261,12 +7369,6 @@
 		(uuid "d10b192c-a351-4b23-bdc7-72cb832d81c0")
 	)
 	(junction
-		(at 227.33 167.64)
-		(diameter 0)
-		(color 0 0 0 0)
-		(uuid "d496024d-d614-4c19-aed3-b59206f96236")
-	)
-	(junction
 		(at 116.84 24.13)
 		(diameter 0)
 		(color 0 0 0 0)
@@ -7415,8 +7517,16 @@
 		(uuid "bccf22bb-7f72-42c8-b762-38f5ad18e5c5")
 	)
 	(no_connect
-		(at 232.41 171.45)
-		(uuid "c61e20c4-0502-4377-b583-8a51ceeb1879")
+		(at 27.94 198.12)
+		(uuid "cd75d658-5338-4177-b81f-0a922cfaccc2")
+	)
+	(no_connect
+		(at 125.73 82.55)
+		(uuid "cefc7581-287c-4569-8163-423970bd98e5")
+	)
+	(no_connect
+		(at 27.94 200.66)
+		(uuid "d7684fdf-f9b6-4e95-adcb-c411dea16495")
 	)
 	(no_connect
 		(at 129.54 198.12)
@@ -7784,6 +7894,16 @@
 	)
 	(wire
 		(pts
+			(xy 223.52 171.45) (xy 232.41 171.45)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "17957901-86da-4f51-b177-7eb02acd4099")
+	)
+	(wire
+		(pts
 			(xy 82.55 31.75) (xy 93.98 31.75)
 		)
 		(stroke
@@ -8011,16 +8131,6 @@
 			(type default)
 		)
 		(uuid "25419821-39cd-45db-95a9-c5922779c15d")
-	)
-	(wire
-		(pts
-			(xy 27.94 198.12) (xy 16.51 198.12)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "2645a487-6b4d-4da1-a7d8-bb3d70a27d0c")
 	)
 	(wire
 		(pts
@@ -8314,6 +8424,16 @@
 	)
 	(wire
 		(pts
+			(xy 312.42 110.49) (xy 307.34 110.49)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "3a035e39-6601-4acd-9e4d-868d848901e1")
+	)
+	(wire
+		(pts
 			(xy 180.34 238.76) (xy 204.47 238.76)
 		)
 		(stroke
@@ -8524,6 +8644,16 @@
 	)
 	(wire
 		(pts
+			(xy 312.42 109.22) (xy 312.42 110.49)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "45608c24-e841-4ef9-8193-3315424b2612")
+	)
+	(wire
+		(pts
 			(xy 207.01 200.66) (xy 195.58 200.66)
 		)
 		(stroke
@@ -8724,7 +8854,7 @@
 	)
 	(wire
 		(pts
-			(xy 232.41 182.88) (xy 220.98 182.88)
+			(xy 232.41 182.88) (xy 223.52 182.88)
 		)
 		(stroke
 			(width 0)
@@ -8794,7 +8924,7 @@
 	)
 	(wire
 		(pts
-			(xy 232.41 180.34) (xy 220.98 180.34)
+			(xy 232.41 180.34) (xy 223.52 180.34)
 		)
 		(stroke
 			(width 0)
@@ -8974,7 +9104,7 @@
 	)
 	(wire
 		(pts
-			(xy 232.41 177.8) (xy 227.33 177.8)
+			(xy 232.41 177.8) (xy 222.25 177.8)
 		)
 		(stroke
 			(width 0)
@@ -9114,16 +9244,6 @@
 	)
 	(wire
 		(pts
-			(xy 125.73 82.55) (xy 139.7 82.55)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "737f4132-5334-44c3-8608-65cb71192fa1")
-	)
-	(wire
-		(pts
 			(xy 276.86 44.45) (xy 280.67 44.45)
 		)
 		(stroke
@@ -9184,7 +9304,7 @@
 	)
 	(wire
 		(pts
-			(xy 213.36 167.64) (xy 213.36 168.91)
+			(xy 212.09 167.64) (xy 212.09 168.91)
 		)
 		(stroke
 			(width 0)
@@ -9204,7 +9324,7 @@
 	)
 	(wire
 		(pts
-			(xy 213.36 166.37) (xy 213.36 167.64)
+			(xy 212.09 166.37) (xy 212.09 167.64)
 		)
 		(stroke
 			(width 0)
@@ -9424,6 +9544,16 @@
 	)
 	(wire
 		(pts
+			(xy 317.5 110.49) (xy 323.85 110.49)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "8645a2cd-bcda-4114-82b4-f82cbdd55f77")
+	)
+	(wire
+		(pts
 			(xy 195.58 189.23) (xy 195.58 187.96)
 		)
 		(stroke
@@ -9534,13 +9664,13 @@
 	)
 	(wire
 		(pts
-			(xy 227.33 167.64) (xy 232.41 167.64)
+			(xy 222.25 167.64) (xy 232.41 167.64)
 		)
 		(stroke
 			(width 0)
 			(type default)
 		)
-		(uuid "915cee30-bf69-4207-b46d-d4da982e2ef5")
+		(uuid "92410425-467b-4b7e-bab1-11164cac004c")
 	)
 	(wire
 		(pts
@@ -9771,6 +9901,16 @@
 			(type default)
 		)
 		(uuid "9f649b79-66ea-4a75-bd68-9ab8807d4a7b")
+	)
+	(wire
+		(pts
+			(xy 317.5 109.22) (xy 317.5 110.49)
+		)
+		(stroke
+			(width 0)
+			(type default)
+		)
+		(uuid "9f911287-8313-4998-9dfe-868a6c7c96ed")
 	)
 	(wire
 		(pts
@@ -10044,7 +10184,7 @@
 	)
 	(wire
 		(pts
-			(xy 227.33 177.8) (xy 227.33 167.64)
+			(xy 222.25 177.8) (xy 222.25 167.64)
 		)
 		(stroke
 			(width 0)
@@ -10524,16 +10664,6 @@
 	)
 	(wire
 		(pts
-			(xy 27.94 200.66) (xy 16.51 200.66)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ca8602a8-7264-4917-a248-d2cbd7134705")
-	)
-	(wire
-		(pts
 			(xy 308.61 55.88) (xy 308.61 54.61)
 		)
 		(stroke
@@ -10894,7 +11024,7 @@
 	)
 	(wire
 		(pts
-			(xy 213.36 167.64) (xy 227.33 167.64)
+			(xy 212.09 167.64) (xy 222.25 167.64)
 		)
 		(stroke
 			(width 0)
@@ -10954,16 +11084,6 @@
 	)
 	(wire
 		(pts
-			(xy 307.34 110.49) (xy 314.96 110.49)
-		)
-		(stroke
-			(width 0)
-			(type default)
-		)
-		(uuid "ecd5c1ae-1b32-4564-8b38-373ac2697719")
-	)
-	(wire
-		(pts
 			(xy 314.96 223.52) (xy 306.07 223.52)
 		)
 		(stroke
@@ -11014,7 +11134,7 @@
 	)
 	(wire
 		(pts
-			(xy 213.36 177.8) (xy 213.36 176.53)
+			(xy 212.09 177.8) (xy 212.09 176.53)
 		)
 		(stroke
 			(width 0)
@@ -11724,17 +11844,6 @@
 		)
 		(uuid "1ac55325-06ed-4510-a224-ce6abd6733e8")
 	)
-	(label "UART_TX"
-		(at 139.7 115.57 180)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "1db3ad1d-ffc8-4d56-a84b-a844212df91a")
-	)
 	(label "BUCK_VFB"
 		(at 278.13 54.61 0)
 		(fields_autoplaced yes)
@@ -11867,17 +11976,6 @@
 		)
 		(uuid "33baa158-4f54-48de-970d-7b63f647b817")
 	)
-	(label "UART_RX"
-		(at 139.7 82.55 180)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify right bottom)
-		)
-		(uuid "34f2852e-a37e-418c-909e-afad7784cf49")
-	)
 	(label "BTN_1_PRE"
 		(at 382.27 120.65 0)
 		(fields_autoplaced yes)
@@ -11923,7 +12021,7 @@
 		(uuid "450303c9-44dc-4715-a41e-ed44347b9fa7")
 	)
 	(label "I2C_SDA"
-		(at 220.98 182.88 0)
+		(at 223.52 182.88 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -12142,16 +12240,16 @@
 		)
 		(uuid "8939b48c-7cbb-4604-845a-0de233bf5bf5")
 	)
-	(label "UART_RX"
-		(at 16.51 198.12 0)
+	(label "RF_ANT_PAD"
+		(at 323.85 110.49 180)
 		(fields_autoplaced yes)
 		(effects
 			(font
-				(size 1.27 1.27)
+				(size 0.5 0.5)
 			)
-			(justify left bottom)
+			(justify right bottom)
 		)
-		(uuid "8a92d475-5b71-4bf0-93a4-88ee4f0f205b")
+		(uuid "8b8140a5-fa51-4093-a28e-cd0a746f460a")
 	)
 	(label "RF_MATCH"
 		(at 284.48 110.49 0)
@@ -12450,6 +12548,28 @@
 		)
 		(uuid "ce991d4c-3d48-4263-8df2-44ffc8bbf91f")
 	)
+	(label "IMU_INT1"
+		(at 139.7 115.57 180)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify right bottom)
+		)
+		(uuid "cef86457-b240-4fb4-9058-90f28b04249b")
+	)
+	(label "IMU_INT1"
+		(at 223.52 171.45 0)
+		(fields_autoplaced yes)
+		(effects
+			(font
+				(size 1.27 1.27)
+			)
+			(justify left bottom)
+		)
+		(uuid "d0404689-6b41-4696-a8c9-5a267d2f31a4")
+	)
 	(label "IR_COLLECT_1"
 		(at 139.7 69.85 180)
 		(fields_autoplaced yes)
@@ -12517,7 +12637,7 @@
 		(uuid "d6280a90-8232-4bf6-8116-78380328598f")
 	)
 	(label "I2C_SCL"
-		(at 220.98 180.34 0)
+		(at 223.52 180.34 0)
 		(fields_autoplaced yes)
 		(effects
 			(font
@@ -12537,17 +12657,6 @@
 			(justify left bottom)
 		)
 		(uuid "daceb17e-4975-4aaf-9877-c92d1c60d13b")
-	)
-	(label "UART_TX"
-		(at 16.51 200.66 0)
-		(fields_autoplaced yes)
-		(effects
-			(font
-				(size 1.27 1.27)
-			)
-			(justify left bottom)
-		)
-		(uuid "dbbe1a4a-5b42-42a3-940e-30e0110c5a67")
 	)
 	(label "SWD_NRST"
 		(at 21.59 57.15 0)
@@ -12908,7 +13017,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C77103"
+		(property "LCSC Part" "C77103"
 			(at 73.66 62.23 0)
 			(effects
 				(font
@@ -12987,7 +13096,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C4177"
+		(property "LCSC Part" "C4177"
 			(at 252.73 259.08 0)
 			(effects
 				(font
@@ -13133,7 +13242,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C17955"
+		(property "LCSC Part" "C17955"
 			(at 152.4 252.73 0)
 			(effects
 				(font
@@ -13212,7 +13321,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C25905"
+		(property "LCSC Part" "C25905"
 			(at 83.82 180.34 0)
 			(effects
 				(font
@@ -13238,7 +13347,7 @@
 	)
 	(symbol
 		(lib_id "Device:C")
-		(at 213.36 172.72 0)
+		(at 212.09 172.72 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -13246,7 +13355,7 @@
 		(dnp no)
 		(uuid "0e3325c8-d68f-4418-861a-b155bdb74080")
 		(property "Reference" "C26"
-			(at 217.17 171.4499 0)
+			(at 215.9 171.4499 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13255,7 +13364,7 @@
 			)
 		)
 		(property "Value" "10n"
-			(at 217.17 173.9899 0)
+			(at 215.9 173.9899 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13264,7 +13373,7 @@
 			)
 		)
 		(property "Footprint" "Capacitor_SMD:C_0402_1005Metric"
-			(at 214.3252 176.53 0)
+			(at 213.0552 176.53 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13273,7 +13382,7 @@
 			)
 		)
 		(property "Datasheet" "~"
-			(at 213.36 172.72 0)
+			(at 212.09 172.72 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13282,7 +13391,7 @@
 			)
 		)
 		(property "Description" "Unpolarized capacitor"
-			(at 213.36 172.72 0)
+			(at 212.09 172.72 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13290,8 +13399,8 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C15195"
-			(at 213.36 172.72 0)
+		(property "LCSC Part" "C15195"
+			(at 212.09 172.72 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -13369,7 +13478,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C307331"
+		(property "LCSC Part" "C307331"
 			(at 39.37 44.45 0)
 			(effects
 				(font
@@ -13448,7 +13557,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" ""
+		(property "LCSC Part" ""
 			(at 194.31 25.4 0)
 			(effects
 				(font
@@ -13521,7 +13630,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C19666"
+		(property "LCSC Part" "C19666"
 			(at 45.72 66.04 0)
 			(effects
 				(font
@@ -13600,7 +13709,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C307331"
+		(property "LCSC Part" "C307331"
 			(at 367.03 149.86 0)
 			(effects
 				(font
@@ -13811,7 +13920,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C13585"
+		(property "LCSC Part" "C13585"
 			(at 250.19 49.53 0)
 			(effects
 				(font
@@ -13860,7 +13969,7 @@
 				)
 			)
 		)
-		(property "Footprint" "footprints:ECS-320-8-37B-CKY-TR"
+		(property "Footprint" "footprints:XL7EL89CKI-111YLC-32M"
 			(at 378.46 39.37 0)
 			(effects
 				(font
@@ -13887,7 +13996,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" ""
+		(property "LCSC Part" "C2965582"
 			(at 378.46 39.37 0)
 			(effects
 				(font
@@ -14037,7 +14146,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" ""
+		(property "LCSC Part" ""
 			(at 177.8 245.11 0)
 			(effects
 				(font
@@ -14382,7 +14491,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C45783"
+		(property "LCSC Part" "C45783"
 			(at 308.61 49.53 0)
 			(effects
 				(font
@@ -14461,7 +14570,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" ""
+		(property "LCSC Part" ""
 			(at 250.19 245.11 0)
 			(effects
 				(font
@@ -14538,7 +14647,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C129328"
+		(property "LCSC Part" "C129328"
 			(at 314.96 203.2 0)
 			(effects
 				(font
@@ -14717,7 +14826,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" ""
+		(property "LCSC Part" ""
 			(at 393.7 196.85 0)
 			(effects
 				(font
@@ -14789,7 +14898,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C15849"
+		(property "LCSC Part" "C15849"
 			(at 82.55 27.94 0)
 			(effects
 				(font
@@ -14868,7 +14977,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C307331"
+		(property "LCSC Part" "C307331"
 			(at 73.66 44.45 0)
 			(effects
 				(font
@@ -14945,7 +15054,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" ""
+		(property "LCSC Part" ""
 			(at 392.43 144.78 0)
 			(effects
 				(font
@@ -15089,7 +15198,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C307331"
+		(property "LCSC Part" "C307331"
 			(at 280.67 48.26 0)
 			(effects
 				(font
@@ -15166,7 +15275,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C383369"
+		(property "LCSC Part" "C383369"
 			(at 288.29 44.45 0)
 			(effects
 				(font
@@ -15245,7 +15354,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" ""
+		(property "LCSC Part" ""
 			(at 226.06 245.11 0)
 			(effects
 				(font
@@ -15324,7 +15433,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C25905"
+		(property "LCSC Part" "C25905"
 			(at 92.71 180.34 0)
 			(effects
 				(font
@@ -15350,7 +15459,7 @@
 	)
 	(symbol
 		(lib_id "power:+3V3")
-		(at 213.36 166.37 0)
+		(at 212.09 166.37 0)
 		(unit 1)
 		(exclude_from_sim no)
 		(in_bom yes)
@@ -15358,7 +15467,7 @@
 		(dnp no)
 		(uuid "40f5a8f3-dc46-41aa-954e-936e91b03db1")
 		(property "Reference" "#PWR036"
-			(at 213.36 170.18 0)
+			(at 212.09 170.18 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15367,7 +15476,7 @@
 			)
 		)
 		(property "Value" "+3V3"
-			(at 213.36 162.56 0)
+			(at 212.09 162.56 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15375,7 +15484,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 213.36 166.37 0)
+			(at 212.09 166.37 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15384,7 +15493,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 213.36 166.37 0)
+			(at 212.09 166.37 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15393,7 +15502,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"+3V3\""
-			(at 213.36 166.37 0)
+			(at 212.09 166.37 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -15534,7 +15643,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C307331"
+		(property "LCSC Part" "C307331"
 			(at 120.65 44.45 0)
 			(effects
 				(font
@@ -15616,7 +15725,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C2687116"
+		(property "LCSC Part" "C2687116"
 			(at 116.84 182.88 0)
 			(effects
 				(font
@@ -15775,7 +15884,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C15127"
+		(property "LCSC Part" "C15127"
 			(at 231.14 46.99 0)
 			(effects
 				(font
@@ -15922,7 +16031,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C25905"
+		(property "LCSC Part" "C25905"
 			(at 356.87 149.86 0)
 			(effects
 				(font
@@ -16001,7 +16110,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" ""
+		(property "LCSC Part" ""
 			(at 170.18 25.4 0)
 			(effects
 				(font
@@ -16073,7 +16182,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C25744"
+		(property "LCSC Part" "C25744"
 			(at 195.58 193.04 0)
 			(effects
 				(font
@@ -16152,7 +16261,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C25779"
+		(property "LCSC Part" "C25779"
 			(at 295.91 49.53 0)
 			(effects
 				(font
@@ -16229,7 +16338,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" ""
+		(property "LCSC Part" "C531364"
 			(at 288.29 110.49 0)
 			(effects
 				(font
@@ -16314,7 +16423,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C4177"
+		(property "LCSC Part" "C4177"
 			(at 228.6 259.08 0)
 			(effects
 				(font
@@ -16392,7 +16501,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C25905"
+		(property "LCSC Part" "C25905"
 			(at 138.43 267.97 0)
 			(effects
 				(font
@@ -16471,7 +16580,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" ""
+		(property "LCSC Part" ""
 			(at 207.01 102.87 0)
 			(effects
 				(font
@@ -16684,7 +16793,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" ""
+		(property "LCSC Part" ""
 			(at 194.31 33.02 0)
 			(effects
 				(font
@@ -16757,7 +16866,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C32949"
+		(property "LCSC Part" "C32949"
 			(at 370.84 69.85 0)
 			(effects
 				(font
@@ -16836,7 +16945,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" ""
+		(property "LCSC Part" ""
 			(at 40.64 187.96 0)
 			(effects
 				(font
@@ -17016,7 +17125,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C2150"
+		(property "LCSC Part" "C2150"
 			(at 193.04 114.3 0)
 			(effects
 				(font
@@ -17098,7 +17207,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C17955"
+		(property "LCSC Part" "C17955"
 			(at 76.2 252.73 0)
 			(effects
 				(font
@@ -17177,7 +17286,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C307331"
+		(property "LCSC Part" "C307331"
 			(at 62.23 44.45 0)
 			(effects
 				(font
@@ -17386,7 +17495,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" ""
+		(property "LCSC Part" ""
 			(at 170.18 33.02 0)
 			(effects
 				(font
@@ -17459,7 +17568,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C25744"
+		(property "LCSC Part" "C25744"
 			(at 295.91 59.69 0)
 			(effects
 				(font
@@ -17537,7 +17646,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C307331"
+		(property "LCSC Part" "C307331"
 			(at 288.29 210.82 0)
 			(effects
 				(font
@@ -17683,7 +17792,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C307331"
+		(property "LCSC Part" "C307331"
 			(at 50.8 44.45 0)
 			(effects
 				(font
@@ -18160,7 +18269,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C25905"
+		(property "LCSC Part" "C25905"
 			(at 62.23 267.97 0)
 			(effects
 				(font
@@ -18238,7 +18347,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C307331"
+		(property "LCSC Part" "C307331"
 			(at 199.39 165.1 0)
 			(effects
 				(font
@@ -18316,7 +18425,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" ""
+		(property "LCSC Part" ""
 			(at 393.7 222.25 0)
 			(effects
 				(font
@@ -18389,7 +18498,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C2150"
+		(property "LCSC Part" "C2150"
 			(at 149.86 262.89 0)
 			(effects
 				(font
@@ -18471,7 +18580,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C2150"
+		(property "LCSC Part" "C2150"
 			(at 35.56 262.89 0)
 			(effects
 				(font
@@ -18553,7 +18662,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" ""
+		(property "LCSC Part" ""
 			(at 38.1 243.84 0)
 			(effects
 				(font
@@ -18698,7 +18807,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" ""
+		(property "LCSC Part" ""
 			(at 365.76 217.17 0)
 			(effects
 				(font
@@ -18788,7 +18897,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C25905"
+		(property "LCSC Part" "C25905"
 			(at 24.13 267.97 0)
 			(effects
 				(font
@@ -18864,7 +18973,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C25076"
+		(property "LCSC Part" "C25076"
 			(at 377.19 144.78 0)
 			(effects
 				(font
@@ -18942,7 +19051,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" ""
+		(property "LCSC Part" ""
 			(at 365.76 191.77 0)
 			(effects
 				(font
@@ -19030,7 +19139,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C32346"
+		(property "LCSC Part" "C32346"
 			(at 378.46 64.77 0)
 			(effects
 				(font
@@ -19109,7 +19218,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" ""
+		(property "LCSC Part" ""
 			(at 171.45 69.85 0)
 			(effects
 				(font
@@ -19182,7 +19291,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C19666"
+		(property "LCSC Part" "C19666"
 			(at 27.94 44.45 0)
 			(effects
 				(font
@@ -19323,7 +19432,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C25076"
+		(property "LCSC Part" "C25076"
 			(at 377.19 120.65 0)
 			(effects
 				(font
@@ -19402,7 +19511,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C4177"
+		(property "LCSC Part" "C4177"
 			(at 204.47 259.08 0)
 			(effects
 				(font
@@ -19480,7 +19589,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C25744"
+		(property "LCSC Part" "C25744"
 			(at 186.69 193.04 0)
 			(effects
 				(font
@@ -19557,7 +19666,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C486062"
+		(property "LCSC Part" "C486062"
 			(at 261.62 44.45 0)
 			(effects
 				(font
@@ -19648,7 +19757,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" ""
+		(property "LCSC Part" ""
 			(at 186.69 63.5 0)
 			(effects
 				(font
@@ -19721,7 +19830,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" ""
+		(property "LCSC Part" ""
 			(at 114.3 243.84 0)
 			(effects
 				(font
@@ -19800,7 +19909,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C17955"
+		(property "LCSC Part" "C17955"
 			(at 38.1 252.73 0)
 			(effects
 				(font
@@ -19878,7 +19987,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C45783"
+		(property "LCSC Part" "C45783"
 			(at 320.04 49.53 0)
 			(effects
 				(font
@@ -20091,7 +20200,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" ""
+		(property "LCSC Part" ""
 			(at 269.24 110.49 0)
 			(effects
 				(font
@@ -20184,7 +20293,7 @@
 	)
 	(symbol
 		(lib_id "power:GND")
-		(at 213.36 177.8 0)
+		(at 212.09 177.8 0)
 		(mirror y)
 		(unit 1)
 		(exclude_from_sim no)
@@ -20194,7 +20303,7 @@
 		(fields_autoplaced yes)
 		(uuid "a67858b9-f828-4acb-86f5-552cfe559b7a")
 		(property "Reference" "#PWR039"
-			(at 213.36 184.15 0)
+			(at 212.09 184.15 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -20203,7 +20312,7 @@
 			)
 		)
 		(property "Value" "GND"
-			(at 213.36 182.88 0)
+			(at 212.09 182.88 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -20212,7 +20321,7 @@
 			)
 		)
 		(property "Footprint" ""
-			(at 213.36 177.8 0)
+			(at 212.09 177.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -20221,7 +20330,7 @@
 			)
 		)
 		(property "Datasheet" ""
-			(at 213.36 177.8 0)
+			(at 212.09 177.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -20230,7 +20339,7 @@
 			)
 		)
 		(property "Description" "Power symbol creates a global label with name \"GND\" , ground"
-			(at 213.36 177.8 0)
+			(at 212.09 177.8 0)
 			(effects
 				(font
 					(size 1.27 1.27)
@@ -20305,7 +20414,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" ""
+		(property "LCSC Part" ""
 			(at 179.07 33.02 0)
 			(effects
 				(font
@@ -20378,7 +20487,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C11702"
+		(property "LCSC Part" "C11702"
 			(at 195.58 102.87 0)
 			(effects
 				(font
@@ -20535,6 +20644,76 @@
 		)
 	)
 	(symbol
+		(lib_id "Device:Antenna_Chip")
+		(at 314.96 106.68 0)
+		(unit 1)
+		(exclude_from_sim no)
+		(in_bom yes)
+		(on_board yes)
+		(dnp no)
+		(fields_autoplaced yes)
+		(uuid "aab275ee-eec5-4ed0-ab91-3c54eb9c5a06")
+		(property "Reference" "AE1"
+			(at 320.04 102.8699 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Value" "Antenna_Chip"
+			(at 320.04 105.4099 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(justify left)
+			)
+		)
+		(property "Footprint" "footprints:ANT_2450AT42A100E"
+			(at 312.42 102.235 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Datasheet" "~"
+			(at 312.42 102.235 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(property "Description" "Ceramic chip antenna with pin for PCB trace"
+			(at 314.96 106.68 0)
+			(effects
+				(font
+					(size 1.27 1.27)
+				)
+				(hide yes)
+			)
+		)
+		(pin "1"
+			(uuid "b1c80565-1bcd-4749-8dbc-380d4b71f25b")
+		)
+		(pin "2"
+			(uuid "c7b7720b-0b53-40bb-85b2-4d7c178a8765")
+		)
+		(instances
+			(project "micromouse"
+				(path "/f865c82b-e5c4-410c-8bc5-ca3a55596e18"
+					(reference "AE1")
+					(unit 1)
+				)
+			)
+		)
+	)
+	(symbol
 		(lib_id "Device:C")
 		(at 367.03 125.73 0)
 		(unit 1)
@@ -20589,7 +20768,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C307331"
+		(property "LCSC Part" "C307331"
 			(at 367.03 125.73 0)
 			(effects
 				(font
@@ -20668,7 +20847,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" ""
+		(property "LCSC Part" ""
 			(at 171.45 63.5 0)
 			(effects
 				(font
@@ -20874,7 +21053,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C307331"
+		(property "LCSC Part" "C307331"
 			(at 302.26 193.04 0)
 			(effects
 				(font
@@ -20953,7 +21132,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C25905"
+		(property "LCSC Part" "C25905"
 			(at 356.87 125.73 0)
 			(effects
 				(font
@@ -21228,7 +21407,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" ""
+		(property "LCSC Part" ""
 			(at 392.43 120.65 0)
 			(effects
 				(font
@@ -21371,7 +21550,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C3288646"
+		(property "LCSC Part" "C3288646"
 			(at 234.95 162.56 0)
 			(effects
 				(font
@@ -21473,7 +21652,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C19666"
+		(property "LCSC Part" "C19666"
 			(at 133.35 44.45 0)
 			(effects
 				(font
@@ -21616,7 +21795,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C15195"
+		(property "LCSC Part" "C15195"
 			(at 93.98 27.94 0)
 			(effects
 				(font
@@ -21694,7 +21873,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C25905"
+		(property "LCSC Part" "C25905"
 			(at 100.33 267.97 0)
 			(effects
 				(font
@@ -21838,7 +22017,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C17955"
+		(property "LCSC Part" "C17955"
 			(at 114.3 252.73 0)
 			(effects
 				(font
@@ -21985,7 +22164,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" ""
+		(property "LCSC Part" ""
 			(at 179.07 25.4 0)
 			(effects
 				(font
@@ -22123,7 +22302,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C25076"
+		(property "LCSC Part" "C25076"
 			(at 182.88 114.3 0)
 			(effects
 				(font
@@ -22403,7 +22582,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C307331"
+		(property "LCSC Part" "C307331"
 			(at 33.02 60.96 0)
 			(effects
 				(font
@@ -22549,7 +22728,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C1015"
+		(property "LCSC Part" "C1015"
 			(at 74.93 24.13 0)
 			(effects
 				(font
@@ -22628,7 +22807,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" ""
+		(property "LCSC Part" ""
 			(at 201.93 245.11 0)
 			(effects
 				(font
@@ -22707,7 +22886,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C4177"
+		(property "LCSC Part" "C4177"
 			(at 180.34 259.08 0)
 			(effects
 				(font
@@ -22853,7 +23032,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" ""
+		(property "LCSC Part" ""
 			(at 76.2 243.84 0)
 			(effects
 				(font
@@ -22932,7 +23111,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" ""
+		(property "LCSC Part" ""
 			(at 260.35 115.57 0)
 			(effects
 				(font
@@ -23075,7 +23254,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C307331"
+		(property "LCSC Part" "C307331"
 			(at 116.84 27.94 0)
 			(effects
 				(font
@@ -23154,7 +23333,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C2150"
+		(property "LCSC Part" "C2150"
 			(at 111.76 262.89 0)
 			(effects
 				(font
@@ -23301,7 +23480,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" ""
+		(property "LCSC Part" ""
 			(at 152.4 243.84 0)
 			(effects
 				(font
@@ -23353,7 +23532,7 @@
 				(justify right)
 			)
 		)
-		(property "Footprint" "Connector_USB:USB_C_Receptacle_GCT_USB4110"
+		(property "Footprint" "footprints:USB_C_16P_QTGM027"
 			(at 140.97 182.88 0)
 			(effects
 				(font
@@ -23380,7 +23559,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C2681552"
+		(property "LCSC Part" "C2681552"
 			(at 144.78 182.88 0)
 			(effects
 				(font
@@ -23569,7 +23748,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C23630"
+		(property "LCSC Part" "C23630"
 			(at 186.69 165.1 0)
 			(effects
 				(font
@@ -23713,7 +23892,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C8678"
+		(property "LCSC Part" "C8678"
 			(at 242.57 39.37 0)
 			(effects
 				(font
@@ -23859,7 +24038,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C32949"
+		(property "LCSC Part" "C32949"
 			(at 386.08 69.85 0)
 			(effects
 				(font
@@ -23939,7 +24118,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C404023"
+		(property "LCSC Part" "C404023"
 			(at 102.87 92.71 0)
 			(effects
 				(font
@@ -24105,82 +24284,6 @@
 		)
 	)
 	(symbol
-		(lib_id "Device:Antenna")
-		(at 314.96 105.41 0)
-		(unit 1)
-		(exclude_from_sim no)
-		(in_bom yes)
-		(on_board yes)
-		(dnp no)
-		(fields_autoplaced yes)
-		(uuid "f4a3697d-f957-402a-81d9-313cf7df492b")
-		(property "Reference" "AE1"
-			(at 317.5 104.7749 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Value" "AMCA31-2R450G-S1F-T3"
-			(at 317.5 107.3149 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(justify left)
-			)
-		)
-		(property "Footprint" "footprints:AMCA31-2R450G-S1F-T3"
-			(at 314.96 105.41 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Datasheet" "~"
-			(at 314.96 105.41 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "Description" "Antenna"
-			(at 314.96 105.41 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(property "LCSC Part #" ""
-			(at 314.96 105.41 0)
-			(effects
-				(font
-					(size 1.27 1.27)
-				)
-				(hide yes)
-			)
-		)
-		(pin "1"
-			(uuid "05e08f11-ae2d-44d7-897c-2528becefb5f")
-		)
-		(instances
-			(project "micromouse"
-				(path "/f865c82b-e5c4-410c-8bc5-ca3a55596e18"
-					(reference "AE1")
-					(unit 1)
-				)
-			)
-		)
-	)
-	(symbol
 		(lib_id "Device:Q_NPN_BEC")
 		(at 73.66 262.89 0)
 		(unit 1)
@@ -24235,7 +24338,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C2150"
+		(property "LCSC Part" "C2150"
 			(at 73.66 262.89 0)
 			(effects
 				(font
@@ -24316,7 +24419,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C307331"
+		(property "LCSC Part" "C307331"
 			(at 85.09 44.45 0)
 			(effects
 				(font
@@ -24395,7 +24498,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" ""
+		(property "LCSC Part" ""
 			(at 278.13 115.57 0)
 			(effects
 				(font
@@ -24471,7 +24574,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" "C1046"
+		(property "LCSC Part" "C1046"
 			(at 60.96 62.23 0)
 			(effects
 				(font
@@ -24686,7 +24789,7 @@
 				(hide yes)
 			)
 		)
-		(property "LCSC Part #" ""
+		(property "LCSC Part" ""
 			(at 312.42 149.86 0)
 			(effects
 				(font

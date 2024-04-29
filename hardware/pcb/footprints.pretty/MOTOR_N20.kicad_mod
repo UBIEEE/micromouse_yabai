@@ -342,7 +342,7 @@
 	)
 	(fp_rect
 		(start 25 -6.5)
-		(end 27 -5.5)
+		(end 28 -5.5)
 		(stroke
 			(width 0.1)
 			(type default)
@@ -363,7 +363,7 @@
 		(uuid "38516a55-694c-49f1-a3bb-127a11bcc6ec")
 	)
 	(fp_rect
-		(start 27 -10.75)
+		(start 28 -10.75)
 		(end 30 -1.25)
 		(stroke
 			(width 0.1)
@@ -544,7 +544,7 @@
 		(uuid "8a31d2f9-35d7-4ed6-870c-88d90994da51")
 	)
 	(fp_rect
-		(start 27 -10.75)
+		(start 28 -10.75)
 		(end 30 -1.25)
 		(stroke
 			(width 0.1)
@@ -667,6 +667,7 @@
 		)
 	)
 	(model "${KIPRJMOD}/models/MOTOR_N20.step"
+		(hide yes)
 		(offset
 			(xyz 24 6 5)
 		)
@@ -675,6 +676,17 @@
 		)
 		(rotate
 			(xyz 0 90 -90)
+		)
+	)
+	(model "${KIPRJMOD}/models/N20_MOTOR_ENCODER.step"
+		(offset
+			(xyz 24 17.75 10)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 180 -90)
 		)
 	)
 )

@@ -139,13 +139,13 @@
 	)
 	(model "${KIPRJMOD}/models/SFH_4545.step"
 		(offset
-			(xyz 0 0 0)
+			(xyz 0 -1.58 3)
 		)
 		(scale
 			(xyz 1 1 1)
 		)
 		(rotate
-			(xyz -90 0 180)
+			(xyz 0 0 0)
 		)
 	)
 )
