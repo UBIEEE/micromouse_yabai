@@ -5912,7 +5912,7 @@
 		)
 		(fp_arc
 			(start -2.5 -7.8)
-			(mid 0 -10.300011)
+			(mid -0.000001 -10.300013)
 			(end 2.5 -7.8)
 			(stroke
 				(width 0.1)
@@ -16269,6 +16269,17 @@
 			(pintype "passive")
 			(solder_mask_margin 0.051)
 			(uuid "bae32b1a-d5c7-462d-a05f-67cab75e445e")
+		)
+		(model "${KIPRJMOD}/models/XL7EL89CKI-111YLC-32M.step"
+			(offset
+				(xyz -0.8 1 0)
+			)
+			(scale
+				(xyz 1 1 1)
+			)
+			(rotate
+				(xyz 0 0 90)
+			)
 		)
 	)
 	(footprint "Capacitor_SMD:C_0603_1608Metric"
