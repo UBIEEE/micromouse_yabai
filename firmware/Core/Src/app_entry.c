@@ -25,7 +25,7 @@
 #include "app_ble.h"
 #include "ble.h"
 #include "tl.h"
-#include "stm32_seq.h"
+#include "cmsis_os.h"
 #include "shci_tl.h"
 #include "stm32_lpm.h"
 #include "app_debug.h"
@@ -67,7 +67,23 @@ PLACE_IN_SECTION("MB_MEM2") ALIGN(4) static uint8_t BleSpareEvtBuffer[sizeof(TL_
 
 /* USER CODE END PV */
 
+/* Global variables ----------------------------------------------------------*/
+osMutexId_t MtxShciId;
+osSemaphoreId_t SemShciId;
+osThreadId_t ShciUserEvtProcessId;
+
+const osThreadAttr_t ShciUserEvtProcess_attr = {
+    .name = CFG_SHCI_USER_EVT_PROCESS_NAME,
+    .attr_bits = CFG_SHCI_USER_EVT_PROCESS_ATTR_BITS,
+    .cb_mem = CFG_SHCI_USER_EVT_PROCESS_CB_MEM,
+    .cb_size = CFG_SHCI_USER_EVT_PROCESS_CB_SIZE,
+    .stack_mem = CFG_SHCI_USER_EVT_PROCESS_STACK_MEM,
+    .priority = CFG_SHCI_USER_EVT_PROCESS_PRIORITY,
+    .stack_size = CFG_SHCI_USER_EVT_PROCESS_STACK_SIZE
+};
+
 /* Private functions prototypes-----------------------------------------------*/
+static void ShciUserEvtProcess(void *argument);
 static void Config_HSE(void);
 static void Reset_Device(void);
 #if (CFG_HW_RESET_BY_FW == 1)
@@ -314,8 +330,13 @@ static void appe_Tl_Init(void)
   /**< Reference table initialization */
   TL_Init();
 
+  MtxShciId = osMutexNew(NULL);
+  SemShciId = osSemaphoreNew(1, 0, NULL); /*< Create the semaphore and make it busy at initialization */
+
+  /** FreeRTOS system task creation */
+  ShciUserEvtProcessId = osThreadNew(ShciUserEvtProcess, NULL, &ShciUserEvtProcess_attr);
+
   /**< System channel initialization */
-  UTIL_SEQ_RegTask(1<< CFG_TASK_SYSTEM_HCI_ASYNCH_EVT_ID, UTIL_SEQ_RFU, shci_user_evt_proc);
   SHci_Tl_Init_Conf.p_cmdbuffer = (uint8_t*)&SystemCmdBuffer;
   SHci_Tl_Init_Conf.StatusNotCallBack = APPE_SysStatusNot;
   shci_init(APPE_SysUserEvtRx, (void*) &SHci_Tl_Init_Conf);
@@ -334,7 +355,19 @@ static void appe_Tl_Init(void)
 
 static void APPE_SysStatusNot(SHCI_TL_CmdStatus_t status)
 {
-  UNUSED(status);
+  switch (status)
+  {
+    case SHCI_TL_CmdBusy:
+      osMutexAcquire(MtxShciId, osWaitForever);
+      break;
+
+    case SHCI_TL_CmdAvailable:
+      osMutexRelease(MtxShciId);
+      break;
+
+    default:
+      break;
+  }
   return;
 }
 
@@ -504,6 +537,27 @@ static void APPE_SysEvtReadyProcessing(void * pPayload)
   return;
 }
 
+/*************************************************************
+ *
+ * FREERTOS WRAPPER FUNCTIONS
+ *
+*************************************************************/
+static void ShciUserEvtProcess(void *argument)
+{
+  UNUSED(argument);
+  for(;;)
+  {
+    /* USER CODE BEGIN SHCI_USER_EVT_PROCESS_1 */
+
+    /* USER CODE END SHCI_USER_EVT_PROCESS_1 */
+     osThreadFlagsWait(1, osFlagsWaitAny, osWaitForever);
+     shci_user_evt_proc();
+    /* USER CODE BEGIN SHCI_USER_EVT_PROCESS_2 */
+
+    /* USER CODE END SHCI_USER_EVT_PROCESS_2 */
+    }
+}
+
 /* USER CODE BEGIN FD_LOCAL_FUNCTIONS */
 
 /* USER CODE END FD_LOCAL_FUNCTIONS */
@@ -542,53 +596,24 @@ void HAL_Delay(uint32_t Delay)
   }
 }
 
-void MX_APPE_Process(void)
-{
-  /* USER CODE BEGIN MX_APPE_Process_1 */
-
-  /* USER CODE END MX_APPE_Process_1 */
-  UTIL_SEQ_Run(UTIL_SEQ_DEFAULT);
-  /* USER CODE BEGIN MX_APPE_Process_2 */
-
-  /* USER CODE END MX_APPE_Process_2 */
-}
-
-void UTIL_SEQ_Idle(void)
-{
-#if (CFG_LPM_SUPPORTED == 1)
-  UTIL_LPM_EnterLowPower();
-#endif /* CFG_LPM_SUPPORTED == 1 */
-  return;
-}
-
-/**
-  * @brief  This function is called by the scheduler each time an event
-  *         is pending.
-  *
-  * @param  evt_waited_bm : Event pending.
-  * @retval None
-  */
-void UTIL_SEQ_EvtIdle(UTIL_SEQ_bm_t task_id_bm, UTIL_SEQ_bm_t evt_waited_bm)
-{
-  UTIL_SEQ_Run(UTIL_SEQ_DEFAULT);
-  return;
-}
-
 void shci_notify_asynch_evt(void* pdata)
 {
-  UTIL_SEQ_SetTask(1<<CFG_TASK_SYSTEM_HCI_ASYNCH_EVT_ID, CFG_SCH_PRIO_0);
+  UNUSED(pdata);
+  osThreadFlagsSet(ShciUserEvtProcessId, 1);
   return;
 }
 
 void shci_cmd_resp_release(uint32_t flag)
 {
-  UTIL_SEQ_SetEvt(1<< CFG_IDLEEVT_SYSTEM_HCI_CMD_EVT_RSP_ID);
+  UNUSED(flag);
+  osSemaphoreRelease(SemShciId);
   return;
 }
 
 void shci_cmd_resp_wait(uint32_t timeout)
 {
-  UTIL_SEQ_WaitEvt(1<< CFG_IDLEEVT_SYSTEM_HCI_CMD_EVT_RSP_ID);
+  UNUSED(timeout);
+  osSemaphoreAcquire(SemShciId, osWaitForever);
   return;
 }
 

@@ -156,43 +156,11 @@
 /**< specific parameters */
 /*****************************************************/
 
-#define P2P_SERVER1    1    /*1 = Device is Peripherique*/
-#define P2P_SERVER2    0
-#define P2P_SERVER3    0
-#define P2P_SERVER4    0
-#define P2P_SERVER5    0
-#define P2P_SERVER6    0
-
-#define CFG_DEV_ID_P2P_SERVER1                  (0x83)
-#define CFG_DEV_ID_P2P_SERVER2                  (0x84)
-#define CFG_DEV_ID_P2P_SERVER3                  (0x87)
-#define CFG_DEV_ID_P2P_SERVER4                  (0x88)
-#define CFG_DEV_ID_P2P_SERVER5                  (0x89)
-#define CFG_DEV_ID_P2P_SERVER6                  (0x8A)
-#define CFG_DEV_ID_P2P_ROUTER                   (0x85)
-
-#define  RADIO_ACTIVITY_EVENT   1          /* 1 for OOB Demo */
-
 /**
 * AD Element - Group B Feature
 */
-/* LSB - First Byte */
-#define CFG_FEATURE_THREAD_SWITCH               (0x40)
-
 /* LSB - Second Byte */
 #define CFG_FEATURE_OTA_REBOOT                  (0x20)
-
-#define CONN_L(x) ((int)((x)/0.625f))
-#define CONN_P(x) ((int)((x)/1.25f))
-
-  /*  L2CAP Connection Update request parameters used for test only with smart Phone */
-#define L2CAP_REQUEST_NEW_CONN_PARAM             0
-
-#define L2CAP_INTERVAL_MIN              CONN_P(1000) /* 1s */
-#define L2CAP_INTERVAL_MAX              CONN_P(1000) /* 1s */
-#define L2CAP_PERIPHERAL_LATENCY             0x0000
-#define L2CAP_TIMEOUT_MULTIPLIER        0x1F4
-
 /* USER CODE BEGIN Specific_Parameters */
 
 /* USER CODE END Specific_Parameters */
@@ -661,66 +629,46 @@ typedef enum
 /* USER CODE END Defines */
 
 /******************************************************************************
- * Scheduler
+ * FreeRTOS
  ******************************************************************************/
+/* USER CODE BEGIN FreeRTOS */
 
-/**
- * These are the lists of task id registered to the scheduler
- * Each task id shall be in the range [0:31]
- * This mechanism allows to implement a generic code in the API TL_BLE_HCI_StatusNot() to comply with
- * the requirement that a HCI/ACI command shall never be sent if there is already one pending
- */
+/* USER CODE END FreeRTOS */
+#define CFG_SHCI_USER_EVT_PROCESS_NAME        "SHCI_USER_EVT_PROCESS"
+#define CFG_SHCI_USER_EVT_PROCESS_ATTR_BITS   (0)
+#define CFG_SHCI_USER_EVT_PROCESS_CB_MEM      (0)
+#define CFG_SHCI_USER_EVT_PROCESS_CB_SIZE     (0)
+#define CFG_SHCI_USER_EVT_PROCESS_STACK_MEM   (0)
+#define CFG_SHCI_USER_EVT_PROCESS_PRIORITY    osPriorityNone
+#define CFG_SHCI_USER_EVT_PROCESS_STACK_SIZE  (128 * 20)
 
-/**< Add in that list all tasks that may send a ACI/HCI command */
-typedef enum
-{
-  CFG_TASK_ADV_CANCEL_ID,
-#if (L2CAP_REQUEST_NEW_CONN_PARAM != 0 )
-  CFG_TASK_CONN_UPDATE_REG_ID,
-#endif
-  CFG_TASK_HCI_ASYNCH_EVT_ID,
-  /* USER CODE BEGIN CFG_Task_Id_With_HCI_Cmd_t */
+#define CFG_HCI_USER_EVT_PROCESS_NAME         "HCI_USER_EVT_PROCESS"
+#define CFG_HCI_USER_EVT_PROCESS_ATTR_BITS    (0)
+#define CFG_HCI_USER_EVT_PROCESS_CB_MEM       (0)
+#define CFG_HCI_USER_EVT_PROCESS_CB_SIZE      (0)
+#define CFG_HCI_USER_EVT_PROCESS_STACK_MEM    (0)
+#define CFG_HCI_USER_EVT_PROCESS_PRIORITY     osPriorityNone
+#define CFG_HCI_USER_EVT_PROCESS_STACK_SIZE   (128 * 40)
 
-  /* USER CODE END CFG_Task_Id_With_HCI_Cmd_t */
-  CFG_LAST_TASK_ID_WITH_HCICMD,                                               /**< Shall be LAST in the list */
-} CFG_Task_Id_With_HCI_Cmd_t;
+#define CFG_ADV_UPDATE_PROCESS_NAME           "ADV_UPDATE_PROCESS"
+#define CFG_ADV_UPDATE_PROCESS_ATTR_BITS      (0)
+#define CFG_ADV_UPDATE_PROCESS_CB_MEM         (0)
+#define CFG_ADV_UPDATE_PROCESS_CB_SIZE        (0)
+#define CFG_ADV_UPDATE_PROCESS_STACK_MEM      (0)
+#define CFG_ADV_UPDATE_PROCESS_PRIORITY       osPriorityNone
+#define CFG_ADV_UPDATE_PROCESS_STACK_SIZE     (128 * 20)
 
-/**< Add in that list all tasks that never send a ACI/HCI command */
-typedef enum
-{
-  CFG_FIRST_TASK_ID_WITH_NO_HCICMD = CFG_LAST_TASK_ID_WITH_HCICMD - 1,        /**< Shall be FIRST in the list */
-  CFG_TASK_SYSTEM_HCI_ASYNCH_EVT_ID,
-  /* USER CODE BEGIN CFG_Task_Id_With_NO_HCI_Cmd_t */
+#define CFG_HRS_PROCESS_NAME                  "HRS_PROCESS"
+#define CFG_HRS_PROCESS_ATTR_BITS             (0)
+#define CFG_HRS_PROCESS_CB_MEM                (0)
+#define CFG_HRS_PROCESS_CB_SIZE               (0)
+#define CFG_HRS_PROCESS_STACK_MEM             (0)
+#define CFG_HRS_PROCESS_PRIORITY              osPriorityNone
+#define CFG_HRS_PROCESS_STACK_SIZE            (128 * 20)
 
-  /* USER CODE END CFG_Task_Id_With_NO_HCI_Cmd_t */
-  CFG_LAST_TASK_ID_WITH_NO_HCICMD                                            /**< Shall be LAST in the list */
-} CFG_Task_Id_With_NO_HCI_Cmd_t;
+/* USER CODE BEGIN FreeRTOS_Defines */
 
-#define CFG_TASK_NBR    CFG_LAST_TASK_ID_WITH_NO_HCICMD
-
-/**
- * This is the list of priority required by the application
- * Each Id shall be in the range 0..31
- */
-typedef enum
-{
-  CFG_SCH_PRIO_0,
-  /* USER CODE BEGIN CFG_SCH_Prio_Id_t */
-
-  /* USER CODE END CFG_SCH_Prio_Id_t */
-} CFG_SCH_Prio_Id_t;
-
-/**
- * This is a bit mapping over 32bits listing all events id supported in the application
- */
-typedef enum
-{
-  CFG_IDLEEVT_HCI_CMD_EVT_RSP_ID,
-  CFG_IDLEEVT_SYSTEM_HCI_CMD_EVT_RSP_ID,
-  /* USER CODE BEGIN CFG_IdleEvt_Id_t */
-
-  /* USER CODE END CFG_IdleEvt_Id_t */
-} CFG_IdleEvt_Id_t;
+/* USER CODE END FreeRTOS_Defines */
 
 /******************************************************************************
  * LOW POWER

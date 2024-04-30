@@ -18,6 +18,9 @@ target_include_directories(stm32cubemx INTERFACE
     ../../Drivers/STM32WBxx_HAL_Driver/Inc
     ../../Drivers/STM32WBxx_HAL_Driver/Inc/Legacy
     ../../Utilities/lpm/tiny_lpm
+    ../../Middlewares/Third_Party/FreeRTOS/Source/include
+    ../../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2
+    ../../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F
     ../../Middlewares/ST/STM32_WPAN
     ../../Middlewares/ST/STM32_WPAN/interface/patterns/ble_thread
     ../../Middlewares/ST/STM32_WPAN/interface/patterns/ble_thread/tl
@@ -29,22 +32,25 @@ target_include_directories(stm32cubemx INTERFACE
     ../../Middlewares/ST/STM32_WPAN/ble/svc/Inc
     ../../Middlewares/ST/STM32_WPAN/ble/svc/Src
     ../../Drivers/CMSIS/Device/ST/STM32WBxx/Include
-    ../../Utilities/sequencer
     ../../Middlewares/ST/STM32_WPAN/ble
     ../../Drivers/CMSIS/Include
 )
 
 target_sources(stm32cubemx INTERFACE
     ../../Core/Src/main.c
+    ../../Core/Src/app_freertos.c
     ../../Core/Src/app_entry.c
     ../../Core/Src/app_debug.c
     ../../Core/Src/hw_timerserver.c
     ../../Core/Src/stm32_lpm_if.c
+    ../../Core/Src/freertos_port.c
     ../../Core/Src/stm32wbxx_it.c
     ../../Core/Src/stm32wbxx_hal_msp.c
+    ../../Core/Src/stm32wbxx_hal_timebase_tim.c
     ../../STM32_WPAN/Target/hw_ipcc.c
     ../../STM32_WPAN/App/app_ble.c
-    ../../STM32_WPAN/App/p2p_server_app.c
+    ../../STM32_WPAN/App/dis_app.c
+    ../../STM32_WPAN/App/hrs_app.c
     ../../Drivers/STM32WBxx_HAL_Driver/Src/stm32wbxx_hal_adc.c
     ../../Drivers/STM32WBxx_HAL_Driver/Src/stm32wbxx_hal_adc_ex.c
     ../../Drivers/STM32WBxx_HAL_Driver/Src/stm32wbxx_ll_adc.c
@@ -74,6 +80,16 @@ target_sources(stm32cubemx INTERFACE
     ../../Drivers/STM32WBxx_HAL_Driver/Src/stm32wbxx_hal_pcd_ex.c
     ../../Drivers/STM32WBxx_HAL_Driver/Src/stm32wbxx_ll_usb.c
     ../../Core/Src/system_stm32wbxx.c
+    ../../Middlewares/Third_Party/FreeRTOS/Source/croutine.c
+    ../../Middlewares/Third_Party/FreeRTOS/Source/event_groups.c
+    ../../Middlewares/Third_Party/FreeRTOS/Source/list.c
+    ../../Middlewares/Third_Party/FreeRTOS/Source/queue.c
+    ../../Middlewares/Third_Party/FreeRTOS/Source/stream_buffer.c
+    ../../Middlewares/Third_Party/FreeRTOS/Source/tasks.c
+    ../../Middlewares/Third_Party/FreeRTOS/Source/timers.c
+    ../../Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.c
+    ../../Middlewares/Third_Party/FreeRTOS/Source/portable/MemMang/heap_4.c
+    ../../Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/port.c
     ../../Middlewares/ST/STM32_WPAN/interface/patterns/ble_thread/tl/tl_mbox.c
     ../../Middlewares/ST/STM32_WPAN/interface/patterns/ble_thread/shci/shci.c
     ../../Middlewares/ST/STM32_WPAN/utilities/dbg_trace.c
@@ -86,14 +102,14 @@ target_sources(stm32cubemx INTERFACE
     ../../Middlewares/ST/STM32_WPAN/ble/core/auto/ble_hal_aci.c
     ../../Middlewares/ST/STM32_WPAN/ble/core/auto/ble_hci_le.c
     ../../Middlewares/ST/STM32_WPAN/ble/core/auto/ble_l2cap_aci.c
-    ../../Middlewares/ST/STM32_WPAN/ble/svc/Src/p2p_stm.c
+    ../../Middlewares/ST/STM32_WPAN/ble/svc/Src/hrs.c
+    ../../Middlewares/ST/STM32_WPAN/ble/svc/Src/dis.c
     ../../Middlewares/ST/STM32_WPAN/interface/patterns/ble_thread/tl/hci_tl.c
     ../../Middlewares/ST/STM32_WPAN/interface/patterns/ble_thread/tl/hci_tl_if.c
     ../../Middlewares/ST/STM32_WPAN/interface/patterns/ble_thread/tl/shci_tl.c
     ../../Middlewares/ST/STM32_WPAN/interface/patterns/ble_thread/tl/shci_tl_if.c
     ../../Middlewares/ST/STM32_WPAN/ble/svc/Src/svc_ctl.c
     ../../Utilities/lpm/tiny_lpm/stm32_lpm.c
-    ../../Utilities/sequencer/stm32_seq.c
     ../../Core/Src/sysmem.c
     ../../Core/Src/syscalls.c
     ../../startup_stm32wb55xx_cm4.s
