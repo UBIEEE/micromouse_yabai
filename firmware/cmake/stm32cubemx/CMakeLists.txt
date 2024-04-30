@@ -81,8 +81,6 @@ target_sources(stm32cubemx INTERFACE
     ../../Drivers/STM32WBxx_HAL_Driver/Src/stm32wbxx_hal_rtc_ex.c
     ../../Drivers/STM32WBxx_HAL_Driver/Src/stm32wbxx_hal_tim.c
     ../../Drivers/STM32WBxx_HAL_Driver/Src/stm32wbxx_hal_tim_ex.c
-    ../../Drivers/STM32WBxx_HAL_Driver/Src/stm32wbxx_hal_uart.c
-    ../../Drivers/STM32WBxx_HAL_Driver/Src/stm32wbxx_hal_uart_ex.c
     ../../Core/Src/system_stm32wbxx.c
     ../../Middlewares/ST/STM32_WPAN/interface/patterns/ble_thread/tl/tl_mbox.c
     ../../Middlewares/ST/STM32_WPAN/interface/patterns/ble_thread/shci/shci.c
