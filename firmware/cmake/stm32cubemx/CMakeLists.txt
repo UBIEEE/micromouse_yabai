@@ -15,8 +15,6 @@ target_compile_definitions(stm32cubemx INTERFACE
 target_include_directories(stm32cubemx INTERFACE
     ../../Core/Inc
     ../../STM32_WPAN/App
-    ../../USB_Device/App
-    ../../USB_Device/Target
     ../../Drivers/STM32WBxx_HAL_Driver/Inc
     ../../Drivers/STM32WBxx_HAL_Driver/Inc/Legacy
     ../../Utilities/lpm/tiny_lpm
@@ -30,8 +28,6 @@ target_include_directories(stm32cubemx INTERFACE
     ../../Middlewares/ST/STM32_WPAN/ble/core/template
     ../../Middlewares/ST/STM32_WPAN/ble/svc/Inc
     ../../Middlewares/ST/STM32_WPAN/ble/svc/Src
-    ../../Middlewares/ST/STM32_USB_Device_Library/Core/Inc
-    ../../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Inc
     ../../Drivers/CMSIS/Device/ST/STM32WBxx/Include
     ../../Utilities/sequencer
     ../../Middlewares/ST/STM32_WPAN/ble
@@ -49,13 +45,9 @@ target_sources(stm32cubemx INTERFACE
     ../../STM32_WPAN/Target/hw_ipcc.c
     ../../STM32_WPAN/App/app_ble.c
     ../../STM32_WPAN/App/p2p_server_app.c
-    ../../USB_Device/App/usb_device.c
-    ../../USB_Device/App/usbd_desc.c
-    ../../USB_Device/App/usbd_cdc_if.c
-    ../../USB_Device/Target/usbd_conf.c
-    ../../Drivers/STM32WBxx_HAL_Driver/Src/stm32wbxx_hal_pcd.c
-    ../../Drivers/STM32WBxx_HAL_Driver/Src/stm32wbxx_hal_pcd_ex.c
-    ../../Drivers/STM32WBxx_HAL_Driver/Src/stm32wbxx_ll_usb.c
+    ../../Drivers/STM32WBxx_HAL_Driver/Src/stm32wbxx_hal_adc.c
+    ../../Drivers/STM32WBxx_HAL_Driver/Src/stm32wbxx_hal_adc_ex.c
+    ../../Drivers/STM32WBxx_HAL_Driver/Src/stm32wbxx_ll_adc.c
     ../../Drivers/STM32WBxx_HAL_Driver/Src/stm32wbxx_hal_rcc.c
     ../../Drivers/STM32WBxx_HAL_Driver/Src/stm32wbxx_ll_rcc.c
     ../../Drivers/STM32WBxx_HAL_Driver/Src/stm32wbxx_hal_rcc_ex.c
@@ -70,9 +62,6 @@ target_sources(stm32cubemx INTERFACE
     ../../Drivers/STM32WBxx_HAL_Driver/Src/stm32wbxx_hal_cortex.c
     ../../Drivers/STM32WBxx_HAL_Driver/Src/stm32wbxx_hal.c
     ../../Drivers/STM32WBxx_HAL_Driver/Src/stm32wbxx_hal_exti.c
-    ../../Drivers/STM32WBxx_HAL_Driver/Src/stm32wbxx_hal_adc.c
-    ../../Drivers/STM32WBxx_HAL_Driver/Src/stm32wbxx_hal_adc_ex.c
-    ../../Drivers/STM32WBxx_HAL_Driver/Src/stm32wbxx_ll_adc.c
     ../../Drivers/STM32WBxx_HAL_Driver/Src/stm32wbxx_hal_i2c.c
     ../../Drivers/STM32WBxx_HAL_Driver/Src/stm32wbxx_hal_i2c_ex.c
     ../../Drivers/STM32WBxx_HAL_Driver/Src/stm32wbxx_hal_ipcc.c
@@ -81,6 +70,9 @@ target_sources(stm32cubemx INTERFACE
     ../../Drivers/STM32WBxx_HAL_Driver/Src/stm32wbxx_hal_rtc_ex.c
     ../../Drivers/STM32WBxx_HAL_Driver/Src/stm32wbxx_hal_tim.c
     ../../Drivers/STM32WBxx_HAL_Driver/Src/stm32wbxx_hal_tim_ex.c
+    ../../Drivers/STM32WBxx_HAL_Driver/Src/stm32wbxx_hal_pcd.c
+    ../../Drivers/STM32WBxx_HAL_Driver/Src/stm32wbxx_hal_pcd_ex.c
+    ../../Drivers/STM32WBxx_HAL_Driver/Src/stm32wbxx_ll_usb.c
     ../../Core/Src/system_stm32wbxx.c
     ../../Middlewares/ST/STM32_WPAN/interface/patterns/ble_thread/tl/tl_mbox.c
     ../../Middlewares/ST/STM32_WPAN/interface/patterns/ble_thread/shci/shci.c
@@ -100,10 +92,6 @@ target_sources(stm32cubemx INTERFACE
     ../../Middlewares/ST/STM32_WPAN/interface/patterns/ble_thread/tl/shci_tl.c
     ../../Middlewares/ST/STM32_WPAN/interface/patterns/ble_thread/tl/shci_tl_if.c
     ../../Middlewares/ST/STM32_WPAN/ble/svc/Src/svc_ctl.c
-    ../../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_core.c
-    ../../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ctlreq.c
-    ../../Middlewares/ST/STM32_USB_Device_Library/Core/Src/usbd_ioreq.c
-    ../../Middlewares/ST/STM32_USB_Device_Library/Class/CDC/Src/usbd_cdc.c
     ../../Utilities/lpm/tiny_lpm/stm32_lpm.c
     ../../Utilities/sequencer/stm32_seq.c
     ../../Core/Src/sysmem.c
