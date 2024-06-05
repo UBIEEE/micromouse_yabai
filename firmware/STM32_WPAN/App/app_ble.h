@@ -36,6 +36,8 @@ extern "C" {
 
 /* Exported types ------------------------------------------------------------*/
 
+/* USER CODE BEGIN ET */
+
 typedef enum
 {
   APP_BLE_IDLE,
@@ -46,8 +48,6 @@ typedef enum
   APP_BLE_CONNECTED_SERVER,
   APP_BLE_CONNECTED_CLIENT
 } APP_BLE_ConnStatus_t;
-
-/* USER CODE BEGIN ET */
 
 /* USER CODE END ET */
 
@@ -68,9 +68,10 @@ typedef enum
 
 /* Exported functions ---------------------------------------------*/
 void APP_BLE_Init(void);
-APP_BLE_ConnStatus_t APP_BLE_Get_Server_Connection_Status(void);
 
 /* USER CODE BEGIN EF */
+
+APP_BLE_ConnStatus_t APP_BLE_Get_Server_Connection_Status(void);
 
 /* USER CODE END EF */
 

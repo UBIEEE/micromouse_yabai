@@ -42,32 +42,17 @@
  */
 #define CFG_ADV_BD_ADDRESS                (0x11aabbccddee)
 
-/**
- * Define BD_ADDR type: define proper address. Can only be GAP_PUBLIC_ADDR (0x00) or GAP_STATIC_RANDOM_ADDR (0x01)
- */
-#define CFG_IDENTITY_ADDRESS              GAP_PUBLIC_ADDR
-
-/**
- * Define privacy: PRIVACY_DISABLED or PRIVACY_ENABLED
- */
-#define CFG_PRIVACY                       PRIVACY_DISABLED
-
-/**
- * Define BLE Address Type
- * Bluetooth address types defined in ble_legacy.h
- * if CFG_PRIVACY equals PRIVACY_DISABLED, CFG_BLE_ADDRESS_TYPE has 2 allowed values: GAP_PUBLIC_ADDR or GAP_STATIC_RANDOM_ADDR
- * if CFG_PRIVACY equals PRIVACY_ENABLED, CFG_BLE_ADDRESS_TYPE has 2 allowed values: GAP_RESOLVABLE_PRIVATE_ADDR or GAP_NON_RESOLVABLE_PRIVATE_ADDR
- */
-#define CFG_BLE_ADDRESS_TYPE              GAP_PUBLIC_ADDR
-
 #define CFG_FAST_CONN_ADV_INTERVAL_MIN    (0x80)      /**< 80ms */
 #define CFG_FAST_CONN_ADV_INTERVAL_MAX    (0xA0)      /**< 100ms */
 #define CFG_LP_CONN_ADV_INTERVAL_MIN      (0x640)     /**< 1s */
 #define CFG_LP_CONN_ADV_INTERVAL_MAX      (0xFA0)     /**< 2.5s */
+#define ADV_TYPE
+#define BLE_ADDR_TYPE                     GAP_PUBLIC_ADDR
+#define ADV_FILTER
 /**
  * Define IO Authentication
  */
-#define CFG_BONDING_MODE                 (1)
+#define CFG_BONDING_MODE                 (0)
 #define CFG_FIXED_PIN                    (111111)
 #define CFG_USED_FIXED_PIN               (0)
 #define CFG_ENCRYPTION_KEY_SIZE_MAX      (16)
@@ -151,17 +136,67 @@
 
 /* USER CODE BEGIN Generic_Parameters */
 
+#if 1
+  /**
+  * Define BD_ADDR type: define proper address. Can only be GAP_PUBLIC_ADDR (0x00) or GAP_STATIC_RANDOM_ADDR (0x01)
+  */
+  #define CFG_IDENTITY_ADDRESS              GAP_PUBLIC_ADDR
+
+  /**
+  * Define privacy: PRIVACY_DISABLED or PRIVACY_ENABLED
+  */
+  #define CFG_PRIVACY                       PRIVACY_DISABLED
+
+  /**
+  * Define BLE Address Type
+  * Bluetooth address types defined in ble_legacy.h
+  * if CFG_PRIVACY equals PRIVACY_DISABLED, CFG_BLE_ADDRESS_TYPE has 2 allowed values: GAP_PUBLIC_ADDR or GAP_STATIC_RANDOM_ADDR
+  * if CFG_PRIVACY equals PRIVACY_ENABLED, CFG_BLE_ADDRESS_TYPE has 2 allowed values: GAP_RESOLVABLE_PRIVATE_ADDR or GAP_NON_RESOLVABLE_PRIVATE_ADDR
+  */
+  #define CFG_BLE_ADDRESS_TYPE              GAP_PUBLIC_ADDR
+
+  #define CFG_FAST_CONN_ADV_INTERVAL_MIN    (0x0080)      /**< 80ms */
+  #define CFG_FAST_CONN_ADV_INTERVAL_MAX    (0x00A0)      /**< 100ms */
+  #define CFG_LP_CONN_ADV_INTERVAL_MIN      (0x640)     /**< 1s */
+  #define CFG_LP_CONN_ADV_INTERVAL_MAX      (0xFA0)     /**< 2.5s */
+  #define ADV_TYPE                          ADV_IND
+  #define BLE_ADDR_TYPE                     GAP_PUBLIC_ADDR
+  #define ADV_FILTER                        NO_WHITE_LIST_USE
+
+#endif
+
 /* USER CODE END Generic_Parameters */
 
 /**< specific parameters */
 /*****************************************************/
 
-/**
-* AD Element - Group B Feature
-*/
-/* LSB - Second Byte */
-#define CFG_FEATURE_OTA_REBOOT                  (0x20)
 /* USER CODE BEGIN Specific_Parameters */
+
+#if 1
+
+  #define  RADIO_ACTIVITY_EVENT   1          /* 1 for OOB Demo */
+
+  /**
+  * AD Element - Group B Feature
+  */
+  /* LSB - First Byte */
+  #define CFG_FEATURE_THREAD_SWITCH               (0x40)
+
+  /* LSB - Second Byte */
+  #define CFG_FEATURE_OTA_REBOOT                  (0x20)
+
+  #define CONN_L(x) ((int)((x)/0.625f))
+  #define CONN_P(x) ((int)((x)/1.25f))
+
+    /*  L2CAP Connection Update request parameters used for test only with smart Phone */
+  #define L2CAP_REQUEST_NEW_CONN_PARAM             0
+
+  #define L2CAP_INTERVAL_MIN              CONN_P(1000) /* 1s */
+  #define L2CAP_INTERVAL_MAX              CONN_P(1000) /* 1s */
+  #define L2CAP_PERIPHERAL_LATENCY             0x0000
+  #define L2CAP_TIMEOUT_MULTIPLIER        0x1F4
+
+#endif
 
 /* USER CODE END Specific_Parameters */
 
@@ -650,13 +685,13 @@ typedef enum
 #define CFG_HCI_USER_EVT_PROCESS_PRIORITY     osPriorityNone
 #define CFG_HCI_USER_EVT_PROCESS_STACK_SIZE   (128 * 40)
 
-#define CFG_ADV_UPDATE_PROCESS_NAME           "ADV_UPDATE_PROCESS"
-#define CFG_ADV_UPDATE_PROCESS_ATTR_BITS      (0)
-#define CFG_ADV_UPDATE_PROCESS_CB_MEM         (0)
-#define CFG_ADV_UPDATE_PROCESS_CB_SIZE        (0)
-#define CFG_ADV_UPDATE_PROCESS_STACK_MEM      (0)
-#define CFG_ADV_UPDATE_PROCESS_PRIORITY       osPriorityNone
-#define CFG_ADV_UPDATE_PROCESS_STACK_SIZE     (128 * 20)
+// #define CFG_ADV_UPDATE_PROCESS_NAME           "ADV_UPDATE_PROCESS"
+// #define CFG_ADV_UPDATE_PROCESS_ATTR_BITS      (0)
+// #define CFG_ADV_UPDATE_PROCESS_CB_MEM         (0)
+// #define CFG_ADV_UPDATE_PROCESS_CB_SIZE        (0)
+// #define CFG_ADV_UPDATE_PROCESS_STACK_MEM      (0)
+// #define CFG_ADV_UPDATE_PROCESS_PRIORITY       osPriorityNone
+// #define CFG_ADV_UPDATE_PROCESS_STACK_SIZE     (128 * 20)
 
 #define CFG_HRS_PROCESS_NAME                  "HRS_PROCESS"
 #define CFG_HRS_PROCESS_ATTR_BITS             (0)
@@ -667,6 +702,16 @@ typedef enum
 #define CFG_HRS_PROCESS_STACK_SIZE            (128 * 20)
 
 /* USER CODE BEGIN FreeRTOS_Defines */
+
+#if 1
+  #define CFG_ADV_CANCEL_PROCESS_NAME           "ADV_CANCEL_PROCESS"
+  #define CFG_ADV_CANCEL_PROCESS_ATTR_BITS      (0)
+  #define CFG_ADV_CANCEL_PROCESS_CB_MEM         (0)
+  #define CFG_ADV_CANCEL_PROCESS_CB_SIZE        (0)
+  #define CFG_ADV_CANCEL_PROCESS_STACK_MEM      (0)
+  #define CFG_ADV_CANCEL_PROCESS_PRIORITY       osPriorityNone
+  #define CFG_ADV_CANCEL_PROCESS_STACK_SIZE     (128 * 20)
+#endif
 
 /* USER CODE END FreeRTOS_Defines */
 
