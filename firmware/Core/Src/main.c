@@ -135,6 +135,7 @@ int main(void)
   /* USER CODE BEGIN 2 */
 
   HAL_TIM_PWM_Start(&htim16, TIM_CHANNEL_1); // Buzzer
+  HAL_TIM_Base_Start_IT(&htim17); // Motors
 
   /* USER CODE END 2 */
 
