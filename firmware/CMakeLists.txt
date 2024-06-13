@@ -1,34 +1,38 @@
 cmake_minimum_required(VERSION 3.22)
 
-#
-# This file is generated only once,
-# and is not re-generated if converter is called multiple times.
-#
-# User is free to modify the file as much as necessary
-#
+if("${CMAKE_SOURCE_DIR}" STREQUAL "${CMAKE_BINARY_DIR}")
+  message(FATAL_ERROR "In-source builds are not allowed.")
+endif()
 
-# Setup compiler settings
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_SOURCE_DIR}/cmake")
+
+# Language standards
 set(CMAKE_C_STANDARD 11)
 set(CMAKE_C_STANDARD_REQUIRED ON)
 set(CMAKE_C_EXTENSIONS ON)
 
+set(CMAKE_CXX_STANDARD 20)
+set(CMAKE_CXX_STANDARD_REQUIRED ON)
+set(CMAKE_CXX_EXTENSIONS ON)
 
-# Define the build type
+# Build type
 if(NOT CMAKE_BUILD_TYPE)
-    set(CMAKE_BUILD_TYPE "Debug")
+  set(CMAKE_BUILD_TYPE "Debug")
 endif()
 
-# Set the project name
+# Project name
 set(CMAKE_PROJECT_NAME firmware)
 
-# Include toolchain file
-include("cmake/gcc-arm-none-eabi.cmake")
+# Toolchain
+include(gcc-arm-none-eabi)
 
-# Enable compile command to ease indexing with e.g. clangd
+# Enable compile commands
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 
-# Enable CMake support for ASM and C languages
-enable_language(C ASM)
+# Languages
+enable_language(C)
+enable_language(CXX)
+enable_language(ASM)
 
 # Core project settings
 project(${CMAKE_PROJECT_NAME})
@@ -39,35 +43,8 @@ add_executable(${CMAKE_PROJECT_NAME})
 
 # Add STM32CubeMX generated sources
 add_subdirectory(cmake/stm32cubemx)
+target_link_libraries(${CMAKE_PROJECT_NAME} stm32cubemx)
 
-# Link directories setup
-target_link_directories(${CMAKE_PROJECT_NAME} PRIVATE
-    # Add user defined library search paths
-)
-
-file(GLOB_RECURSE USER_SOURCES
-    Core/Src/*.cpp
-)
-
-# Add sources to executable
-target_sources(${CMAKE_PROJECT_NAME} PRIVATE
-    # Add user sources here
-    ${USER_SOURCES}
-)
-
-# Add include paths
-target_include_directories(${CMAKE_PROJECT_NAME} PRIVATE
-    # Add user defined include paths
-)
-
-# Add project symbols (macros)
-target_compile_definitions(${CMAKE_PROJECT_NAME} PRIVATE
-    # Add user defined symbols
-)
-
-# Add linked libraries
-target_link_libraries(${CMAKE_PROJECT_NAME}
-    stm32cubemx
-
-    # Add user defined libraries
-)
+# Sources
+file(GLOB_RECURSE USER_SOURCES Core/Src/*.cpp)
+target_sources(${CMAKE_PROJECT_NAME} PRIVATE ${USER_SOURCES})
