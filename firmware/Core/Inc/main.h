@@ -64,6 +64,7 @@ void Error_Handler(void);
 /* Private defines -----------------------------------------------------------*/
 #define BUTTON_1_Pin GPIO_PIN_3
 #define BUTTON_1_GPIO_Port GPIOH
+#define BUTTON_1_EXTI_IRQn EXTI3_IRQn
 #define ENCODER_RIGHT_A_Pin GPIO_PIN_0
 #define ENCODER_RIGHT_A_GPIO_Port GPIOA
 #define ENCODER_RIGHT_B_Pin GPIO_PIN_1
@@ -94,12 +95,14 @@ void Error_Handler(void);
 #define IR_MID_RIGHT_EMIT_GPIO_Port GPIOE
 #define BUTTON_2_Pin GPIO_PIN_15
 #define BUTTON_2_GPIO_Port GPIOA
+#define BUTTON_2_EXTI_IRQn EXTI15_10_IRQn
 #define IR_FAR_RIGHT_EMIT_Pin GPIO_PIN_4
 #define IR_FAR_RIGHT_EMIT_GPIO_Port GPIOB
 #define ENCODER_LEFT_B_Pin GPIO_PIN_5
 #define ENCODER_LEFT_B_GPIO_Port GPIOB
 #define IMU_INT1_Pin GPIO_PIN_6
 #define IMU_INT1_GPIO_Port GPIOB
+#define IMU_INT1_EXTI_IRQn EXTI9_5_IRQn
 #define ENCODER_LEFT_A_Pin GPIO_PIN_7
 #define ENCODER_LEFT_A_GPIO_Port GPIOB
 
