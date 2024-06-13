@@ -105,6 +105,8 @@ void Error_Handler(void);
 
 /* USER CODE BEGIN Private defines */
 
+#define ROBOT_UPDATE_PERIOD_MS 20
+
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

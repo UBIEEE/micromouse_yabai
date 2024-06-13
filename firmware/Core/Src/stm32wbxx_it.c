@@ -198,12 +198,12 @@ void SysTick_Handler(void)
   /* USER CODE BEGIN SysTick_IRQn 1 */
 
   //
-  // Tell the sequencer to run the main robot task every 20 ticks (20ms/50Hz).
+  // Tell the sequencer to run the main robot task.
   //
   // Make sure the Robot_Update task is registered with the sequencer before
   // telling the sequencer to run the task!
   //
-  if ((HAL_GetTick() % 20 == 0) && g_robot_update_registered) {
+  if ((HAL_GetTick() % ROBOT_UPDATE_PERIOD_MS == 0) && g_robot_update_registered) {
     UTIL_SEQ_SetTask(1 << CFG_TASK_ROBOT_UPDATE_ID, CFG_SCH_PRIO_0);
   }
 
