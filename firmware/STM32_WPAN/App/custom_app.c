@@ -30,6 +30,9 @@
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
+#include "Basic/robot.h"
+#include <stdbool.h>
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -72,6 +75,8 @@ uint8_t UpdateCharData[247];
 uint8_t NotifyCharData[247];
 
 /* USER CODE BEGIN PV */
+
+bool g_robot_update_registered = false;
 
 /* USER CODE END PV */
 
@@ -159,6 +164,23 @@ void Custom_APP_Notification(Custom_App_ConnHandle_Not_evt_t *pNotification)
 void Custom_APP_Init(void)
 {
   /* USER CODE BEGIN CUSTOM_APP_Init */
+
+  //
+  // Initialize robot stuff.
+  //
+  Robot_Init();
+
+  //
+  // Register the robot update task with the sequencer.
+  // The task will be executed every 20ms (see SysTick_Handler in stm32wbxx_it.c).
+  //
+  UTIL_SEQ_RegTask(1 << CFG_TASK_ROBOT_UPDATE_ID, 0, Robot_Update);
+
+  //
+  // The task has been registered with the sequencer, so signal that the task
+  // is ready to be run.
+  //
+  g_robot_update_registered = true;
 
   /* USER CODE END CUSTOM_APP_Init */
   return;

@@ -22,6 +22,10 @@
 #include "stm32wbxx_it.h"
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+
+#include <stdbool.h>
+#include "stm32_seq.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
@@ -41,6 +45,8 @@
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
+
+extern bool g_robot_update_registered; // custom_app.c
 
 /* USER CODE END PV */
 
@@ -190,6 +196,16 @@ void SysTick_Handler(void)
   /* USER CODE END SysTick_IRQn 0 */
   HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */
+
+  //
+  // Tell the sequencer to run the main robot task every 20 ticks (20ms/50Hz).
+  //
+  // Make sure the Robot_Update task is registered with the sequencer before
+  // telling the sequencer to run the task!
+  //
+  if ((HAL_GetTick() % 20 == 0) && g_robot_update_registered) {
+    UTIL_SEQ_SetTask(1 << CFG_TASK_ROBOT_UPDATE_ID, CFG_SCH_PRIO_0);
+  }
 
   /* USER CODE END SysTick_IRQn 1 */
 }
