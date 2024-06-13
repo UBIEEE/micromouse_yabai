@@ -134,6 +134,8 @@ int main(void)
   MX_RF_Init();
   /* USER CODE BEGIN 2 */
 
+  HAL_TIM_PWM_Start(&htim16, TIM_CHANNEL_1); // Buzzer
+
   /* USER CODE END 2 */
 
   /* Init code for STM32_WPAN */
