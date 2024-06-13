@@ -28,7 +28,6 @@ extern "C" {
 
 /* Includes ------------------------------------------------------------------*/
 #include "stm32wbxx_hal.h"
-
 #include "app_conf.h"
 #include "app_entry.h"
 #include "app_common.h"

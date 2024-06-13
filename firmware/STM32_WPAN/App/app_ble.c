@@ -28,7 +28,7 @@
 #include "tl.h"
 #include "app_ble.h"
 
-#include "cmsis_os.h"
+#include "stm32_seq.h"
 #include "shci.h"
 #include "stm32_lpm.h"
 #include "otp.h"
@@ -233,35 +233,9 @@ uint8_t a_AdvData[18] =
 
 /* USER CODE BEGIN PV */
 
-osMutexId_t MtxHciId;
-osSemaphoreId_t SemHciId;
-osThreadId_t AdvCancelProcessId;
-osThreadId_t HciUserEvtProcessId;
-
-const osThreadAttr_t AdvCancelProcess_attr = {
-    .name = CFG_ADV_CANCEL_PROCESS_NAME,
-    .attr_bits = CFG_ADV_CANCEL_PROCESS_ATTR_BITS,
-    .cb_mem = CFG_ADV_CANCEL_PROCESS_CB_MEM,
-    .cb_size = CFG_ADV_CANCEL_PROCESS_CB_SIZE,
-    .stack_mem = CFG_ADV_CANCEL_PROCESS_STACK_MEM,
-    .priority = CFG_ADV_CANCEL_PROCESS_PRIORITY,
-    .stack_size = CFG_ADV_CANCEL_PROCESS_STACK_SIZE
-};
-
-const osThreadAttr_t HciUserEvtProcess_attr = {
-    .name = CFG_HCI_USER_EVT_PROCESS_NAME,
-    .attr_bits = CFG_HCI_USER_EVT_PROCESS_ATTR_BITS,
-    .cb_mem = CFG_HCI_USER_EVT_PROCESS_CB_MEM,
-    .cb_size = CFG_HCI_USER_EVT_PROCESS_CB_SIZE,
-    .stack_mem = CFG_HCI_USER_EVT_PROCESS_STACK_MEM,
-    .priority = CFG_HCI_USER_EVT_PROCESS_PRIORITY,
-    .stack_size = CFG_HCI_USER_EVT_PROCESS_STACK_SIZE
-};
-
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
-static void HciUserEvtProcess(void *argument);
 static void BLE_UserEvtRx(void *p_Payload);
 static void BLE_StatusNot(HCI_TL_CmdStatus_t Status);
 static void Ble_Tl_Init(void);
@@ -269,7 +243,6 @@ static void Ble_Hci_Gap_Gatt_Init(void);
 static const uint8_t* BleGetBdAddress(void);
 static void Adv_Request(APP_BLE_ConnStatus_t NewStatus);
 static void Adv_Cancel(void);
-static void AdvCancelProcess(void *argument);
 #if (L2CAP_REQUEST_NEW_CONN_PARAM != 0)
 static void BLE_SVC_L2CAP_Conn_Update(uint16_t ConnectionHandle);
 static void Connection_Interval_Update_Req(void);
@@ -342,7 +315,7 @@ void APP_BLE_Init(void)
   /**
    * Register the hci transport layer to handle BLE User Asynchronous Events
    */
-  HciUserEvtProcessId = osThreadNew(HciUserEvtProcess, NULL, &HciUserEvtProcess_attr);
+  UTIL_SEQ_RegTask(1<<CFG_TASK_HCI_ASYNCH_EVT_ID, UTIL_SEQ_RFU, hci_user_evt_proc);
 
   /**
    * Starts the BLE Stack on CPU2
@@ -379,7 +352,7 @@ void APP_BLE_Init(void)
    * From here, all initialization are BLE application specific
    */
 
-  AdvCancelProcessId = osThreadNew(AdvCancelProcess, NULL, &AdvCancelProcess_attr);
+  UTIL_SEQ_RegTask(1<<CFG_TASK_ADV_CANCEL_ID, UTIL_SEQ_RFU, Adv_Cancel);
 
   /* USER CODE BEGIN APP_BLE_Init_4 */
 
@@ -719,9 +692,6 @@ APP_BLE_ConnStatus_t APP_BLE_Get_Server_Connection_Status(void)
 static void Ble_Tl_Init(void)
 {
   HCI_TL_HciInitConf_t Hci_Tl_Init_Conf;
-
-  MtxHciId = osMutexNew(NULL);
-  SemHciId = osSemaphoreNew(1, 0, NULL); /*< Create the semaphore and make it busy at initialization */
 
   Hci_Tl_Init_Conf.p_cmdbuffer = (uint8_t*)&BleCmdBuffer;
   Hci_Tl_Init_Conf.StatusNotCallBack = BLE_StatusNot;
@@ -1158,28 +1128,6 @@ static void Adv_Cancel(void)
   return;
 }
 
-static void AdvCancelProcess(void *argument)
-{
-  UNUSED(argument);
-
-  for(;;)
-  {
-    osThreadFlagsWait(1, osFlagsWaitAny, osWaitForever);
-    Adv_Cancel();
-  }
-}
-
-static void HciUserEvtProcess(void *argument)
-{
-  UNUSED(argument);
-
-  for(;;)
-  {
-    osThreadFlagsWait(1, osFlagsWaitAny, osWaitForever);
-    hci_user_evt_proc();
-  }
-}
-
 #if (L2CAP_REQUEST_NEW_CONN_PARAM != 0)
 void BLE_SVC_L2CAP_Conn_Update(uint16_t ConnectionHandle)
 {
@@ -1240,24 +1188,21 @@ static void Connection_Interval_Update_Req(void)
  *************************************************************/
 void hci_notify_asynch_evt(void* p_Data)
 {
-  UNUSED(p_Data);
-  osThreadFlagsSet(HciUserEvtProcessId, 1);
+  UTIL_SEQ_SetTask(1 << CFG_TASK_HCI_ASYNCH_EVT_ID, CFG_SCH_PRIO_0);
 
   return;
 }
 
 void hci_cmd_resp_release(uint32_t Flag)
 {
-  UNUSED(Flag);
-  osSemaphoreRelease(SemHciId);
+  UTIL_SEQ_SetEvt(1 << CFG_IDLEEVT_HCI_CMD_EVT_RSP_ID);
 
   return;
 }
 
 void hci_cmd_resp_wait(uint32_t Timeout)
 {
-  UNUSED(Timeout);
-  osSemaphoreAcquire(SemHciId, osWaitForever);
+  UTIL_SEQ_WaitEvt(1 << CFG_IDLEEVT_HCI_CMD_EVT_RSP_ID);
 
   return;
 }
@@ -1288,14 +1233,24 @@ static void BLE_StatusNot(HCI_TL_CmdStatus_t Status)
   switch (Status)
   {
     case HCI_TL_CmdBusy:
-      osMutexAcquire(MtxHciId, osWaitForever);
+      /**
+       * All tasks that may send an aci/hci commands shall be listed here
+       * This is to prevent a new command is sent while one is already pending
+       */
+      task_id_list = (1 << CFG_LAST_TASK_ID_WITH_HCICMD) - 1;
+      UTIL_SEQ_PauseTask(task_id_list);
       /* USER CODE BEGIN HCI_TL_CmdBusy */
 
       /* USER CODE END HCI_TL_CmdBusy */
       break;
 
     case HCI_TL_CmdAvailable:
-      osMutexRelease(MtxHciId);
+      /**
+       * All tasks that may send an aci/hci commands shall be listed here
+       * This is to prevent a new command is sent while one is already pending
+       */
+      task_id_list = (1 << CFG_LAST_TASK_ID_WITH_HCICMD) - 1;
+      UTIL_SEQ_ResumeTask(task_id_list);
       /* USER CODE BEGIN HCI_TL_CmdAvailable */
 
       /* USER CODE END HCI_TL_CmdAvailable */

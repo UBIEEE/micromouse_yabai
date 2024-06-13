@@ -25,7 +25,7 @@
 #include "ble.h"
 #include "custom_app.h"
 #include "custom_stm.h"
-#include "cmsis_os.h"
+#include "stm32_seq.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -95,10 +95,10 @@ void Custom_STM_App_Notification(Custom_STM_App_Notification_evt_t *pNotificatio
     /* USER CODE END CUSTOM_STM_App_Notification_Custom_Evt_Opcode */
 
     /* testService */
-    case CUSTOM_STM_CHARWRITE_WRITE_EVT:
-      /* USER CODE BEGIN CUSTOM_STM_CHARWRITE_WRITE_EVT */
+    case CUSTOM_STM_TESTWRITECHAR_WRITE_EVT:
+      /* USER CODE BEGIN CUSTOM_STM_TESTWRITECHAR_WRITE_EVT */
 
-      /* USER CODE END CUSTOM_STM_CHARWRITE_WRITE_EVT */
+      /* USER CODE END CUSTOM_STM_TESTWRITECHAR_WRITE_EVT */
       break;
 
     case CUSTOM_STM_NOTIFICATION_COMPLETE_EVT:

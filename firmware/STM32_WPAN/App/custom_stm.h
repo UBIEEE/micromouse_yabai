@@ -35,13 +35,13 @@ extern "C" {
 typedef enum
 {
   /* testService */
-  CUSTOM_STM_CHARWRITE,
+  CUSTOM_STM_TESTWRITECHAR,
 } Custom_STM_Char_Opcode_t;
 
 typedef enum
 {
-  /* charWrite */
-  CUSTOM_STM_CHARWRITE_WRITE_EVT,
+  /* testWriteChar */
+  CUSTOM_STM_TESTWRITECHAR_WRITE_EVT,
   CUSTOM_STM_NOTIFICATION_COMPLETE_EVT,
 
   CUSTOM_STM_BOOT_REQUEST_EVT
@@ -67,7 +67,7 @@ typedef struct
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
-extern uint8_t SizeCharwrite;
+extern uint8_t SizeTestwritechar;
 
 /* USER CODE BEGIN EC */
 

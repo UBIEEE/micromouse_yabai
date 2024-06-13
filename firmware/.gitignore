@@ -70,3 +70,5 @@ _deps
 [Bb]uild*/
 [Dd]ebug*/
 [Rr]elease*/
+
+.mxproject

@@ -42,13 +42,31 @@
  */
 #define CFG_ADV_BD_ADDRESS                (0x11aabbccddee)
 
-#define CFG_FAST_CONN_ADV_INTERVAL_MIN    (0x80)      /**< 80ms */
-#define CFG_FAST_CONN_ADV_INTERVAL_MAX    (0xA0)      /**< 100ms */
+/**
+ * Define BD_ADDR type: define proper address. Can only be GAP_PUBLIC_ADDR (0x00) or GAP_STATIC_RANDOM_ADDR (0x01)
+ */
+#define CFG_IDENTITY_ADDRESS              GAP_PUBLIC_ADDR
+
+/**
+ * Define privacy: PRIVACY_DISABLED or PRIVACY_ENABLED
+ */
+#define CFG_PRIVACY                       PRIVACY_DISABLED
+
+/**
+ * Define BLE Address Type
+ * Bluetooth address types defined in ble_legacy.h
+ * if CFG_PRIVACY equals PRIVACY_DISABLED, CFG_BLE_ADDRESS_TYPE has 2 allowed values: GAP_PUBLIC_ADDR or GAP_STATIC_RANDOM_ADDR
+ * if CFG_PRIVACY equals PRIVACY_ENABLED, CFG_BLE_ADDRESS_TYPE has 2 allowed values: GAP_RESOLVABLE_PRIVATE_ADDR or GAP_NON_RESOLVABLE_PRIVATE_ADDR
+ */
+#define CFG_BLE_ADDRESS_TYPE              GAP_PUBLIC_ADDR
+
+#define CFG_FAST_CONN_ADV_INTERVAL_MIN    (0x0080)      /**< 80ms */
+#define CFG_FAST_CONN_ADV_INTERVAL_MAX    (0x00A0)      /**< 100ms */
 #define CFG_LP_CONN_ADV_INTERVAL_MIN      (0x640)     /**< 1s */
 #define CFG_LP_CONN_ADV_INTERVAL_MAX      (0xFA0)     /**< 2.5s */
-#define ADV_TYPE
+#define ADV_TYPE                          ADV_IND
 #define BLE_ADDR_TYPE                     GAP_PUBLIC_ADDR
-#define ADV_FILTER
+#define ADV_FILTER                        NO_WHITE_LIST_USE
 /**
  * Define IO Authentication
  */
@@ -103,8 +121,8 @@
 /**
  * Device name configuration for Generic Access Service
  */
-#define CFG_GAP_DEVICE_NAME             "TEMPLATE"
-#define CFG_GAP_DEVICE_NAME_LENGTH      (8)
+#define CFG_GAP_DEVICE_NAME             "MicroMouse"
+#define CFG_GAP_DEVICE_NAME_LENGTH      (10)
 
 /**
  * Define PHY
@@ -136,67 +154,34 @@
 
 /* USER CODE BEGIN Generic_Parameters */
 
-#if 1
-  /**
-  * Define BD_ADDR type: define proper address. Can only be GAP_PUBLIC_ADDR (0x00) or GAP_STATIC_RANDOM_ADDR (0x01)
-  */
-  #define CFG_IDENTITY_ADDRESS              GAP_PUBLIC_ADDR
-
-  /**
-  * Define privacy: PRIVACY_DISABLED or PRIVACY_ENABLED
-  */
-  #define CFG_PRIVACY                       PRIVACY_DISABLED
-
-  /**
-  * Define BLE Address Type
-  * Bluetooth address types defined in ble_legacy.h
-  * if CFG_PRIVACY equals PRIVACY_DISABLED, CFG_BLE_ADDRESS_TYPE has 2 allowed values: GAP_PUBLIC_ADDR or GAP_STATIC_RANDOM_ADDR
-  * if CFG_PRIVACY equals PRIVACY_ENABLED, CFG_BLE_ADDRESS_TYPE has 2 allowed values: GAP_RESOLVABLE_PRIVATE_ADDR or GAP_NON_RESOLVABLE_PRIVATE_ADDR
-  */
-  #define CFG_BLE_ADDRESS_TYPE              GAP_PUBLIC_ADDR
-
-  #define CFG_FAST_CONN_ADV_INTERVAL_MIN    (0x0080)      /**< 80ms */
-  #define CFG_FAST_CONN_ADV_INTERVAL_MAX    (0x00A0)      /**< 100ms */
-  #define CFG_LP_CONN_ADV_INTERVAL_MIN      (0x640)     /**< 1s */
-  #define CFG_LP_CONN_ADV_INTERVAL_MAX      (0xFA0)     /**< 2.5s */
-  #define ADV_TYPE                          ADV_IND
-  #define BLE_ADDR_TYPE                     GAP_PUBLIC_ADDR
-  #define ADV_FILTER                        NO_WHITE_LIST_USE
-
-#endif
-
 /* USER CODE END Generic_Parameters */
 
 /**< specific parameters */
 /*****************************************************/
 
+#define  RADIO_ACTIVITY_EVENT   1          /* 1 for OOB Demo */
+
+/**
+* AD Element - Group B Feature
+*/
+/* LSB - First Byte */
+#define CFG_FEATURE_THREAD_SWITCH               (0x40)
+
+/* LSB - Second Byte */
+#define CFG_FEATURE_OTA_REBOOT                  (0x20)
+
+#define CONN_L(x) ((int)((x)/0.625f))
+#define CONN_P(x) ((int)((x)/1.25f))
+
+  /*  L2CAP Connection Update request parameters used for test only with smart Phone */
+#define L2CAP_REQUEST_NEW_CONN_PARAM             0
+
+#define L2CAP_INTERVAL_MIN              CONN_P(1000) /* 1s */
+#define L2CAP_INTERVAL_MAX              CONN_P(1000) /* 1s */
+#define L2CAP_PERIPHERAL_LATENCY             0x0000
+#define L2CAP_TIMEOUT_MULTIPLIER        0x1F4
+
 /* USER CODE BEGIN Specific_Parameters */
-
-#if 1
-
-  #define  RADIO_ACTIVITY_EVENT   1          /* 1 for OOB Demo */
-
-  /**
-  * AD Element - Group B Feature
-  */
-  /* LSB - First Byte */
-  #define CFG_FEATURE_THREAD_SWITCH               (0x40)
-
-  /* LSB - Second Byte */
-  #define CFG_FEATURE_OTA_REBOOT                  (0x20)
-
-  #define CONN_L(x) ((int)((x)/0.625f))
-  #define CONN_P(x) ((int)((x)/1.25f))
-
-    /*  L2CAP Connection Update request parameters used for test only with smart Phone */
-  #define L2CAP_REQUEST_NEW_CONN_PARAM             0
-
-  #define L2CAP_INTERVAL_MIN              CONN_P(1000) /* 1s */
-  #define L2CAP_INTERVAL_MAX              CONN_P(1000) /* 1s */
-  #define L2CAP_PERIPHERAL_LATENCY             0x0000
-  #define L2CAP_TIMEOUT_MULTIPLIER        0x1F4
-
-#endif
 
 /* USER CODE END Specific_Parameters */
 
@@ -664,56 +649,66 @@ typedef enum
 /* USER CODE END Defines */
 
 /******************************************************************************
- * FreeRTOS
+ * Scheduler
  ******************************************************************************/
-/* USER CODE BEGIN FreeRTOS */
 
-/* USER CODE END FreeRTOS */
-#define CFG_SHCI_USER_EVT_PROCESS_NAME        "SHCI_USER_EVT_PROCESS"
-#define CFG_SHCI_USER_EVT_PROCESS_ATTR_BITS   (0)
-#define CFG_SHCI_USER_EVT_PROCESS_CB_MEM      (0)
-#define CFG_SHCI_USER_EVT_PROCESS_CB_SIZE     (0)
-#define CFG_SHCI_USER_EVT_PROCESS_STACK_MEM   (0)
-#define CFG_SHCI_USER_EVT_PROCESS_PRIORITY    osPriorityNone
-#define CFG_SHCI_USER_EVT_PROCESS_STACK_SIZE  (128 * 20)
+/**
+ * These are the lists of task id registered to the scheduler
+ * Each task id shall be in the range [0:31]
+ * This mechanism allows to implement a generic code in the API TL_BLE_HCI_StatusNot() to comply with
+ * the requirement that a HCI/ACI command shall never be sent if there is already one pending
+ */
 
-#define CFG_HCI_USER_EVT_PROCESS_NAME         "HCI_USER_EVT_PROCESS"
-#define CFG_HCI_USER_EVT_PROCESS_ATTR_BITS    (0)
-#define CFG_HCI_USER_EVT_PROCESS_CB_MEM       (0)
-#define CFG_HCI_USER_EVT_PROCESS_CB_SIZE      (0)
-#define CFG_HCI_USER_EVT_PROCESS_STACK_MEM    (0)
-#define CFG_HCI_USER_EVT_PROCESS_PRIORITY     osPriorityNone
-#define CFG_HCI_USER_EVT_PROCESS_STACK_SIZE   (128 * 40)
-
-// #define CFG_ADV_UPDATE_PROCESS_NAME           "ADV_UPDATE_PROCESS"
-// #define CFG_ADV_UPDATE_PROCESS_ATTR_BITS      (0)
-// #define CFG_ADV_UPDATE_PROCESS_CB_MEM         (0)
-// #define CFG_ADV_UPDATE_PROCESS_CB_SIZE        (0)
-// #define CFG_ADV_UPDATE_PROCESS_STACK_MEM      (0)
-// #define CFG_ADV_UPDATE_PROCESS_PRIORITY       osPriorityNone
-// #define CFG_ADV_UPDATE_PROCESS_STACK_SIZE     (128 * 20)
-
-#define CFG_HRS_PROCESS_NAME                  "HRS_PROCESS"
-#define CFG_HRS_PROCESS_ATTR_BITS             (0)
-#define CFG_HRS_PROCESS_CB_MEM                (0)
-#define CFG_HRS_PROCESS_CB_SIZE               (0)
-#define CFG_HRS_PROCESS_STACK_MEM             (0)
-#define CFG_HRS_PROCESS_PRIORITY              osPriorityNone
-#define CFG_HRS_PROCESS_STACK_SIZE            (128 * 20)
-
-/* USER CODE BEGIN FreeRTOS_Defines */
-
-#if 1
-  #define CFG_ADV_CANCEL_PROCESS_NAME           "ADV_CANCEL_PROCESS"
-  #define CFG_ADV_CANCEL_PROCESS_ATTR_BITS      (0)
-  #define CFG_ADV_CANCEL_PROCESS_CB_MEM         (0)
-  #define CFG_ADV_CANCEL_PROCESS_CB_SIZE        (0)
-  #define CFG_ADV_CANCEL_PROCESS_STACK_MEM      (0)
-  #define CFG_ADV_CANCEL_PROCESS_PRIORITY       osPriorityNone
-  #define CFG_ADV_CANCEL_PROCESS_STACK_SIZE     (128 * 20)
+/**< Add in that list all tasks that may send a ACI/HCI command */
+typedef enum
+{
+  CFG_TASK_ADV_CANCEL_ID,
+#if (L2CAP_REQUEST_NEW_CONN_PARAM != 0 )
+  CFG_TASK_CONN_UPDATE_REG_ID,
 #endif
+  CFG_TASK_HCI_ASYNCH_EVT_ID,
+  /* USER CODE BEGIN CFG_Task_Id_With_HCI_Cmd_t */
 
-/* USER CODE END FreeRTOS_Defines */
+  /* USER CODE END CFG_Task_Id_With_HCI_Cmd_t */
+  CFG_LAST_TASK_ID_WITH_HCICMD,                                               /**< Shall be LAST in the list */
+} CFG_Task_Id_With_HCI_Cmd_t;
+
+/**< Add in that list all tasks that never send a ACI/HCI command */
+typedef enum
+{
+  CFG_FIRST_TASK_ID_WITH_NO_HCICMD = CFG_LAST_TASK_ID_WITH_HCICMD - 1,        /**< Shall be FIRST in the list */
+  CFG_TASK_SYSTEM_HCI_ASYNCH_EVT_ID,
+  /* USER CODE BEGIN CFG_Task_Id_With_NO_HCI_Cmd_t */
+
+  /* USER CODE END CFG_Task_Id_With_NO_HCI_Cmd_t */
+  CFG_LAST_TASK_ID_WITH_NO_HCICMD                                            /**< Shall be LAST in the list */
+} CFG_Task_Id_With_NO_HCI_Cmd_t;
+
+#define CFG_TASK_NBR    CFG_LAST_TASK_ID_WITH_NO_HCICMD
+
+/**
+ * This is the list of priority required by the application
+ * Each Id shall be in the range 0..31
+ */
+typedef enum
+{
+  CFG_SCH_PRIO_0,
+  /* USER CODE BEGIN CFG_SCH_Prio_Id_t */
+
+  /* USER CODE END CFG_SCH_Prio_Id_t */
+} CFG_SCH_Prio_Id_t;
+
+/**
+ * This is a bit mapping over 32bits listing all events id supported in the application
+ */
+typedef enum
+{
+  CFG_IDLEEVT_HCI_CMD_EVT_RSP_ID,
+  CFG_IDLEEVT_SYSTEM_HCI_CMD_EVT_RSP_ID,
+  /* USER CODE BEGIN CFG_IdleEvt_Id_t */
+
+  /* USER CODE END CFG_IdleEvt_Id_t */
+} CFG_IdleEvt_Id_t;
 
 /******************************************************************************
  * LOW POWER

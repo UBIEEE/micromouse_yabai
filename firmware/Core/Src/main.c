@@ -18,8 +18,6 @@
 /* USER CODE END Header */
 /* Includes ------------------------------------------------------------------*/
 #include "main.h"
-#include "cmsis_os.h"
-#include "usb_device.h"
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
@@ -33,35 +31,6 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-
-#define NOTE_C_4
-#define NOTE_CS_4
-#define NOTE_D_4
-#define NOTE_DS_4
-#define NOTE_E_4
-#define NOTE_F_4
-#define NOTE_FS_4
-#define NOTE_G_4 3360
-#define NOTE_GS_4 3180
-#define NOTE_A_4 2995
-#define NOTE_AS_4 2840
-#define NOTE_B_4 2690
-
-#define NOTE_C_5 2545
-#define NOTE_CS_5 2410
-#define NOTE_D_5 2280
-#define NOTE_DS_5 2160
-#define NOTE_E_5 2040
-#define NOTE_F_5 1930
-#define NOTE_FS_5 1830//?
-#define NOTE_G_5 1740 // 810
-#define NOTE_GS_5 760
-#define NOTE_A_5 720
-#define NOTE_AS_5 680
-#define NOTE_B_5 640
-
-#define NOTE_CS_6 570
-#define NOTE_D_6 540
 
 /* USER CODE END PD */
 
@@ -82,38 +51,13 @@ LPTIM_HandleTypeDef hlptim1;
 
 RTC_HandleTypeDef hrtc;
 
-TIM_HandleTypeDef htim1;
 TIM_HandleTypeDef htim2;
 TIM_HandleTypeDef htim16;
+TIM_HandleTypeDef htim17;
 
-/* Definitions for defaultTask */
-osThreadId_t defaultTaskHandle;
-const osThreadAttr_t defaultTask_attributes = {
-  .name = "defaultTask",
-  .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityNormal,
-};
-/* Definitions for musicTask */
-osThreadId_t musicTaskHandle;
-const osThreadAttr_t musicTask_attributes = {
-  .name = "musicTask",
-  .stack_size = 128 * 4,
-  .priority = (osPriority_t) osPriorityLow,
-};
+PCD_HandleTypeDef hpcd_USB_FS;
+
 /* USER CODE BEGIN PV */
-
-int16_t counter1 = 0;
-int16_t counter2 = 0;
-
-volatile uint16_t adcResultsDMA[4];
-volatile int adcConversionComplete = 0;
-
-#define TEMPO 120 // Home Depot
-// #define TEMPO 134 // Thunderstruck
-
-int pwm_counter = 0;
-int pwm_pulse_left = 0;
-int pwm_pulse_right = 0;
 
 /* USER CODE END PV */
 
@@ -129,125 +73,15 @@ static void MX_I2C1_Init(void);
 static void MX_IPCC_Init(void);
 static void MX_RTC_Init(void);
 static void MX_ADC1_Init(void);
-static void MX_TIM1_Init(void);
+static void MX_USB_PCD_Init(void);
+static void MX_TIM17_Init(void);
 static void MX_RF_Init(void);
-void StartDefaultTask(void *argument);
-void StartMusicTask(void *argument);
-
 /* USER CODE BEGIN PFP */
 
 /* USER CODE END PFP */
 
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
-
-void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef *hadc) {
-  adcConversionComplete = 1;
-}
-
-uint8_t Get_ID()
-{
-	HAL_StatusTypeDef _hal;
-	I2C_HandleTypeDef* _i2c = &hi2c1;
-	uint8_t adr = 0x68<<1; // 0xD0
-	uint8_t _smbuff[1];
-  _smbuff[0]= 0x75; // WHO_AM_I
-	uint8_t _rmbuff[1];		
-	
-	_hal = HAL_I2C_Master_Transmit (_i2c, adr, _smbuff, 1 ,100);
-	
-	_hal = (HAL_I2C_Master_Receive(_i2c, adr, _rmbuff, 1,100)); // read
-	if (_hal == HAL_OK)
-	{
-		return _rmbuff[0]; // Who_am_i = 0x67
-	}
-	else
-	{
-		return _hal;
-	}	
-}
-
-void set_note(uint32_t arr) {
-  htim16.Instance->ARR = arr;
-  htim16.Instance->CCR1 = arr/2;
-}
-
-enum NoteDuration { // 4/4 time
-  WHOLE = 240000 / TEMPO,
-  HALF = 120000 / TEMPO,
-  QUARTER = 60000 / TEMPO,
-  EIGHTH = 30000 / TEMPO,
-  SIXTEENTH = 15000 / TEMPO
-};
-
-
-void play_note(uint32_t arr, uint32_t duration) {
-  if (!duration) return;
-  set_note(arr);
-  osDelay(duration);
-}
-
-void play_note_short(uint32_t arr, uint32_t duration) {
-  if (!duration) return;
-  play_note(arr, duration-20);
-  set_note(0);
-  osDelay(20);
-}
-
-void home_depot() {
-  for (int i = 0; i < 3; i++) {
-    play_note_short(NOTE_A_4, EIGHTH);
-    play_note(NOTE_A_4, EIGHTH);
-    play_note(NOTE_D_5, EIGHTH);
-    play_note(NOTE_A_4, EIGHTH);
-    play_note(0, EIGHTH);
-    play_note(NOTE_A_4, EIGHTH);
-    play_note(0, EIGHTH);
-    play_note(NOTE_A_4, EIGHTH);
-    play_note(NOTE_C_5, EIGHTH);
-    play_note(NOTE_A_4, EIGHTH);
-    play_note(0, EIGHTH);
-    play_note(NOTE_A_4, EIGHTH);
-    play_note(0, EIGHTH);
-    play_note(NOTE_A_4, EIGHTH);
-    play_note(NOTE_G_4, EIGHTH);
-    play_note_short(NOTE_A_4, EIGHTH);
-  }
-
-  play_note(0, EIGHTH);
-  play_note_short(NOTE_A_4, EIGHTH);
-  play_note_short(NOTE_D_5, EIGHTH);
-  play_note_short(NOTE_A_4, EIGHTH);
-  play_note(NOTE_C_5, QUARTER);
-  play_note(NOTE_D_6, EIGHTH);
-  play_note(0, EIGHTH);
-
-  for (int i = 0; i < 7; i++) {
-    play_note_short(NOTE_A_4, EIGHTH);
-    play_note_short(NOTE_D_5, EIGHTH);
-    play_note_short(NOTE_A_4, EIGHTH);
-    play_note_short(NOTE_C_5, EIGHTH);
-    play_note_short(NOTE_A_4, EIGHTH);
-    play_note(NOTE_G_4, EIGHTH);
-    play_note(NOTE_D_6, EIGHTH);
-    play_note(0, EIGHTH);
-  }
-  play_note_short(NOTE_A_4, EIGHTH);
-  play_note_short(NOTE_D_5, EIGHTH);
-  play_note_short(NOTE_A_4, EIGHTH);
-  play_note_short(NOTE_A_4, EIGHTH);
-}
-
-void test_freq() {
-  int arr = 0;
-  if (HAL_GPIO_ReadPin(BUTTON_1_GPIO_Port, BUTTON_1_Pin) == GPIO_PIN_SET) {
-    arr = NOTE_A_4;
-  } else {
-    arr = NOTE_G_4;
-  }
-
-  set_note(arr);
-}
 
 /* USER CODE END 0 */
 
@@ -295,61 +129,22 @@ int main(void)
   MX_I2C1_Init();
   MX_RTC_Init();
   MX_ADC1_Init();
-  MX_TIM1_Init();
+  MX_USB_PCD_Init();
+  MX_TIM17_Init();
   MX_RF_Init();
   /* USER CODE BEGIN 2 */
 
-  HAL_TIM_PWM_Start(&htim16, TIM_CHANNEL_1);
-
   /* USER CODE END 2 */
-
-  /* Init scheduler */
-  osKernelInitialize();
-
-  /* USER CODE BEGIN RTOS_MUTEX */
-  /* add mutexes, ... */
-  /* USER CODE END RTOS_MUTEX */
-
-  /* USER CODE BEGIN RTOS_SEMAPHORES */
-  /* add semaphores, ... */
-  /* USER CODE END RTOS_SEMAPHORES */
-
-  /* USER CODE BEGIN RTOS_TIMERS */
-  /* start timers, add new ones, ... */
-  /* USER CODE END RTOS_TIMERS */
-
-  /* USER CODE BEGIN RTOS_QUEUES */
-  /* add queues, ... */
-  /* USER CODE END RTOS_QUEUES */
-
-  /* Create the thread(s) */
-  /* creation of defaultTask */
-  defaultTaskHandle = osThreadNew(StartDefaultTask, NULL, &defaultTask_attributes);
-
-  /* creation of musicTask */
-  musicTaskHandle = osThreadNew(StartMusicTask, NULL, &musicTask_attributes);
-
-  /* USER CODE BEGIN RTOS_THREADS */
-  /* add threads, ... */
-  /* USER CODE END RTOS_THREADS */
-
-  /* USER CODE BEGIN RTOS_EVENTS */
-  /* add events, ... */
-  /* USER CODE END RTOS_EVENTS */
 
   /* Init code for STM32_WPAN */
   MX_APPE_Init();
-
-  /* Start scheduler */
-  osKernelStart();
-
-  /* We should never get here as control is now taken by the scheduler */
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
   while (1)
   {
     /* USER CODE END WHILE */
+    MX_APPE_Process();
 
     /* USER CODE BEGIN 3 */
   }
@@ -645,10 +440,6 @@ static void MX_LPTIM1_Init(void)
   }
   /* USER CODE BEGIN LPTIM1_Init 2 */
 
-  if (HAL_LPTIM_Encoder_Start(&hlptim1, 0xFFFF)) {
-    Error_Handler();
-  }
-
   /* USER CODE END LPTIM1_Init 2 */
 
 }
@@ -718,55 +509,6 @@ static void MX_RTC_Init(void)
 }
 
 /**
-  * @brief TIM1 Initialization Function
-  * @param None
-  * @retval None
-  */
-static void MX_TIM1_Init(void)
-{
-
-  /* USER CODE BEGIN TIM1_Init 0 */
-
-  /* USER CODE END TIM1_Init 0 */
-
-  TIM_ClockConfigTypeDef sClockSourceConfig = {0};
-  TIM_MasterConfigTypeDef sMasterConfig = {0};
-
-  /* USER CODE BEGIN TIM1_Init 1 */
-
-  /* USER CODE END TIM1_Init 1 */
-  htim1.Instance = TIM1;
-  htim1.Init.Prescaler = 64-1;
-  htim1.Init.CounterMode = TIM_COUNTERMODE_UP;
-  htim1.Init.Period = 2-1;
-  htim1.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
-  htim1.Init.RepetitionCounter = 0;
-  htim1.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
-  if (HAL_TIM_Base_Init(&htim1) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sClockSourceConfig.ClockSource = TIM_CLOCKSOURCE_INTERNAL;
-  if (HAL_TIM_ConfigClockSource(&htim1, &sClockSourceConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  sMasterConfig.MasterOutputTrigger = TIM_TRGO_RESET;
-  sMasterConfig.MasterOutputTrigger2 = TIM_TRGO2_RESET;
-  sMasterConfig.MasterSlaveMode = TIM_MASTERSLAVEMODE_DISABLE;
-  if (HAL_TIMEx_MasterConfigSynchronization(&htim1, &sMasterConfig) != HAL_OK)
-  {
-    Error_Handler();
-  }
-  /* USER CODE BEGIN TIM1_Init 2 */
-
-  HAL_TIM_Base_Start_IT(&htim1);
-
-  /* USER CODE END TIM1_Init 2 */
-
-}
-
-/**
   * @brief TIM2 Initialization Function
   * @param None
   * @retval None
@@ -811,10 +553,6 @@ static void MX_TIM2_Init(void)
   }
   /* USER CODE BEGIN TIM2_Init 2 */
 
-  if (HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL)) {
-    Error_Handler();
-  }
-
   /* USER CODE END TIM2_Init 2 */
 
 }
@@ -828,11 +566,6 @@ static void MX_TIM16_Init(void)
 {
 
   /* USER CODE BEGIN TIM16_Init 0 */
-
-  /*
-  C5: 2400/2545
-  B4: 2690
-  */
 
   /* USER CODE END TIM16_Init 0 */
 
@@ -888,6 +621,71 @@ static void MX_TIM16_Init(void)
 }
 
 /**
+  * @brief TIM17 Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_TIM17_Init(void)
+{
+
+  /* USER CODE BEGIN TIM17_Init 0 */
+
+  /* USER CODE END TIM17_Init 0 */
+
+  /* USER CODE BEGIN TIM17_Init 1 */
+
+  /* USER CODE END TIM17_Init 1 */
+  htim17.Instance = TIM17;
+  htim17.Init.Prescaler = 64-1;
+  htim17.Init.CounterMode = TIM_COUNTERMODE_UP;
+  htim17.Init.Period = 20-1;
+  htim17.Init.ClockDivision = TIM_CLOCKDIVISION_DIV1;
+  htim17.Init.RepetitionCounter = 0;
+  htim17.Init.AutoReloadPreload = TIM_AUTORELOAD_PRELOAD_DISABLE;
+  if (HAL_TIM_Base_Init(&htim17) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN TIM17_Init 2 */
+
+  /* USER CODE END TIM17_Init 2 */
+
+}
+
+/**
+  * @brief USB Initialization Function
+  * @param None
+  * @retval None
+  */
+static void MX_USB_PCD_Init(void)
+{
+
+  /* USER CODE BEGIN USB_Init 0 */
+
+  /* USER CODE END USB_Init 0 */
+
+  /* USER CODE BEGIN USB_Init 1 */
+
+  /* USER CODE END USB_Init 1 */
+  hpcd_USB_FS.Instance = USB;
+  hpcd_USB_FS.Init.dev_endpoints = 8;
+  hpcd_USB_FS.Init.speed = PCD_SPEED_FULL;
+  hpcd_USB_FS.Init.phy_itface = PCD_PHY_EMBEDDED;
+  hpcd_USB_FS.Init.Sof_enable = DISABLE;
+  hpcd_USB_FS.Init.low_power_enable = DISABLE;
+  hpcd_USB_FS.Init.lpm_enable = DISABLE;
+  hpcd_USB_FS.Init.battery_charging_enable = DISABLE;
+  if (HAL_PCD_Init(&hpcd_USB_FS) != HAL_OK)
+  {
+    Error_Handler();
+  }
+  /* USER CODE BEGIN USB_Init 2 */
+
+  /* USER CODE END USB_Init 2 */
+
+}
+
+/**
   * Enable DMA controller clock
   */
 static void MX_DMA_Init(void)
@@ -899,7 +697,7 @@ static void MX_DMA_Init(void)
 
   /* DMA interrupt init */
   /* DMA1_Channel1_IRQn interrupt configuration */
-  HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 5, 0);
+  HAL_NVIC_SetPriority(DMA1_Channel1_IRQn, 0, 0);
   HAL_NVIC_EnableIRQ(DMA1_Channel1_IRQn);
 
 }
@@ -971,103 +769,12 @@ static void MX_GPIO_Init(void)
   HAL_GPIO_Init(IMU_INT1_GPIO_Port, &GPIO_InitStruct);
 
 /* USER CODE BEGIN MX_GPIO_Init_2 */
-
 /* USER CODE END MX_GPIO_Init_2 */
 }
 
 /* USER CODE BEGIN 4 */
 
 /* USER CODE END 4 */
-
-/* USER CODE BEGIN Header_StartDefaultTask */
-/**
-  * @brief  Function implementing the defaultTask thread.
-  * @param  argument: Not used
-  * @retval None
-  */
-/* USER CODE END Header_StartDefaultTask */
-void StartDefaultTask(void *argument)
-{
-  /* init code for USB_Device */
-  MX_USB_Device_Init();
-  /* USER CODE BEGIN 5 */
-  /* Infinite loop */
-  for(;;)
-  {
-    if (HAL_GPIO_ReadPin(BUTTON_2_GPIO_Port, BUTTON_2_Pin) == GPIO_PIN_SET) {
-      pwm_pulse_left = 3;
-      pwm_pulse_right = 3;
-      osDelay(1000);
-      pwm_pulse_left = 0;
-      pwm_pulse_right = 0;
-    }
-
-    osDelay(100);
-  }
-  /* USER CODE END 5 */
-}
-
-/* USER CODE BEGIN Header_StartMusicTask */
-/**
-* @brief Function implementing the musicTask thread.
-* @param argument: Not used
-* @retval None
-*/
-/* USER CODE END Header_StartMusicTask */
-void StartMusicTask(void *argument)
-{
-  /* USER CODE BEGIN StartMusicTask */
-  play_note_short(NOTE_D_5, EIGHTH);
-  play_note_short(NOTE_D_6, EIGHTH);
-
-  /* Infinite loop */
-  for(;;)
-  {
-    if (HAL_GPIO_ReadPin(BUTTON_1_GPIO_Port, BUTTON_1_Pin) == GPIO_PIN_SET) {
-      home_depot();
-    }
-    osDelay(100);
-  }
-  /* USER CODE END StartMusicTask */
-}
-
-/**
-  * @brief  Period elapsed callback in non blocking mode
-  * @note   This function is called  when TIM17 interrupt took place, inside
-  * HAL_TIM_IRQHandler(). It makes a direct call to HAL_IncTick() to increment
-  * a global variable "uwTick" used as application time base.
-  * @param  htim : TIM handle
-  * @retval None
-  */
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
-{
-  /* USER CODE BEGIN Callback 0 */
-
-  /* USER CODE END Callback 0 */
-  if (htim->Instance == TIM17) {
-    HAL_IncTick();
-  }
-  /* USER CODE BEGIN Callback 1 */
-  if (htim->Instance == TIM1) {
-    if (pwm_counter < pwm_pulse_right) {
-      MOTOR_RIGHT_GPIO_Port->BSRR = (uint32_t)MOTOR_RIGHT_Pin; // Set
-    }
-    else {
-      MOTOR_RIGHT_GPIO_Port->BRR = (uint32_t)MOTOR_RIGHT_Pin; // Reset
-    }
-
-    if (pwm_counter < pwm_pulse_left) {
-      MOTOR_LEFT_GPIO_Port->BSRR = (uint32_t)MOTOR_LEFT_Pin; // Set
-    }
-    else {
-      MOTOR_LEFT_GPIO_Port->BRR = (uint32_t)MOTOR_LEFT_Pin; // Reset
-    }
-
-    pwm_counter++;
-    pwm_counter %= 10;
-  }
-  /* USER CODE END Callback 1 */
-}
 
 /**
   * @brief  This function is executed in case of error occurrence.
