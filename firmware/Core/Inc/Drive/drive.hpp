@@ -3,9 +3,6 @@
 #include "Basic/subsystem.hpp"
 
 class Drive : public Subsystem {
-  uint8_t pwm_counter     = 0;
-  uint8_t pwm_pulse_right = 0;
-  uint8_t pwm_pulse_left  = 0;
 
 public:
   void process() override;
@@ -21,9 +18,4 @@ public:
 private:
   void set_speed_dir(uint8_t left, GPIO_PinState left_dir, uint8_t right,
                      GPIO_PinState right_dir);
-
-private:
-  friend void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim);
-
-  void pwm_update(); // 50kHz
 };

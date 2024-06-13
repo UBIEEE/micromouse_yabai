@@ -34,10 +34,9 @@ void Robot_Update() {
   }
 }
 
-////////////////////////////////////////////////////////////////////////////////
-// Callbacks.
-////////////////////////////////////////////////////////////////////////////////
-
+//
+// External interrupt callback.
+//
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
   switch (GPIO_Pin) {
   case BUTTON_1_Pin:
@@ -51,11 +50,4 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
   case IMU_INT1_Pin:
     break;
   }
-}
-
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim) {
-  assert_param(htim->Instance == TIM17);
-  UNUSED(htim);
-
-  drive.pwm_update();
 }
