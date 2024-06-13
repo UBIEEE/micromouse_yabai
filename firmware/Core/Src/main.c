@@ -137,6 +137,9 @@ int main(void)
   HAL_TIM_PWM_Start(&htim16, TIM_CHANNEL_1); // Buzzer
   HAL_TIM_Base_Start_IT(&htim17); // Motors
 
+  HAL_TIM_Encoder_Start(&htim2, TIM_CHANNEL_ALL); // Encoder Right 
+  HAL_LPTIM_Encoder_Start(&hlptim1, 0xFFFF); // Encoder Left
+
   /* USER CODE END 2 */
 
   /* Init code for STM32_WPAN */

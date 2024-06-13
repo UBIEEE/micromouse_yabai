@@ -2,13 +2,19 @@
 
 #include <cmath>
 
+extern LPTIM_HandleTypeDef hlptim1; // Left encoder
+extern TIM_HandleTypeDef htim2;     // Right encoder
+
 static constexpr int8_t PWM_PERIOD = 10; // The resolution of the PWM.
 
 static uint8_t s_pwm_counter     = 0;
 static uint8_t s_pwm_pulse_right = 0;
 static uint8_t s_pwm_pulse_left  = 0;
 
-void Drive::process() {}
+void Drive::process() {
+  uint16_t left_enc  = hlptim1.Instance->CNT;
+  uint16_t right_enc = htim2.Instance->CNT / 2;
+}
 
 void Drive::set_speed(float left_float, float right_float) {
   const int8_t left(left_float * PWM_PERIOD);
