@@ -2,7 +2,9 @@
 
 #include "Basic/subsystem.hpp"
 
-class Drive : public Subsystem {
+#include <cstdint>
+
+class Drive : public SubsystemSingleton<Drive> {
   float m_left_dist_mm = 0.f;
   float m_right_dist_mm = 0.f;
 
@@ -14,10 +16,8 @@ public:
 
   void stop() { set_speed_dir(0, GPIO_PIN_RESET, 0, GPIO_PIN_RESET); };
 
-  //
   // Set the speed of the motors.
   // Values should be between -1.0 and 1.0.
-  //
   void set_speed(float left_percent, float right_percent);
 
 private:

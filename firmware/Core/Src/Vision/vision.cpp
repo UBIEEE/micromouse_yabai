@@ -1,6 +1,14 @@
 #include "Vision/vision.hpp"
 
+//
+// External variables.
+//
+
 extern ADC_HandleTypeDef hadc1; // main.c
+
+//
+// Constants.
+//
 
 // Number of ticks waiting for the IR emitters to turn on.
 static constexpr uint8_t WAITING_TICKS = 2;
@@ -19,7 +27,15 @@ static constexpr uint16_t EMIT_PINS[] = {
     IR_FAR_LEFT_EMIT_Pin,
 };
 
+//
+// Static variables.
+//
+
 static volatile bool s_adc_ready = false;
+
+//
+// Vision functions.
+//
 
 void Vision::process() {
   if (!m_enabled) return;
@@ -59,8 +75,10 @@ void Vision::process() {
 }
 
 //
-// ADC conversion complete callback.
+// Callbacks.
 //
+
+// ADC conversion complete callback.
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc) {
   assert_param(hadc->Instance == ADC1);
   UNUSED(hadc);

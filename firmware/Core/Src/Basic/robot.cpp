@@ -7,50 +7,48 @@
 #include "main.h"
 #include <array>
 
-////////////////////////////////////////////////////////////////////////////////
-// Subsystems.
-////////////////////////////////////////////////////////////////////////////////
+//
+// Static variables.
+//
 
-static Buzzer buzzer;
-static Drive drive;
-static Vision vision;
-
-static constexpr std::array<Subsystem*, 3> subsystems = {
-    &buzzer,
-    &drive,
-    &vision,
+static constexpr std::array<Subsystem*, 3> s_subsystems = {
+  &Buzzer::get(),
+  &Drive::get(),
+  &Vision::get(),
 };
 
-////////////////////////////////////////////////////////////////////////////////
+//
 // Robot functions.
-////////////////////////////////////////////////////////////////////////////////
+//
 
 void Robot_Init() {
-  for (auto s : subsystems) {
+  for (auto s : s_subsystems) {
     s->init();
   }
 }
 
 void Robot_Update() {
-  for (auto s : subsystems) {
+  for (auto s : s_subsystems) {
     s->process();
   }
 }
 
 //
-// External interrupt callback.
+// Callbacks.
 //
+
+// External interrupt callback.
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
   switch (GPIO_Pin) {
   case BUTTON_1_Pin:
-    buzzer.play_song(Buzzer::Song::HOME_DEPOT);
-    // drive.set_speed(0.2, 0.2);
-    vision.set_enabled(true);
+    Buzzer::get().play_song(Buzzer::Song::HOME_DEPOT);
+    Drive::get().set_speed(-0.5, -0.5);
+    Vision::get().set_enabled(true);
     break;
   case BUTTON_2_Pin:
-    buzzer.quiet();
-    drive.stop();
-    vision.set_enabled(false);
+    Buzzer::get().quiet();
+    Drive::get().stop();
+    Vision::get().set_enabled(false);
     break;
   case IMU_INT1_Pin:
     break;
