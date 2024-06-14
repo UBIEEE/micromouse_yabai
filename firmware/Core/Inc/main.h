@@ -109,6 +109,7 @@ void Error_Handler(void);
 /* USER CODE BEGIN Private defines */
 
 #define ROBOT_UPDATE_PERIOD_MS 20
+#define ROBOT_UPDATE_PERIOD_S (ROBOT_UPDATE_PERIOD_MS / 1000.f)
 
 /* USER CODE END Private defines */
 

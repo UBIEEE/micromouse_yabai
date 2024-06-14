@@ -1,24 +1,48 @@
 #include "Drive/drive.hpp"
 
 #include <cmath>
+#include <numbers>
 
 extern LPTIM_HandleTypeDef hlptim1; // Left encoder
 extern TIM_HandleTypeDef htim2;     // Right encoder
 
+////////////////////////////////////////////////////////////////////////////////
+// Constants.
+////////////////////////////////////////////////////////////////////////////////
+
 static constexpr int8_t PWM_PERIOD = 10; // The resolution of the PWM.
+
+static constexpr int8_t ENCODER_MAGNET_POLES = 6;
+static constexpr float GEAR_RATIO            = 20.f;
+static constexpr float ENCODER_TICKS_PER_ROTATION =
+    (ENCODER_MAGNET_POLES * GEAR_RATIO);
+
+static constexpr float WHEEL_DIAMETER_MM = 25.f;
+static constexpr float WHEEL_CIRCUMFERENCE_MM =
+    (WHEEL_DIAMETER_MM * std::numbers::pi_v<float>);
+
+static constexpr float ENCODER_TICKS_PER_MM =
+    ENCODER_TICKS_PER_ROTATION / WHEEL_CIRCUMFERENCE_MM;
+
+static constexpr float ENCODER_MM_PER_TICK = 1.f / ENCODER_TICKS_PER_MM;
+
+////////////////////////////////////////////////////////////////////////////////
+// Static variables.
+////////////////////////////////////////////////////////////////////////////////
 
 static uint8_t s_pwm_counter     = 0;
 static uint8_t s_pwm_pulse_right = 0;
 static uint8_t s_pwm_pulse_left  = 0;
 
-void Drive::process() {
-  uint16_t left_enc  = hlptim1.Instance->CNT;
-  uint16_t right_enc = htim2.Instance->CNT / 2;
-}
+////////////////////////////////////////////////////////////////////////////////
+// Drive functions.
+////////////////////////////////////////////////////////////////////////////////
 
-void Drive::set_speed(float left_float, float right_float) {
-  const int8_t left(left_float * PWM_PERIOD);
-  const int8_t right(right_float * PWM_PERIOD);
+void Drive::process() { update_encoders(); }
+
+void Drive::set_speed(float left_percent, float right_percent) {
+  const int8_t left(left_percent * PWM_PERIOD);
+  const int8_t right(right_percent * PWM_PERIOD);
 
   const int8_t abs_left  = std::abs(left);
   const int8_t abs_right = std::abs(right);
@@ -39,6 +63,30 @@ void Drive::set_speed_dir(uint8_t left, GPIO_PinState left_dir, uint8_t right,
   s_pwm_pulse_left  = left;
   s_pwm_pulse_right = right;
 }
+
+void Drive::update_encoders() {
+  const int8_t left_delta_ticks  = hlptim1.Instance->CNT;
+  const int8_t right_delta_ticks = htim2.Instance->CNT / 2;
+
+  const float left_delta_mm  = left_delta_ticks * ENCODER_MM_PER_TICK;
+  const float right_delta_mm = right_delta_ticks * ENCODER_MM_PER_TICK;
+
+  // Reset the encoders.
+  __HAL_LPTIM_RESET_COUNTER(&hlptim1);
+  __HAL_TIM_SET_COUNTER(&htim2, 0);
+
+  // Update the distance.
+  m_left_dist_mm += left_delta_mm;
+  m_right_dist_mm += right_delta_mm;
+
+  // Calculate the velocity.
+  m_left_vel_mmps  = left_delta_mm / ROBOT_UPDATE_PERIOD_S;
+  m_right_vel_mmps = right_delta_mm / ROBOT_UPDATE_PERIOD_S;
+}
+
+////////////////////////////////////////////////////////////////////////////////
+// Callbacks.
+////////////////////////////////////////////////////////////////////////////////
 
 //
 // Timer callback.
