@@ -12,6 +12,7 @@ public:
     NONE       = 0,
     STARTUP    = 1,
     HOME_DEPOT = 2,
+    NOKIA      = 3,
   };
 
 private:

@@ -18,6 +18,7 @@ extern TIM_HandleTypeDef htim16; // main.c
 struct SongHandle {
   std::span<const Note> notes;
   uint16_t ticks_per_note;
+  bool pause_between_notes = true;
 };
 
 //
@@ -62,6 +63,23 @@ static constexpr Note SONG_HOME_DEPOT_NOTES[] = {
 // clang-format on
 
 //
+// Nokia ringtone.
+//
+
+static constexpr uint16_t SONG_NOKIA_TEMPO = 180;
+
+static constexpr Note SONG_NOKIA_NOTES[] = {
+    NOTE_E_6,  NOTE_D_6, NOTE_FS_5, NOTE_FS_5, NOTE_GS_5, NOTE_GS_5,
+    NOTE_CS_6, NOTE_B_5, NOTE_D_5,  NOTE_D_5,  NOTE_E_5,  NOTE_E_5,
+    NOTE_B_5,  NOTE_A_5, NOTE_CS_5, NOTE_CS_5, NOTE_E_5,  NOTE_E_5,
+    NOTE_A_5,  NOTE_A_5, NOTE_A_5,  NOTE_A_5,  REST, REST,
+    NOTE_E_6,  NOTE_D_6, NOTE_FS_5, NOTE_FS_5, NOTE_GS_5, NOTE_GS_5,
+    NOTE_CS_6, NOTE_B_5, NOTE_D_5,  NOTE_D_5,  NOTE_E_5,  NOTE_E_5,
+    NOTE_B_5,  NOTE_A_5, NOTE_CS_5, NOTE_CS_5, NOTE_E_5,  NOTE_E_5,
+    NOTE_A_5,  NOTE_A_5, NOTE_A_5,  NOTE_A_5,  REST,
+};
+
+//
 // All songs.
 //
 
@@ -74,6 +92,9 @@ static constexpr SongHandle SONGS[] = {
 
     // HOME_DEPOT
     {SONG_HOME_DEPOT_NOTES, SONG_HOME_DEPOT_TEMPO / ROBOT_UPDATE_PERIOD_MS},
+
+    // NOKIA
+    {SONG_NOKIA_NOTES, SONG_NOKIA_TEMPO / ROBOT_UPDATE_PERIOD_MS, false},
 };
 
 //
@@ -94,8 +115,10 @@ void Buzzer::process() {
   if (m_note_ticks == m_song_handle->ticks_per_note) {
     m_note_ticks = 0;
 
-    // Add a small rest to separate notes.
-    set_note(0);
+    if (m_song_handle->pause_between_notes) {
+      // Add a small rest to separate notes.
+      set_note(0);
+    }
 
     // Check if this is the last note in the song.
     if (++m_note_index == m_song_handle->notes.size()) {

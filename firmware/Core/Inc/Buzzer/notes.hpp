@@ -37,4 +37,6 @@ enum Note : uint16_t {
   // NOTE_C_6  = 0,
   NOTE_CS_6 = 570,
   NOTE_D_6  = 540,
+  // NOTE_DS_6 = 510,
+  NOTE_E_6 = 480, // Just a guess
 };
