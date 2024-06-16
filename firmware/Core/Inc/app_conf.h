@@ -121,8 +121,8 @@
 /**
  * Device name configuration for Generic Access Service
  */
-#define CFG_GAP_DEVICE_NAME             "MicroMouse"
-#define CFG_GAP_DEVICE_NAME_LENGTH      (10)
+#define CFG_GAP_DEVICE_NAME             "PetersMicroMouse"
+#define CFG_GAP_DEVICE_NAME_LENGTH      (16)
 
 /**
  * Define PHY
