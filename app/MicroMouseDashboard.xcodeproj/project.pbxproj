@@ -1,0 +1,644 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 60;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		75DE09E82C1E177E00B7DEDE /* MicroMouseDashboardApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75DE09E72C1E177E00B7DEDE /* MicroMouseDashboardApp.swift */; };
+		75DE09EA2C1E177E00B7DEDE /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75DE09E92C1E177E00B7DEDE /* ContentView.swift */; };
+		75DE09EC2C1E177F00B7DEDE /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 75DE09EB2C1E177F00B7DEDE /* Assets.xcassets */; };
+		75DE09F02C1E177F00B7DEDE /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 75DE09EF2C1E177F00B7DEDE /* Preview Assets.xcassets */; };
+		75DE09FA2C1E177F00B7DEDE /* MicroMouseDashboardTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75DE09F92C1E177F00B7DEDE /* MicroMouseDashboardTests.swift */; };
+		75DE0A042C1E177F00B7DEDE /* MicroMouseDashboardUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75DE0A032C1E177F00B7DEDE /* MicroMouseDashboardUITests.swift */; };
+		75DE0A062C1E177F00B7DEDE /* MicroMouseDashboardUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75DE0A052C1E177F00B7DEDE /* MicroMouseDashboardUITestsLaunchTests.swift */; };
+		75DE0A132C1E39EC00B7DEDE /* BluetoothManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75DE0A122C1E39E100B7DEDE /* BluetoothManager.swift */; };
+		75DE0A152C1F2DD600B7DEDE /* MicroMouseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75DE0A142C1F2DC700B7DEDE /* MicroMouseManager.swift */; };
+		75DE0A192C1F900000B7DEDE /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75DE0A182C1F8FE200B7DEDE /* AppConstants.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		75DE09F62C1E177F00B7DEDE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 75DE09DC2C1E177E00B7DEDE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 75DE09E32C1E177E00B7DEDE;
+			remoteInfo = MicroMouseDashboard;
+		};
+		75DE0A002C1E177F00B7DEDE /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 75DE09DC2C1E177E00B7DEDE /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 75DE09E32C1E177E00B7DEDE;
+			remoteInfo = MicroMouseDashboard;
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXFileReference section */
+		75DE09E42C1E177E00B7DEDE /* MicroMouseDashboard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MicroMouseDashboard.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		75DE09E72C1E177E00B7DEDE /* MicroMouseDashboardApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicroMouseDashboardApp.swift; sourceTree = "<group>"; };
+		75DE09E92C1E177E00B7DEDE /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		75DE09EB2C1E177F00B7DEDE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		75DE09ED2C1E177F00B7DEDE /* MicroMouseDashboard.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MicroMouseDashboard.entitlements; sourceTree = "<group>"; };
+		75DE09EF2C1E177F00B7DEDE /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		75DE09F52C1E177F00B7DEDE /* MicroMouseDashboardTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MicroMouseDashboardTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		75DE09F92C1E177F00B7DEDE /* MicroMouseDashboardTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicroMouseDashboardTests.swift; sourceTree = "<group>"; };
+		75DE09FF2C1E177F00B7DEDE /* MicroMouseDashboardUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MicroMouseDashboardUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		75DE0A032C1E177F00B7DEDE /* MicroMouseDashboardUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicroMouseDashboardUITests.swift; sourceTree = "<group>"; };
+		75DE0A052C1E177F00B7DEDE /* MicroMouseDashboardUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicroMouseDashboardUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		75DE0A122C1E39E100B7DEDE /* BluetoothManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothManager.swift; sourceTree = "<group>"; };
+		75DE0A142C1F2DC700B7DEDE /* MicroMouseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicroMouseManager.swift; sourceTree = "<group>"; };
+		75DE0A182C1F8FE200B7DEDE /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		75DE09E12C1E177E00B7DEDE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		75DE09F22C1E177F00B7DEDE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		75DE09FC2C1E177F00B7DEDE /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		75DE09DB2C1E177E00B7DEDE = {
+			isa = PBXGroup;
+			children = (
+				75DE09E62C1E177E00B7DEDE /* MicroMouseDashboard */,
+				75DE09F82C1E177F00B7DEDE /* MicroMouseDashboardTests */,
+				75DE0A022C1E177F00B7DEDE /* MicroMouseDashboardUITests */,
+				75DE09E52C1E177E00B7DEDE /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		75DE09E52C1E177E00B7DEDE /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				75DE09E42C1E177E00B7DEDE /* MicroMouseDashboard.app */,
+				75DE09F52C1E177F00B7DEDE /* MicroMouseDashboardTests.xctest */,
+				75DE09FF2C1E177F00B7DEDE /* MicroMouseDashboardUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		75DE09E62C1E177E00B7DEDE /* MicroMouseDashboard */ = {
+			isa = PBXGroup;
+			children = (
+				75DE09E72C1E177E00B7DEDE /* MicroMouseDashboardApp.swift */,
+				75DE09E92C1E177E00B7DEDE /* ContentView.swift */,
+				75DE0A122C1E39E100B7DEDE /* BluetoothManager.swift */,
+				75DE0A182C1F8FE200B7DEDE /* AppConstants.swift */,
+				75DE0A142C1F2DC700B7DEDE /* MicroMouseManager.swift */,
+				75DE09EB2C1E177F00B7DEDE /* Assets.xcassets */,
+				75DE09ED2C1E177F00B7DEDE /* MicroMouseDashboard.entitlements */,
+				75DE09EE2C1E177F00B7DEDE /* Preview Content */,
+			);
+			path = MicroMouseDashboard;
+			sourceTree = "<group>";
+		};
+		75DE09EE2C1E177F00B7DEDE /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				75DE09EF2C1E177F00B7DEDE /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		75DE09F82C1E177F00B7DEDE /* MicroMouseDashboardTests */ = {
+			isa = PBXGroup;
+			children = (
+				75DE09F92C1E177F00B7DEDE /* MicroMouseDashboardTests.swift */,
+			);
+			path = MicroMouseDashboardTests;
+			sourceTree = "<group>";
+		};
+		75DE0A022C1E177F00B7DEDE /* MicroMouseDashboardUITests */ = {
+			isa = PBXGroup;
+			children = (
+				75DE0A032C1E177F00B7DEDE /* MicroMouseDashboardUITests.swift */,
+				75DE0A052C1E177F00B7DEDE /* MicroMouseDashboardUITestsLaunchTests.swift */,
+			);
+			path = MicroMouseDashboardUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		75DE09E32C1E177E00B7DEDE /* MicroMouseDashboard */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 75DE0A092C1E177F00B7DEDE /* Build configuration list for PBXNativeTarget "MicroMouseDashboard" */;
+			buildPhases = (
+				75DE09E02C1E177E00B7DEDE /* Sources */,
+				75DE09E12C1E177E00B7DEDE /* Frameworks */,
+				75DE09E22C1E177E00B7DEDE /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = MicroMouseDashboard;
+			productName = MicroMouseDashboard;
+			productReference = 75DE09E42C1E177E00B7DEDE /* MicroMouseDashboard.app */;
+			productType = "com.apple.product-type.application";
+		};
+		75DE09F42C1E177F00B7DEDE /* MicroMouseDashboardTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 75DE0A0C2C1E177F00B7DEDE /* Build configuration list for PBXNativeTarget "MicroMouseDashboardTests" */;
+			buildPhases = (
+				75DE09F12C1E177F00B7DEDE /* Sources */,
+				75DE09F22C1E177F00B7DEDE /* Frameworks */,
+				75DE09F32C1E177F00B7DEDE /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				75DE09F72C1E177F00B7DEDE /* PBXTargetDependency */,
+			);
+			name = MicroMouseDashboardTests;
+			productName = MicroMouseDashboardTests;
+			productReference = 75DE09F52C1E177F00B7DEDE /* MicroMouseDashboardTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		75DE09FE2C1E177F00B7DEDE /* MicroMouseDashboardUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 75DE0A0F2C1E177F00B7DEDE /* Build configuration list for PBXNativeTarget "MicroMouseDashboardUITests" */;
+			buildPhases = (
+				75DE09FB2C1E177F00B7DEDE /* Sources */,
+				75DE09FC2C1E177F00B7DEDE /* Frameworks */,
+				75DE09FD2C1E177F00B7DEDE /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				75DE0A012C1E177F00B7DEDE /* PBXTargetDependency */,
+			);
+			name = MicroMouseDashboardUITests;
+			productName = MicroMouseDashboardUITests;
+			productReference = 75DE09FF2C1E177F00B7DEDE /* MicroMouseDashboardUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		75DE09DC2C1E177E00B7DEDE /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1600;
+				LastUpgradeCheck = 1600;
+				TargetAttributes = {
+					75DE09E32C1E177E00B7DEDE = {
+						CreatedOnToolsVersion = 16.0;
+					};
+					75DE09F42C1E177F00B7DEDE = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = 75DE09E32C1E177E00B7DEDE;
+					};
+					75DE09FE2C1E177F00B7DEDE = {
+						CreatedOnToolsVersion = 16.0;
+						TestTargetID = 75DE09E32C1E177E00B7DEDE;
+					};
+				};
+			};
+			buildConfigurationList = 75DE09DF2C1E177E00B7DEDE /* Build configuration list for PBXProject "MicroMouseDashboard" */;
+			compatibilityVersion = "Xcode 15.0";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 75DE09DB2C1E177E00B7DEDE;
+			productRefGroup = 75DE09E52C1E177E00B7DEDE /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				75DE09E32C1E177E00B7DEDE /* MicroMouseDashboard */,
+				75DE09F42C1E177F00B7DEDE /* MicroMouseDashboardTests */,
+				75DE09FE2C1E177F00B7DEDE /* MicroMouseDashboardUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		75DE09E22C1E177E00B7DEDE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				75DE09F02C1E177F00B7DEDE /* Preview Assets.xcassets in Resources */,
+				75DE09EC2C1E177F00B7DEDE /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		75DE09F32C1E177F00B7DEDE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		75DE09FD2C1E177F00B7DEDE /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		75DE09E02C1E177E00B7DEDE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				75DE0A152C1F2DD600B7DEDE /* MicroMouseManager.swift in Sources */,
+				75DE09EA2C1E177E00B7DEDE /* ContentView.swift in Sources */,
+				75DE0A132C1E39EC00B7DEDE /* BluetoothManager.swift in Sources */,
+				75DE09E82C1E177E00B7DEDE /* MicroMouseDashboardApp.swift in Sources */,
+				75DE0A192C1F900000B7DEDE /* AppConstants.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		75DE09F12C1E177F00B7DEDE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				75DE09FA2C1E177F00B7DEDE /* MicroMouseDashboardTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		75DE09FB2C1E177F00B7DEDE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				75DE0A062C1E177F00B7DEDE /* MicroMouseDashboardUITestsLaunchTests.swift in Sources */,
+				75DE0A042C1E177F00B7DEDE /* MicroMouseDashboardUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		75DE09F72C1E177F00B7DEDE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 75DE09E32C1E177E00B7DEDE /* MicroMouseDashboard */;
+			targetProxy = 75DE09F62C1E177F00B7DEDE /* PBXContainerItemProxy */;
+		};
+		75DE0A012C1E177F00B7DEDE /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 75DE09E32C1E177E00B7DEDE /* MicroMouseDashboard */;
+			targetProxy = 75DE0A002C1E177F00B7DEDE /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		75DE0A072C1E177F00B7DEDE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		75DE0A082C1E177F00B7DEDE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SWIFT_COMPILATION_MODE = wholemodule;
+			};
+			name = Release;
+		};
+		75DE0A0A2C1E177F00B7DEDE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MicroMouseDashboard/MicroMouseDashboard.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"MicroMouseDashboard/Preview Content\"";
+				DEVELOPMENT_TEAM = XNZV4K78M3;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "MicroMouse Dashboard";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "The Dashboard needs to connect to the MicroMouse via Bluetooth";
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.petelilley.MicroMouseDashboard;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				XROS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Debug;
+		};
+		75DE0A0B2C1E177F00B7DEDE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = MicroMouseDashboard/MicroMouseDashboard.entitlements;
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_ASSET_PATHS = "\"MicroMouseDashboard/Preview Content\"";
+				DEVELOPMENT_TEAM = XNZV4K78M3;
+				ENABLE_HARDENED_RUNTIME = YES;
+				ENABLE_PREVIEWS = YES;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_KEY_CFBundleDisplayName = "MicroMouse Dashboard";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
+				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "The Dashboard needs to connect to the MicroMouse via Bluetooth";
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphoneos*]" = YES;
+				"INFOPLIST_KEY_UILaunchScreen_Generation[sdk=iphonesimulator*]" = YES;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphoneos*]" = UIStatusBarStyleDefault;
+				"INFOPLIST_KEY_UIStatusBarStyle[sdk=iphonesimulator*]" = UIStatusBarStyleDefault;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
+				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.petelilley.MicroMouseDashboard;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				XROS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Release;
+		};
+		75DE0A0D2C1E177F00B7DEDE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = XNZV4K78M3;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.petelilley.MicroMouseDashboardTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MicroMouseDashboard.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MicroMouseDashboard";
+				XROS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Debug;
+		};
+		75DE0A0E2C1E177F00B7DEDE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = XNZV4K78M3;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.petelilley.MicroMouseDashboardTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/MicroMouseDashboard.app/$(BUNDLE_EXECUTABLE_FOLDER_PATH)/MicroMouseDashboard";
+				XROS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Release;
+		};
+		75DE0A102C1E177F00B7DEDE /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = XNZV4K78M3;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.petelilley.MicroMouseDashboardUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TEST_TARGET_NAME = MicroMouseDashboard;
+				XROS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Debug;
+		};
+		75DE0A112C1E177F00B7DEDE /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = XNZV4K78M3;
+				GENERATE_INFOPLIST_FILE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.0;
+				MACOSX_DEPLOYMENT_TARGET = 15.0;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = io.github.petelilley.MicroMouseDashboardUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = auto;
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SWIFT_EMIT_LOC_STRINGS = NO;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TEST_TARGET_NAME = MicroMouseDashboard;
+				XROS_DEPLOYMENT_TARGET = 2.0;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		75DE09DF2C1E177E00B7DEDE /* Build configuration list for PBXProject "MicroMouseDashboard" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				75DE0A072C1E177F00B7DEDE /* Debug */,
+				75DE0A082C1E177F00B7DEDE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		75DE0A092C1E177F00B7DEDE /* Build configuration list for PBXNativeTarget "MicroMouseDashboard" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				75DE0A0A2C1E177F00B7DEDE /* Debug */,
+				75DE0A0B2C1E177F00B7DEDE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		75DE0A0C2C1E177F00B7DEDE /* Build configuration list for PBXNativeTarget "MicroMouseDashboardTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				75DE0A0D2C1E177F00B7DEDE /* Debug */,
+				75DE0A0E2C1E177F00B7DEDE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		75DE0A0F2C1E177F00B7DEDE /* Build configuration list for PBXNativeTarget "MicroMouseDashboardUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				75DE0A102C1E177F00B7DEDE /* Debug */,
+				75DE0A112C1E177F00B7DEDE /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 75DE09DC2C1E177E00B7DEDE /* Project object */;
+}
