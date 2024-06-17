@@ -12,3 +12,8 @@ struct NotReadyView: View {
     }
   }
 }
+
+#Preview {
+  NotReadyView()
+    .environmentObject(BluetoothManager())
+}
