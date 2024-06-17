@@ -46,7 +46,7 @@
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN PV */
 
-extern bool g_robot_update_registered; // custom_app.c
+extern bool g_robot_tasks_registered; // custom_app.c
 
 /* USER CODE END PV */
 
@@ -198,13 +198,25 @@ void SysTick_Handler(void)
   /* USER CODE BEGIN SysTick_IRQn 1 */
 
   //
+  // Make sure the tasks are registered with the sequencer before telling the
+  // sequencer to run the tasks!
+  //
+  if (!g_robot_tasks_registered) return;
+
+  const uint32_t ticks = HAL_GetTick();
+
+  //
   // Tell the sequencer to run the main robot task.
   //
-  // Make sure the Robot_Update task is registered with the sequencer before
-  // telling the sequencer to run the task!
-  //
-  if ((HAL_GetTick() % ROBOT_UPDATE_PERIOD_MS == 0) && g_robot_update_registered) {
+  if (ticks % ROBOT_UPDATE_PERIOD_MS == 0) {
     UTIL_SEQ_SetTask(1 << CFG_TASK_ROBOT_UPDATE_ID, CFG_SCH_PRIO_0);
+  }
+
+  //
+  // Tell the sequencer to run the send feedback robot task.
+  //
+  if (ticks % ROBOT_SEND_FEEDBACK_PERIOD_MS == 0) {
+    UTIL_SEQ_SetTask(1 << CFG_TASK_ROBOT_SEND_FEEDBACK_ID, CFG_SCH_PRIO_0);
   }
 
   /* USER CODE END SysTick_IRQn 1 */

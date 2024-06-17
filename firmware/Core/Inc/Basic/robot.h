@@ -8,6 +8,7 @@ extern "C" {
 
 void Robot_Init(void);
 void Robot_Update(void);
+void Robot_SendFeedback(void);
 
 #ifdef __cplusplus
 }

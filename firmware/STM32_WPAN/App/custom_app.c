@@ -77,7 +77,7 @@ uint8_t NotifyCharData[247];
 
 /* USER CODE BEGIN PV */
 
-bool g_robot_update_registered = false;
+bool g_robot_tasks_registered = false;
 
 /* USER CODE END PV */
 
@@ -192,10 +192,16 @@ void Custom_APP_Init(void)
   UTIL_SEQ_RegTask(1 << CFG_TASK_ROBOT_UPDATE_ID, 0, Robot_Update);
 
   //
-  // The task has been registered with the sequencer, so signal that the task
+  // Register the robot send feedback task with the sequencer.
+  // The task will be executed every 200ms (see SysTick_Handler in stm32wbxx_it.c).
+  //
+  UTIL_SEQ_RegTask(1 << CFG_TASK_ROBOT_SEND_FEEDBACK_ID, 0, Robot_SendFeedback);
+
+  //
+  // The tasks have been registered with the sequencer, so signal that the task
   // is ready to be run.
   //
-  g_robot_update_registered = true;
+  g_robot_tasks_registered = true;
 
   /* USER CODE END CUSTOM_APP_Init */
   return;

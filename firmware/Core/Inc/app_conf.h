@@ -670,6 +670,7 @@ typedef enum
   /* USER CODE BEGIN CFG_Task_Id_With_HCI_Cmd_t */
 
   CFG_TASK_ROBOT_UPDATE_ID, // The main robot update task.
+  CFG_TASK_ROBOT_SEND_FEEDBACK_ID, // The task that sends feedback to the host.
 
   /* USER CODE END CFG_Task_Id_With_HCI_Cmd_t */
   CFG_LAST_TASK_ID_WITH_HCICMD,                                               /**< Shall be LAST in the list */

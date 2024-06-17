@@ -32,6 +32,7 @@ private:
 
 public:
   void process() override;
+  void send_feedback() override;
 
   void set_enabled(bool enabled) { m_enabled = enabled; };
   bool enabled() const { return m_enabled; };

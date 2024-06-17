@@ -111,6 +111,9 @@ void Error_Handler(void);
 #define ROBOT_UPDATE_PERIOD_MS 20
 #define ROBOT_UPDATE_PERIOD_S (ROBOT_UPDATE_PERIOD_MS / 1000.f)
 
+#define ROBOT_SEND_FEEDBACK_PERIOD_MS 333
+#define ROBOT_SEND_FEEDBACK_PERIOD_S (ROBOT_SEND_FEEDBACK_PERIOD_MS / 1000.f)
+
 /* USER CODE END Private defines */
 
 #ifdef __cplusplus

@@ -33,6 +33,12 @@ void Robot_Update() {
   }
 }
 
+void Robot_SendFeedback() {
+  for (auto s : s_subsystems) {
+    s->send_feedback();
+  }
+}
+
 //
 // Callbacks.
 //

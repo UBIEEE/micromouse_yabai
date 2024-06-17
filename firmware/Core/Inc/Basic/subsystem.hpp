@@ -16,6 +16,7 @@ public:
 
   virtual void init() {}
   virtual void process() {}
+  virtual void send_feedback() {}
 
 protected:
   Subsystem() = default;
