@@ -5,6 +5,8 @@
 #include "stm32wbxx_hal.h"
 #include <span>
 
+#include "custom_stm.h"
+
 //
 // External variables.
 //
@@ -25,7 +27,7 @@ struct SongHandle {
 // Startup tone.
 //
 
-static constexpr uint16_t SONG_STARTUP_TEMPO = 250;
+static constexpr uint16_t SONG_STARTUP_NOTE_LENGTH_MS = 250;
 
 static constexpr Note SONG_STARTUP_NOTES[] = {
     NOTE_D_5,
@@ -36,7 +38,7 @@ static constexpr Note SONG_STARTUP_NOTES[] = {
 // Home Depot theme song.
 //
 
-static constexpr uint16_t SONG_HOME_DEPOT_TEMPO = 250;
+static constexpr uint16_t SONG_HOME_DEPOT_NOTE_LENGTH_MS = 250;
 
 // clang-format off
 static constexpr Note SONG_HOME_DEPOT_NOTES[] = {
@@ -66,7 +68,7 @@ static constexpr Note SONG_HOME_DEPOT_NOTES[] = {
 // Nokia ringtone.
 //
 
-static constexpr uint16_t SONG_NOKIA_TEMPO = 180;
+static constexpr uint16_t SONG_NOKIA_NOTE_LENGTH_MS = 180;
 
 static constexpr Note SONG_NOKIA_NOTES[] = {
     NOTE_E_6,  NOTE_D_6, NOTE_FS_5, NOTE_FS_5, NOTE_GS_5, NOTE_GS_5,
@@ -88,14 +90,16 @@ static constexpr SongHandle SONGS[] = {
     {},
 
     // STARTUP
-    {SONG_STARTUP_NOTES, SONG_STARTUP_TEMPO / ROBOT_UPDATE_PERIOD_MS},
+    {SONG_STARTUP_NOTES, SONG_STARTUP_NOTE_LENGTH_MS / ROBOT_UPDATE_PERIOD_MS},
 
     // HOME_DEPOT
-    {SONG_HOME_DEPOT_NOTES, SONG_HOME_DEPOT_TEMPO / ROBOT_UPDATE_PERIOD_MS},
+    {SONG_HOME_DEPOT_NOTES, SONG_HOME_DEPOT_NOTE_LENGTH_MS / ROBOT_UPDATE_PERIOD_MS},
 
     // NOKIA
-    {SONG_NOKIA_NOTES, SONG_NOKIA_TEMPO / ROBOT_UPDATE_PERIOD_MS, false},
+    {SONG_NOKIA_NOTES, SONG_NOKIA_NOTE_LENGTH_MS / ROBOT_UPDATE_PERIOD_MS, false},
 };
+
+static uint8_t s_is_playing[1] = {0};
 
 //
 // Buzzer functions.
@@ -105,6 +109,11 @@ void Buzzer::init() { play_song(Buzzer::Song::STARTUP); }
 
 void Buzzer::process() {
   if (!m_song_handle) return;
+
+  if (m_note_index == 0 && m_note_ticks == 0) {
+    *s_is_playing = 1;
+    Custom_STM_App_Update_Char(CUSTOM_STM_ISPLAYINGCHAR, s_is_playing);
+  }
 
   if (m_note_ticks++ == 0) {
     const Note note = m_song_handle->notes[m_note_index];
@@ -123,7 +132,7 @@ void Buzzer::process() {
     // Check if this is the last note in the song.
     if (++m_note_index == m_song_handle->notes.size()) {
       // Stop playing.
-      m_song_handle = nullptr;
+      quiet();
     }
   }
 }
@@ -135,8 +144,12 @@ void Buzzer::play_song(Song song) {
 }
 
 void Buzzer::quiet() {
-  m_song_handle = nullptr;
   set_note(0);
+  if (m_song_handle != nullptr) {
+    *s_is_playing = 0;
+    m_song_handle = nullptr;
+    Custom_STM_App_Update_Char(CUSTOM_STM_ISPLAYINGCHAR, s_is_playing);
+  }
 }
 
 void Buzzer::set_note(uint32_t counter_period) {
@@ -144,4 +157,18 @@ void Buzzer::set_note(uint32_t counter_period) {
 
   // 50% duty cycle for a square wave.
   htim16.Instance->CCR1 = counter_period / 2;
+}
+
+//
+// Buzzer notifications.
+//
+
+#include "Buzzer/buzzer_notification.h"
+
+void Buzzer_PlaySong(uint8_t song) {
+  if (song == 0 || song > 3) {
+    Buzzer::get().quiet();
+    return;
+  }
+  Buzzer::get().play_song(static_cast<Buzzer::Song>(song));
 }

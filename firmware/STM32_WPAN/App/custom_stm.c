@@ -24,12 +24,15 @@
 
 /* USER CODE BEGIN Includes */
 
+#include "Buzzer/buzzer_notification.h"
+
 /* USER CODE END Includes */
 
 /* Private typedef -----------------------------------------------------------*/
 typedef struct{
-  uint16_t  CustomTestserviceHdle;                    /**< testService handle */
-  uint16_t  CustomTestwritecharHdle;                  /**< testWriteChar handle */
+  uint16_t  CustomMusicserviceHdle;                    /**< musicService handle */
+  uint16_t  CustomPlaysongcharHdle;                  /**< playSongWriteChar handle */
+  uint16_t  CustomIsplayingcharHdle;                  /**< isPlayingNotifyChar handle */
 /* USER CODE BEGIN Context */
   /* Place holder for Characteristic Descriptors Handle*/
 
@@ -63,7 +66,8 @@ typedef struct{
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
-uint8_t SizeTestwritechar = 1;
+uint8_t SizePlaysongchar = 1;
+uint8_t SizeIsplayingchar = 1;
 
 /**
  * START of Section BLE_DRIVER_CONTEXT
@@ -100,8 +104,9 @@ do {\
     uuid_struct[12] = uuid_12; uuid_struct[13] = uuid_13; uuid_struct[14] = uuid_14; uuid_struct[15] = uuid_15; \
 }while(0)
 
-#define COPY_TESTSERVICE_UUID(uuid_struct)          COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x00,0xcc,0x7a,0x48,0x2a,0x98,0x4a,0x7f,0x2e,0xd5,0xb3,0xe5,0x8f)
-#define COPY_TESTWRITECHAR_UUID(uuid_struct)    COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x00,0x8e,0x22,0x45,0x41,0x9d,0x4c,0x21,0xed,0xae,0x82,0xed,0x19)
+#define COPY_MUSICSERVICE_UUID(uuid_struct)          COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x00,0xcc,0x7a,0x48,0x2a,0x98,0x4a,0x7f,0x2e,0xd5,0xb3,0xe5,0x8f)
+#define COPY_PLAYSONGWRITECHAR_UUID(uuid_struct)    COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x00,0x8e,0x22,0x45,0x41,0x9d,0x4c,0x21,0xed,0xae,0x82,0xed,0x19)
+#define COPY_ISPLAYINGNOTIFYCHAR_UUID(uuid_struct)    COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x01,0x8e,0x22,0x45,0x41,0x9d,0x4c,0x21,0xed,0xae,0x82,0xed,0x19)
 
 /* USER CODE BEGIN PF */
 
@@ -138,13 +143,61 @@ static SVCCTL_EvtAckStatus_t Custom_STM_Event_Handler(void *Event)
 
           /* USER CODE END EVT_BLUE_GATT_ATTRIBUTE_MODIFIED_BEGIN */
           attribute_modified = (aci_gatt_attribute_modified_event_rp0*)blecore_evt->data;
-          if (attribute_modified->Attr_Handle == (CustomContext.CustomTestwritecharHdle + CHARACTERISTIC_VALUE_ATTRIBUTE_OFFSET))
+          if (attribute_modified->Attr_Handle == (CustomContext.CustomIsplayingcharHdle + CHARACTERISTIC_DESCRIPTOR_ATTRIBUTE_OFFSET))
+          {
+            return_value = SVCCTL_EvtAckFlowEnable;
+            /* USER CODE BEGIN CUSTOM_STM_Service_1_Char_2 */
+
+            /* USER CODE END CUSTOM_STM_Service_1_Char_2 */
+            switch (attribute_modified->Attr_Data[0])
+            {
+              /* USER CODE BEGIN CUSTOM_STM_Service_1_Char_2_attribute_modified */
+
+              /* USER CODE END CUSTOM_STM_Service_1_Char_2_attribute_modified */
+
+              /* Disabled Notification management */
+              case (!(COMSVC_Notification)):
+                /* USER CODE BEGIN CUSTOM_STM_Service_1_Char_2_Disabled_BEGIN */
+
+                /* USER CODE END CUSTOM_STM_Service_1_Char_2_Disabled_BEGIN */
+                Notification.Custom_Evt_Opcode = CUSTOM_STM_ISPLAYINGCHAR_NOTIFY_DISABLED_EVT;
+                Custom_STM_App_Notification(&Notification);
+                /* USER CODE BEGIN CUSTOM_STM_Service_1_Char_2_Disabled_END */
+
+                /* USER CODE END CUSTOM_STM_Service_1_Char_2_Disabled_END */
+                break;
+
+              /* Enabled Notification management */
+              case COMSVC_Notification:
+                /* USER CODE BEGIN CUSTOM_STM_Service_1_Char_2_COMSVC_Notification_BEGIN */
+
+                /* USER CODE END CUSTOM_STM_Service_1_Char_2_COMSVC_Notification_BEGIN */
+                Notification.Custom_Evt_Opcode = CUSTOM_STM_ISPLAYINGCHAR_NOTIFY_ENABLED_EVT;
+                Custom_STM_App_Notification(&Notification);
+                /* USER CODE BEGIN CUSTOM_STM_Service_1_Char_2_COMSVC_Notification_END */
+
+                /* USER CODE END CUSTOM_STM_Service_1_Char_2_COMSVC_Notification_END */
+                break;
+
+              default:
+                /* USER CODE BEGIN CUSTOM_STM_Service_1_Char_2_default */
+
+                /* USER CODE END CUSTOM_STM_Service_1_Char_2_default */
+              break;
+            }
+          }  /* if (attribute_modified->Attr_Handle == (CustomContext.CustomIsplayingcharHdle + CHARACTERISTIC_DESCRIPTOR_ATTRIBUTE_OFFSET))*/
+
+          else if (attribute_modified->Attr_Handle == (CustomContext.CustomPlaysongcharHdle + CHARACTERISTIC_VALUE_ATTRIBUTE_OFFSET))
           {
             return_value = SVCCTL_EvtAckFlowEnable;
             /* USER CODE BEGIN CUSTOM_STM_Service_1_Char_1_ACI_GATT_ATTRIBUTE_MODIFIED_VSEVT_CODE */
 
+            if (attribute_modified->Attr_Data_Length == 1) {
+              Buzzer_PlaySong(attribute_modified->Attr_Data[0]);
+            }
+
             /* USER CODE END CUSTOM_STM_Service_1_Char_1_ACI_GATT_ATTRIBUTE_MODIFIED_VSEVT_CODE */
-          } /* if (attribute_modified->Attr_Handle == (CustomContext.CustomTestwritecharHdle + CHARACTERISTIC_VALUE_ATTRIBUTE_OFFSET))*/
+          } /* if (attribute_modified->Attr_Handle == (CustomContext.CustomPlaysongcharHdle + CHARACTERISTIC_VALUE_ATTRIBUTE_OFFSET))*/
           /* USER CODE BEGIN EVT_BLUE_GATT_ATTRIBUTE_MODIFIED_END */
 
           /* USER CODE END EVT_BLUE_GATT_ATTRIBUTE_MODIFIED_END */
@@ -239,64 +292,92 @@ void SVCCTL_InitCustomSvc(void)
   SVCCTL_RegisterSvcHandler(Custom_STM_Event_Handler);
 
   /**
-   *          testService
+   *          musicService
    *
-   * Max_Attribute_Records = 1 + 2*1 + 1*no_of_char_with_notify_or_indicate_property + 1*no_of_char_with_broadcast_property
-   * service_max_attribute_record = 1 for testService +
-   *                                2 for testWriteChar +
-   *                              = 3
+   * Max_Attribute_Records = 1 + 2*2 + 1*no_of_char_with_notify_or_indicate_property + 1*no_of_char_with_broadcast_property
+   * service_max_attribute_record = 1 for musicService +
+   *                                2 for playSongWriteChar +
+   *                                2 for isPlayingNotifyChar +
+   *                                1 for isPlayingNotifyChar configuration descriptor +
+   *                              = 6
    *
    * This value doesn't take into account number of descriptors manually added
    * In case of descriptors added, please update the max_attr_record value accordingly in the next SVCCTL_InitService User Section
    */
-  max_attr_record = 3;
+  max_attr_record = 6;
 
   /* USER CODE BEGIN SVCCTL_InitService */
   /* max_attr_record to be updated if descriptors have been added */
 
   /* USER CODE END SVCCTL_InitService */
 
-  COPY_TESTSERVICE_UUID(uuid.Char_UUID_128);
+  COPY_MUSICSERVICE_UUID(uuid.Char_UUID_128);
   ret = aci_gatt_add_service(UUID_TYPE_128,
                              (Service_UUID_t *) &uuid,
                              PRIMARY_SERVICE,
                              max_attr_record,
-                             &(CustomContext.CustomTestserviceHdle));
+                             &(CustomContext.CustomMusicserviceHdle));
   if (ret != BLE_STATUS_SUCCESS)
   {
-    APP_DBG_MSG("  Fail   : aci_gatt_add_service command: testService, error code: 0x%x \n\r", ret);
+    APP_DBG_MSG("  Fail   : aci_gatt_add_service command: musicService, error code: 0x%x \n\r", ret);
   }
   else
   {
-    APP_DBG_MSG("  Success: aci_gatt_add_service command: testService \n\r");
+    APP_DBG_MSG("  Success: aci_gatt_add_service command: musicService \n\r");
   }
 
   /**
-   *  testWriteChar
+   *  playSongWriteChar
    */
-  COPY_TESTWRITECHAR_UUID(uuid.Char_UUID_128);
-  ret = aci_gatt_add_char(CustomContext.CustomTestserviceHdle,
+  COPY_PLAYSONGWRITECHAR_UUID(uuid.Char_UUID_128);
+  ret = aci_gatt_add_char(CustomContext.CustomMusicserviceHdle,
                           UUID_TYPE_128, &uuid,
-                          SizeTestwritechar,
+                          SizePlaysongchar,
                           CHAR_PROP_WRITE,
                           ATTR_PERMISSION_NONE,
                           GATT_NOTIFY_ATTRIBUTE_WRITE,
                           0x10,
                           CHAR_VALUE_LEN_CONSTANT,
-                          &(CustomContext.CustomTestwritecharHdle));
+                          &(CustomContext.CustomPlaysongcharHdle));
   if (ret != BLE_STATUS_SUCCESS)
   {
-    APP_DBG_MSG("  Fail   : aci_gatt_add_char command   : TESTWRITECHAR, error code: 0x%x \n\r", ret);
+    APP_DBG_MSG("  Fail   : aci_gatt_add_char command   : PLAYSONGCHAR, error code: 0x%x \n\r", ret);
   }
   else
   {
-    APP_DBG_MSG("  Success: aci_gatt_add_char command   : TESTWRITECHAR \n\r");
+    APP_DBG_MSG("  Success: aci_gatt_add_char command   : PLAYSONGCHAR \n\r");
   }
 
   /* USER CODE BEGIN SVCCTL_Init_Service1_Char1/ */
   /* Place holder for Characteristic Descriptors */
 
   /* USER CODE END SVCCTL_Init_Service1_Char1 */
+  /**
+   *  isPlayingNotifyChar
+   */
+  COPY_ISPLAYINGNOTIFYCHAR_UUID(uuid.Char_UUID_128);
+  ret = aci_gatt_add_char(CustomContext.CustomMusicserviceHdle,
+                          UUID_TYPE_128, &uuid,
+                          SizeIsplayingchar,
+                          CHAR_PROP_NOTIFY,
+                          ATTR_PERMISSION_NONE,
+                          GATT_DONT_NOTIFY_EVENTS,
+                          0x10,
+                          CHAR_VALUE_LEN_CONSTANT,
+                          &(CustomContext.CustomIsplayingcharHdle));
+  if (ret != BLE_STATUS_SUCCESS)
+  {
+    APP_DBG_MSG("  Fail   : aci_gatt_add_char command   : ISPLAYINGCHAR, error code: 0x%x \n\r", ret);
+  }
+  else
+  {
+    APP_DBG_MSG("  Success: aci_gatt_add_char command   : ISPLAYINGCHAR \n\r");
+  }
+
+  /* USER CODE BEGIN SVCCTL_Init_Service1_Char2/ */
+  /* Place holder for Characteristic Descriptors */
+
+  /* USER CODE END SVCCTL_Init_Service1_Char2 */
 
   /* USER CODE BEGIN SVCCTL_InitCustomSvc_2 */
 
@@ -321,23 +402,42 @@ tBleStatus Custom_STM_App_Update_Char(Custom_STM_Char_Opcode_t CharOpcode, uint8
   switch (CharOpcode)
   {
 
-    case CUSTOM_STM_TESTWRITECHAR:
-      ret = aci_gatt_update_char_value(CustomContext.CustomTestserviceHdle,
-                                       CustomContext.CustomTestwritecharHdle,
+    case CUSTOM_STM_PLAYSONGCHAR:
+      ret = aci_gatt_update_char_value(CustomContext.CustomMusicserviceHdle,
+                                       CustomContext.CustomPlaysongcharHdle,
                                        0, /* charValOffset */
-                                       SizeTestwritechar, /* charValueLen */
+                                       SizePlaysongchar, /* charValueLen */
                                        (uint8_t *)  pPayload);
       if (ret != BLE_STATUS_SUCCESS)
       {
-        APP_DBG_MSG("  Fail   : aci_gatt_update_char_value TESTWRITECHAR command, result : 0x%x \n\r", ret);
+        APP_DBG_MSG("  Fail   : aci_gatt_update_char_value PLAYSONGCHAR command, result : 0x%x \n\r", ret);
       }
       else
       {
-        APP_DBG_MSG("  Success: aci_gatt_update_char_value TESTWRITECHAR command\n\r");
+        APP_DBG_MSG("  Success: aci_gatt_update_char_value PLAYSONGCHAR command\n\r");
       }
       /* USER CODE BEGIN CUSTOM_STM_App_Update_Service_1_Char_1*/
 
       /* USER CODE END CUSTOM_STM_App_Update_Service_1_Char_1*/
+      break;
+
+    case CUSTOM_STM_ISPLAYINGCHAR:
+      ret = aci_gatt_update_char_value(CustomContext.CustomMusicserviceHdle,
+                                       CustomContext.CustomIsplayingcharHdle,
+                                       0, /* charValOffset */
+                                       SizeIsplayingchar, /* charValueLen */
+                                       (uint8_t *)  pPayload);
+      if (ret != BLE_STATUS_SUCCESS)
+      {
+        APP_DBG_MSG("  Fail   : aci_gatt_update_char_value ISPLAYINGCHAR command, result : 0x%x \n\r", ret);
+      }
+      else
+      {
+        APP_DBG_MSG("  Success: aci_gatt_update_char_value ISPLAYINGCHAR command\n\r");
+      }
+      /* USER CODE BEGIN CUSTOM_STM_App_Update_Service_1_Char_2*/
+
+      /* USER CODE END CUSTOM_STM_App_Update_Service_1_Char_2*/
       break;
 
     default:

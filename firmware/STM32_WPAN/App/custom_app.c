@@ -38,7 +38,8 @@
 /* Private typedef -----------------------------------------------------------*/
 typedef struct
 {
-  /* testService */
+  /* musicService */
+  uint8_t               Isplayingchar_Notification_Status;
   /* USER CODE BEGIN CUSTOM_APP_Context_t */
 
   /* USER CODE END CUSTOM_APP_Context_t */
@@ -81,7 +82,9 @@ bool g_robot_update_registered = false;
 /* USER CODE END PV */
 
 /* Private function prototypes -----------------------------------------------*/
-/* testService */
+/* musicService */
+static void Custom_Isplayingchar_Update_Char(void);
+static void Custom_Isplayingchar_Send_Notification(void);
 
 /* USER CODE BEGIN PFP */
 
@@ -99,11 +102,23 @@ void Custom_STM_App_Notification(Custom_STM_App_Notification_evt_t *pNotificatio
 
     /* USER CODE END CUSTOM_STM_App_Notification_Custom_Evt_Opcode */
 
-    /* testService */
-    case CUSTOM_STM_TESTWRITECHAR_WRITE_EVT:
-      /* USER CODE BEGIN CUSTOM_STM_TESTWRITECHAR_WRITE_EVT */
+    /* musicService */
+    case CUSTOM_STM_PLAYSONGCHAR_WRITE_EVT:
+      /* USER CODE BEGIN CUSTOM_STM_PLAYSONGCHAR_WRITE_EVT */
 
-      /* USER CODE END CUSTOM_STM_TESTWRITECHAR_WRITE_EVT */
+      /* USER CODE END CUSTOM_STM_PLAYSONGCHAR_WRITE_EVT */
+      break;
+
+    case CUSTOM_STM_ISPLAYINGCHAR_NOTIFY_ENABLED_EVT:
+      /* USER CODE BEGIN CUSTOM_STM_ISPLAYINGCHAR_NOTIFY_ENABLED_EVT */
+
+      /* USER CODE END CUSTOM_STM_ISPLAYINGCHAR_NOTIFY_ENABLED_EVT */
+      break;
+
+    case CUSTOM_STM_ISPLAYINGCHAR_NOTIFY_DISABLED_EVT:
+      /* USER CODE BEGIN CUSTOM_STM_ISPLAYINGCHAR_NOTIFY_DISABLED_EVT */
+
+      /* USER CODE END CUSTOM_STM_ISPLAYINGCHAR_NOTIFY_DISABLED_EVT */
       break;
 
     case CUSTOM_STM_NOTIFICATION_COMPLETE_EVT:
@@ -196,7 +211,45 @@ void Custom_APP_Init(void)
  *
  *************************************************************/
 
-/* testService */
+/* musicService */
+void Custom_Isplayingchar_Update_Char(void) /* Property Read */
+{
+  uint8_t updateflag = 0;
+
+  /* USER CODE BEGIN Isplayingchar_UC_1*/
+
+  /* USER CODE END Isplayingchar_UC_1*/
+
+  if (updateflag != 0)
+  {
+    Custom_STM_App_Update_Char(CUSTOM_STM_ISPLAYINGCHAR, (uint8_t *)UpdateCharData);
+  }
+
+  /* USER CODE BEGIN Isplayingchar_UC_Last*/
+
+  /* USER CODE END Isplayingchar_UC_Last*/
+  return;
+}
+
+void Custom_Isplayingchar_Send_Notification(void) /* Property Notification */
+{
+  uint8_t updateflag = 0;
+
+  /* USER CODE BEGIN Isplayingchar_NS_1*/
+
+  /* USER CODE END Isplayingchar_NS_1*/
+
+  if (updateflag != 0)
+  {
+    Custom_STM_App_Update_Char(CUSTOM_STM_ISPLAYINGCHAR, (uint8_t *)NotifyCharData);
+  }
+
+  /* USER CODE BEGIN Isplayingchar_NS_Last*/
+
+  /* USER CODE END Isplayingchar_NS_Last*/
+
+  return;
+}
 
 /* USER CODE BEGIN FD_LOCAL_FUNCTIONS*/
 

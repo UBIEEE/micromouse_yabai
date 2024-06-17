@@ -29,19 +29,25 @@ extern "C" {
 /* Includes ------------------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
 
+#include "ble_types.h"
+
 /* USER CODE END Includes */
 
 /* Exported types ------------------------------------------------------------*/
 typedef enum
 {
-  /* testService */
-  CUSTOM_STM_TESTWRITECHAR,
+  /* musicService */
+  CUSTOM_STM_PLAYSONGCHAR,
+  CUSTOM_STM_ISPLAYINGCHAR,
 } Custom_STM_Char_Opcode_t;
 
 typedef enum
 {
-  /* testWriteChar */
-  CUSTOM_STM_TESTWRITECHAR_WRITE_EVT,
+  /* playSongWriteChar */
+  CUSTOM_STM_PLAYSONGCHAR_WRITE_EVT,
+  /* isPlayingNotifyChar */
+  CUSTOM_STM_ISPLAYINGCHAR_NOTIFY_ENABLED_EVT,
+  CUSTOM_STM_ISPLAYINGCHAR_NOTIFY_DISABLED_EVT,
   CUSTOM_STM_NOTIFICATION_COMPLETE_EVT,
 
   CUSTOM_STM_BOOT_REQUEST_EVT
@@ -67,7 +73,8 @@ typedef struct
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
-extern uint8_t SizeTestwritechar;
+extern uint8_t SizePlaysongchar;
+extern uint8_t SizeIsplayingchar;
 
 /* USER CODE BEGIN EC */
 
