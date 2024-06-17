@@ -1,15 +1,41 @@
 import CoreBluetooth
 
-class BluetoothManager: NSObject, CBCentralManagerDelegate, ObservableObject {
+class BluetoothManager: NSObject, ObservableObject,
+                        CBCentralManagerDelegate, CBPeripheralDelegate {
+  
   @Published var isBluetoothEnabled: Bool = false
-  @Published var microMouseManager = MicroMouseManager()
-
+  
   private var centralManager: CBCentralManager!
+  private var microMouse: CBPeripheral?
+  
+  struct ConnectionState {
+    var isDeviceFound = false
+    var isDeviceConnected = false
+    var areServicesFound = false
+    var areCharacteristicsFound = false
+    
+    var isReady : Bool {
+      get {
+        return isDeviceFound && isDeviceConnected &&
+               areServicesFound && areCharacteristicsFound
+      }
+    }
+  }
+  
+  @Published var connectionState = ConnectionState()
   
   override init() {
     super.init()
     self.centralManager = CBCentralManager(delegate: self, queue: nil)
   }
+  
+  func resetState() {
+    connectionState = ConnectionState()
+  }
+  
+  //
+  // CBCentralManagerDelegate stuff
+  //
   
   func centralManagerDidUpdateState(_ central: CBCentralManager) {
     
@@ -27,9 +53,12 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, ObservableObject {
     
     if peripheral.name == AppConstants.Bluetooth.MicroMouseName {
       print("MicroMouse Found!");
-      microMouseManager.setPeripheral(peripheral)
+      microMouse = peripheral
+      microMouse!.delegate = self
       centralManager.stopScan()
       centralManager.connect(peripheral)
+      
+      connectionState.isDeviceFound = true
     }
   }
   
@@ -37,14 +66,59 @@ class BluetoothManager: NSObject, CBCentralManagerDelegate, ObservableObject {
                       didConnect peripheral: CBPeripheral) {
     
     print("MicroMouse Connected!")
-    microMouseManager.microMouse!.discoverServices(nil)
+    microMouse!.discoverServices(nil)
+    
+    connectionState.isDeviceConnected = true
   }
   
   func centralManager(_ central: CBCentralManager,
                       didDisconnectPeripheral peripheral: CBPeripheral, error: Error?) {
     
     print("MicroMouse Disconnected!")
-    microMouseManager.setPeripheral(nil)
+    resetState()
+    microMouse = nil
     centralManager.scanForPeripherals(withServices: nil)
+  }
+  
+  
+  //
+  // CBPeripheralDelegate stuff
+  //
+  
+  func peripheral(_ peripheral: CBPeripheral,
+                  didDiscoverServices error: Error?) {
+
+    if let services = peripheral.services {
+      for service in services {
+        if service.uuid == AppConstants.Bluetooth.ServiceUUID {
+          print("Found the service!")
+          peripheral.discoverCharacteristics([AppConstants.Bluetooth.CharUUID], for: service)
+          
+          connectionState.areServicesFound = true
+        }
+      }
+    }
+    
+  }
+
+  func peripheral(_ peripheral: CBPeripheral,
+                  didDiscoverCharacteristicsFor service: CBService, error: Error?) {
+    
+    if let characteristics = service.characteristics {
+      for ch in characteristics {
+        if ch.uuid == AppConstants.Bluetooth.CharUUID {
+          print("Found the characteristic!")
+          
+          connectionState.areCharacteristicsFound = true
+        }
+      }
+    }
+       
+  }
+  
+  func peripheral(_ peripheral: CBPeripheral,
+                  didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
+    
+    print("Updated value!")
   }
 }

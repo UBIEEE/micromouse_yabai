@@ -14,8 +14,8 @@
 		75DE0A042C1E177F00B7DEDE /* MicroMouseDashboardUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75DE0A032C1E177F00B7DEDE /* MicroMouseDashboardUITests.swift */; };
 		75DE0A062C1E177F00B7DEDE /* MicroMouseDashboardUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75DE0A052C1E177F00B7DEDE /* MicroMouseDashboardUITestsLaunchTests.swift */; };
 		75DE0A132C1E39EC00B7DEDE /* BluetoothManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75DE0A122C1E39E100B7DEDE /* BluetoothManager.swift */; };
-		75DE0A152C1F2DD600B7DEDE /* MicroMouseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75DE0A142C1F2DC700B7DEDE /* MicroMouseManager.swift */; };
 		75DE0A192C1F900000B7DEDE /* AppConstants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75DE0A182C1F8FE200B7DEDE /* AppConstants.swift */; };
+		75DE0A2B2C1FD28900B7DEDE /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75DE0A2A2C1FD28400B7DEDE /* Utilities.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -47,8 +47,8 @@
 		75DE0A032C1E177F00B7DEDE /* MicroMouseDashboardUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicroMouseDashboardUITests.swift; sourceTree = "<group>"; };
 		75DE0A052C1E177F00B7DEDE /* MicroMouseDashboardUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicroMouseDashboardUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		75DE0A122C1E39E100B7DEDE /* BluetoothManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BluetoothManager.swift; sourceTree = "<group>"; };
-		75DE0A142C1F2DC700B7DEDE /* MicroMouseManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicroMouseManager.swift; sourceTree = "<group>"; };
 		75DE0A182C1F8FE200B7DEDE /* AppConstants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppConstants.swift; sourceTree = "<group>"; };
+		75DE0A2A2C1FD28400B7DEDE /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -57,6 +57,7 @@
 			membershipExceptions = (
 				BluetoothDisabledView.swift,
 				ContentView.swift,
+				NotReadyView.swift,
 			);
 			target = 75DE09E32C1E177E00B7DEDE /* MicroMouseDashboard */;
 		};
@@ -127,12 +128,12 @@
 		75DE09E62C1E177E00B7DEDE /* MicroMouseDashboard */ = {
 			isa = PBXGroup;
 			children = (
+				75DE0A2A2C1FD28400B7DEDE /* Utilities.swift */,
 				75DE0A202C1F9B3B00B7DEDE /* Platform */,
 				75DE0A1C2C1F99C600B7DEDE /* Views */,
 				75DE09E72C1E177E00B7DEDE /* MicroMouseDashboardApp.swift */,
 				75DE0A122C1E39E100B7DEDE /* BluetoothManager.swift */,
 				75DE0A182C1F8FE200B7DEDE /* AppConstants.swift */,
-				75DE0A142C1F2DC700B7DEDE /* MicroMouseManager.swift */,
 				75DE09EB2C1E177F00B7DEDE /* Assets.xcassets */,
 				75DE09ED2C1E177F00B7DEDE /* MicroMouseDashboard.entitlements */,
 				75DE09EE2C1E177F00B7DEDE /* Preview Content */,
@@ -295,8 +296,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				75DE0A152C1F2DD600B7DEDE /* MicroMouseManager.swift in Sources */,
 				75DE0A132C1E39EC00B7DEDE /* BluetoothManager.swift in Sources */,
+				75DE0A2B2C1FD28900B7DEDE /* Utilities.swift in Sources */,
 				75DE09E82C1E177E00B7DEDE /* MicroMouseDashboardApp.swift in Sources */,
 				75DE0A192C1F900000B7DEDE /* AppConstants.swift in Sources */,
 			);

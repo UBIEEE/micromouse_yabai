@@ -1,17 +1,19 @@
 import SwiftUI
 
 struct ContentView: View {
-  @StateObject var bluetoothManager = BluetoothManager()
-
+  @StateObject var btManager = BluetoothManager()
+  
   var body: some View {
-    if !bluetoothManager.isBluetoothEnabled {
+    if !btManager.isBluetoothEnabled {
       BluetoothDisabledView()
-    } else {
+    }
+    else if !btManager.connectionState.isReady {
+      NotReadyView()
+        .environmentObject(btManager)
+    }
+    else {
       VStack {
-        Image(systemName: "globe")
-          .imageScale(.large)
-          .foregroundStyle(.tint)
-        Text("Hello, world!")
+        Text("Connected!!")
       }
       .padding()
     }
