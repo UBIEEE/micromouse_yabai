@@ -8,28 +8,59 @@ class BluetoothManager: NSObject, ObservableObject,
   private var centralManager: CBCentralManager!
   private var microMouse: CBPeripheral?
   
+  //
+  // Connection state
+  //
+  
   struct ConnectionState {
-    var isDeviceFound = false
-    var isDeviceConnected = false
-    var areServicesFound = false
-    var areCharacteristicsFound = false
+    var deviceFound = false
+    var deviceConnected = false
+    
+    struct MusicService {
+      var serviceFound = false
+      var playSongChar: CBCharacteristic?
+      var isPlayingChar: CBCharacteristic?
+      
+      var isReady : Bool {
+        get {
+          return serviceFound && playSongChar != nil && isPlayingChar != nil
+        }
+      }
+    }
+    var musicService = MusicService()
     
     var isReady : Bool {
       get {
-        return isDeviceFound && isDeviceConnected &&
-               areServicesFound && areCharacteristicsFound
+        return deviceFound && deviceConnected &&
+               musicService.isReady
       }
     }
   }
   
   @Published var connectionState = ConnectionState()
   
+  @Published var rssi = 0
+  
+  //
+  // Music serivce
+  //
+  
+  struct MusicService {
+    var isPlaying = false
+  }
+  
+  @Published var musicService = MusicService()
+  
+  //
+  // Basic stuff
+  //
+  
   override init() {
     super.init()
     self.centralManager = CBCentralManager(delegate: self, queue: nil)
   }
   
-  func resetState() {
+  private func resetState() {
     connectionState = ConnectionState()
   }
   
@@ -58,7 +89,7 @@ class BluetoothManager: NSObject, ObservableObject,
       centralManager.stopScan()
       centralManager.connect(peripheral)
       
-      connectionState.isDeviceFound = true
+      connectionState.deviceFound = true
     }
   }
   
@@ -68,7 +99,7 @@ class BluetoothManager: NSObject, ObservableObject,
     print("MicroMouse Connected!")
     microMouse!.discoverServices(nil)
     
-    connectionState.isDeviceConnected = true
+    connectionState.deviceConnected = true
   }
   
   func centralManager(_ central: CBCentralManager,
@@ -90,11 +121,11 @@ class BluetoothManager: NSObject, ObservableObject,
 
     if let services = peripheral.services {
       for service in services {
-        if service.uuid == AppConstants.Bluetooth.ServiceUUID {
-          print("Found the service!")
-          peripheral.discoverCharacteristics([AppConstants.Bluetooth.CharUUID], for: service)
+        
+        if service.uuid == AppConstants.Bluetooth.MusicService.ServiceUUID {
+          peripheral.discoverCharacteristics(nil, for: service)
           
-          connectionState.areServicesFound = true
+          connectionState.musicService.serviceFound = true
         }
       }
     }
@@ -106,11 +137,21 @@ class BluetoothManager: NSObject, ObservableObject,
     
     if let characteristics = service.characteristics {
       for ch in characteristics {
-        if ch.uuid == AppConstants.Bluetooth.CharUUID {
-          print("Found the characteristic!")
-          
-          connectionState.areCharacteristicsFound = true
+        
+        //
+        // Music service
+        //
+        if ch.uuid == AppConstants.Bluetooth.MusicService.PlaySongUUID {
+          connectionState.musicService.playSongChar = ch
         }
+        else if ch.uuid == AppConstants.Bluetooth.MusicService.IsPlayingUUID {
+          connectionState.musicService.isPlayingChar = ch
+          microMouse!.setNotifyValue(true, for: ch)
+        }
+        //
+        // Other
+        //
+        // ...
       }
     }
        
@@ -119,6 +160,27 @@ class BluetoothManager: NSObject, ObservableObject,
   func peripheral(_ peripheral: CBPeripheral,
                   didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
     
-    print("Updated value!")
+    //
+    // Music service
+    //
+    if characteristic.uuid == AppConstants.Bluetooth.MusicService.IsPlayingUUID {
+      musicService.isPlaying = characteristic.value![0] == 1
+    }
+    //
+    // Other
+    //
+    // ...
+  }
+  
+  func peripheral(_ peripheral: CBPeripheral, didReadRSSI RSSI: NSNumber, error: Error?) {
+    rssi = RSSI.intValue
+  }
+  
+  func readRSSI() {
+    microMouse?.readRSSI()
+  }
+  
+  func writeValueToChar(_ characteristic: CBCharacteristic, _ value: Data) {
+    microMouse?.writeValue(value, for: characteristic, type: .withResponse)
   }
 }

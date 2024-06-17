@@ -60,6 +60,7 @@
 				ErrorInfoView.swift,
 				MainView.swift,
 				MazeView.swift,
+				MusicView.swift,
 				NavigationView.swift,
 				NotReadyView.swift,
 				SettingsView.swift,

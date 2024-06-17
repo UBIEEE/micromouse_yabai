@@ -16,6 +16,7 @@ struct ContentView: View {
     // App is ready to go!
     else {
       NavigationView()
+        .environmentObject(btManager)
     }
   }
 }

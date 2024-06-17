@@ -4,12 +4,18 @@ struct NotReadyView: View {
   @EnvironmentObject var btManager : BluetoothManager
   
   var body: some View {
-    VStack(alignment: .leading, spacing: 5) {
-      Text("\(Utilities.boolToEmoji(btManager.connectionState.isDeviceFound)) Device found")
-      Text("\(Utilities.boolToEmoji(btManager.connectionState.isDeviceConnected)) Device connected")
-      Text("\(Utilities.boolToEmoji(btManager.connectionState.areServicesFound)) Services found")
-      Text("\(Utilities.boolToEmoji(btManager.connectionState.areCharacteristicsFound)) Characteristics found")
+    VStack {
+      Text("Connection Status")
+        .font(.title)
+      
+      VStack(alignment: .leading, spacing: 5) {
+        Text("\(Utilities.boolToEmoji(btManager.connectionState.deviceFound)) Device found")
+        Text("\(Utilities.boolToEmoji(btManager.connectionState.deviceConnected)) Device connected")
+        Text("\(Utilities.boolToEmoji(btManager.connectionState.musicService.isReady)) Music Service ready")
+      }
+      .padding()
     }
+    .padding()
   }
 }
 

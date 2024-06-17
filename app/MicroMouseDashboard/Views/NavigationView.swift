@@ -1,10 +1,13 @@
 import SwiftUI
 
 struct NavigationView: View {
+  @EnvironmentObject var btManager: BluetoothManager
+  
   var body: some View {
     TabView {
       Tab("Main", systemImage: "hare") {
         MainView()
+          .environmentObject(btManager)
       }
       Tab("Maze", systemImage: "map") {
         MazeView()
@@ -14,6 +17,7 @@ struct NavigationView: View {
       }
       Tab("Error Info", systemImage: "exclamationmark.triangle") {
         ErrorInfoView()
+          .environmentObject(btManager)
       }
 
       TabSection("Subsystems") {
@@ -27,7 +31,7 @@ struct NavigationView: View {
           Text("Vision")
         }
         Tab("Music", systemImage: "music.note") {
-          Text("Music")
+          MusicView()
         }
       }
     }
@@ -38,4 +42,5 @@ struct NavigationView: View {
 
 #Preview {
   NavigationView()
+    .environmentObject(BluetoothManager())
 }
