@@ -110,6 +110,12 @@ void Buzzer::init() { play_song(Buzzer::Song::STARTUP); }
 void Buzzer::process() {
   if (!m_song_handle) return;
 
+  if (m_should_stop) {
+    end_song();
+    m_should_stop = false;
+    return;
+  }
+
   if (m_note_index == 0 && m_note_ticks == 0) {
     *s_is_playing = 1;
     Custom_STM_App_Update_Char(CUSTOM_STM_ISPLAYINGCHAR, s_is_playing);
@@ -131,8 +137,7 @@ void Buzzer::process() {
 
     // Check if this is the last note in the song.
     if (++m_note_index == m_song_handle->notes.size()) {
-      // Stop playing.
-      quiet();
+      end_song();
     }
   }
 }
@@ -143,20 +148,20 @@ void Buzzer::play_song(Song song) {
   m_note_ticks  = 0;
 }
 
-void Buzzer::quiet() {
+void Buzzer::set_note(uint32_t counter_period) {
+  htim16.Instance->ARR = counter_period;
+
+  // 50% duty cycle for a square wave.
+  htim16.Instance->CCR1 = counter_period / 2;
+}
+
+void Buzzer::end_song() {
   set_note(0);
   if (m_song_handle != nullptr) {
     *s_is_playing = 0;
     m_song_handle = nullptr;
     Custom_STM_App_Update_Char(CUSTOM_STM_ISPLAYINGCHAR, s_is_playing);
   }
-}
-
-void Buzzer::set_note(uint32_t counter_period) {
-  htim16.Instance->ARR = counter_period;
-
-  // 50% duty cycle for a square wave.
-  htim16.Instance->CCR1 = counter_period / 2;
 }
 
 //
