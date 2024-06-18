@@ -13,7 +13,7 @@ struct MusicView: View {
   @State private var selectedSong: Song = .homeDepot
   
   var body: some View {
-    VStack {
+    NavigationStack {
       List {
         Section("Status") {
           // Show whether the MicroMouse is currently playing anything!
@@ -41,6 +41,7 @@ struct MusicView: View {
           .disabled(!btManager.musicService.isPlaying)
         }
       }
+      .navigationTitle("Music")
     }
   }
 }
