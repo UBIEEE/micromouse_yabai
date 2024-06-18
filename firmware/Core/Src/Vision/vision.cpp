@@ -1,5 +1,7 @@
 #include "Vision/vision.hpp"
 
+#include "custom_stm.h"
+
 //
 // External variables.
 //
@@ -38,7 +40,15 @@ static volatile bool s_adc_ready = false;
 //
 
 void Vision::process() {
-  if (!m_enabled) return;
+  if (!m_enabled) {
+    if (m_state != State::IDLE) {
+      // Turn off the emitter.
+      HAL_GPIO_WritePin(EMIT_PORTS[m_sensor], EMIT_PINS[m_sensor],
+                        GPIO_PIN_RESET);
+      m_state = State::IDLE;
+    }
+    return;
+  }
 
   switch (m_state) {
   case State::READING:
@@ -72,6 +82,15 @@ void Vision::process() {
     m_state = State::READING;
     break;
   }
+}
+
+void Vision::send_feedback() {
+  static bool was_enabled = false;
+
+  if (m_enabled || was_enabled) {
+    Custom_STM_App_Update_Char(CUSTOM_STM_VISIONDATACHAR, m_readings);
+  }
+  was_enabled = m_enabled;
 }
 
 //

@@ -39,6 +39,8 @@ typedef enum
   /* musicService */
   CUSTOM_STM_PLAYSONGCHAR,
   CUSTOM_STM_ISPLAYINGCHAR,
+  /* visionService */
+  CUSTOM_STM_VISIONDATACHAR,
 } Custom_STM_Char_Opcode_t;
 
 typedef enum
@@ -48,6 +50,9 @@ typedef enum
   /* isPlayingNotifyChar */
   CUSTOM_STM_ISPLAYINGCHAR_NOTIFY_ENABLED_EVT,
   CUSTOM_STM_ISPLAYINGCHAR_NOTIFY_DISABLED_EVT,
+  /* visionDataNotifyChar */
+  CUSTOM_STM_VISIONDATACHAR_NOTIFY_ENABLED_EVT,
+  CUSTOM_STM_VISIONDATACHAR_NOTIFY_DISABLED_EVT,
   CUSTOM_STM_NOTIFICATION_COMPLETE_EVT,
 
   CUSTOM_STM_BOOT_REQUEST_EVT
@@ -75,6 +80,7 @@ typedef struct
 /* Exported constants --------------------------------------------------------*/
 extern uint8_t SizePlaysongchar;
 extern uint8_t SizeIsplayingchar;
+extern uint8_t SizeVisiondatachar;
 
 /* USER CODE BEGIN EC */
 
