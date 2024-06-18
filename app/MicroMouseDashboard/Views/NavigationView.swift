@@ -28,7 +28,7 @@ struct NavigationView: View {
           Text("IMU")
         }
         Tab("Vision", systemImage: "eyes") {
-          Text("Vision")
+          VisionView()
         }
         Tab("Music", systemImage: "music.note") {
           MusicView()

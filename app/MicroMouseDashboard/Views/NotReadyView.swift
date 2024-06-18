@@ -12,6 +12,7 @@ struct NotReadyView: View {
         Text("\(Utilities.boolToEmoji(btManager.connectionState.deviceFound)) Device found")
         Text("\(Utilities.boolToEmoji(btManager.connectionState.deviceConnected)) Device connected")
         Text("\(Utilities.boolToEmoji(btManager.connectionState.musicService.isReady)) Music Service ready")
+        Text("\(Utilities.boolToEmoji(btManager.connectionState.visionService.isReady)) Vision Service ready")
       }
       .padding()
     }

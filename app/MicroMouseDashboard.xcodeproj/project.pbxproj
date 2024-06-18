@@ -64,6 +64,7 @@
 				NavigationView.swift,
 				NotReadyView.swift,
 				SettingsView.swift,
+				VisionView.swift,
 			);
 			target = 75DE09E32C1E177E00B7DEDE /* MicroMouseDashboard */;
 		};

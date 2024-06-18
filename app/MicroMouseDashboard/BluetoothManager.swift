@@ -16,18 +16,39 @@ class BluetoothManager: NSObject, ObservableObject,
     var deviceFound = false
     var deviceConnected = false
     
+    //
+    // Music service
+    //
+    
     struct MusicService {
       var serviceFound = false
       var playSongChar: CBCharacteristic?
       var isPlayingChar: CBCharacteristic?
       
-      var isReady : Bool {
+      var isReady: Bool {
         get {
           return serviceFound && playSongChar != nil && isPlayingChar != nil
         }
       }
     }
     var musicService = MusicService()
+    
+    //
+    // Vision service
+    //
+    
+    struct VisionService {
+      var serviceFound = false
+      var dataChar: CBCharacteristic?
+      
+      var isReady: Bool {
+        get {
+          return serviceFound && dataChar != nil
+        }
+      }
+    }
+    
+    var visionService = VisionService()
     
     var isReady : Bool {
       get {
@@ -50,6 +71,32 @@ class BluetoothManager: NSObject, ObservableObject,
   }
   
   @Published var musicService = MusicService()
+  
+  //
+  // Vision service
+  //
+  
+  struct VisionService {
+    var sensorData = Data([0, 0, 0, 0])
+    
+    var farRightReading: UInt8 {
+      get { return sensorData[0] }
+    }
+    
+    var midRightReading: UInt8 {
+      get { return sensorData[1] }
+    }
+    
+    var midLeftReading: UInt8 {
+      get { return sensorData[2] }
+    }
+    
+    var farLeftReading: UInt8 {
+      get { return sensorData[3] }
+    }
+  }
+  
+  @Published var visionService = VisionService()
   
   //
   // Basic stuff
@@ -121,11 +168,15 @@ class BluetoothManager: NSObject, ObservableObject,
 
     if let services = peripheral.services {
       for service in services {
-        
-        if service.uuid == AppConstants.Bluetooth.MusicService.ServiceUUID {
-          peripheral.discoverCharacteristics(nil, for: service)
-          
+        peripheral.discoverCharacteristics(nil, for: service)
+
+        switch service.uuid {
+        case AppConstants.Bluetooth.MusicService.ServiceUUID:
           connectionState.musicService.serviceFound = true
+        case AppConstants.Bluetooth.VisionService.ServiceUUID:
+          connectionState.visionService.serviceFound = true
+        default:
+          print("Unknown Service Discovered: \(service.uuid.uuidString)")
         }
       }
     }
@@ -138,20 +189,26 @@ class BluetoothManager: NSObject, ObservableObject,
     if let characteristics = service.characteristics {
       for ch in characteristics {
         
-        //
-        // Music service
-        //
-        if ch.uuid == AppConstants.Bluetooth.MusicService.PlaySongUUID {
-          connectionState.musicService.playSongChar = ch
-        }
-        else if ch.uuid == AppConstants.Bluetooth.MusicService.IsPlayingUUID {
-          connectionState.musicService.isPlayingChar = ch
+        func setNotify() {
           microMouse!.setNotifyValue(true, for: ch)
         }
-        //
-        // Other
-        //
-        // ...
+        
+        switch ch.uuid {
+        // Music service
+        case AppConstants.Bluetooth.MusicService.PlaySongUUID: // Write
+          connectionState.musicService.playSongChar = ch
+        case AppConstants.Bluetooth.MusicService.IsPlayingUUID: // Notify
+          connectionState.musicService.isPlayingChar = ch
+          setNotify()
+          
+        // Vision service
+        case AppConstants.Bluetooth.VisionService.DataUUID: // Notify
+          connectionState.visionService.dataChar = ch
+          setNotify()
+          
+        default:
+          print("Unknown Characteristic Discovered: \(ch.uuid)")
+        }
       }
     }
        
@@ -160,16 +217,21 @@ class BluetoothManager: NSObject, ObservableObject,
   func peripheral(_ peripheral: CBPeripheral,
                   didUpdateValueFor characteristic: CBCharacteristic, error: Error?) {
     
-    //
+    switch characteristic.uuid {
     // Music service
-    //
-    if characteristic.uuid == AppConstants.Bluetooth.MusicService.IsPlayingUUID {
+    case AppConstants.Bluetooth.MusicService.IsPlayingUUID:
       musicService.isPlaying = characteristic.value![0] == 1
+      
+    // Vision service
+    case AppConstants.Bluetooth.VisionService.DataUUID:
+      visionService.sensorData = characteristic.value![0...3]
+      if (visionService.sensorData.count != 4) {
+        print("Vision data wrong size!")
+      }
+      
+    default:
+      print("Unknown Characteristic Update: \(characteristic.uuid)")
     }
-    //
-    // Other
-    //
-    // ...
   }
   
   func peripheral(_ peripheral: CBPeripheral, didReadRSSI RSSI: NSNumber, error: Error?) {
