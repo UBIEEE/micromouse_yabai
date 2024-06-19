@@ -9,10 +9,14 @@ struct SongHandle;
 class Buzzer : public SubsystemSingleton<Buzzer> {
 public:
   enum class Song : uint8_t {
-    NONE       = 0,
-    STARTUP    = 1,
-    HOME_DEPOT = 2,
-    NOKIA      = 3,
+    NONE          = 0,
+    STARTUP       = 1,
+    BLE_CONECT    = 2,
+    BLE_DISCONECT = 3,
+    HOME_DEPOT    = 4,
+    NOKIA         = 5,
+    
+    _COUNT,
   };
 
 private:
@@ -25,6 +29,7 @@ private:
 public:
   void init() override;
   void process() override;
+  void on_connect_send_feedback() override;
 
   // Starts playing a song from the beginning.
   void play_song(Song song);

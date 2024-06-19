@@ -16,6 +16,7 @@ public:
 
   virtual void init() {}
   virtual void process() {}
+  virtual void on_connect_send_feedback() {}
   virtual void send_feedback() {}
 
 protected:

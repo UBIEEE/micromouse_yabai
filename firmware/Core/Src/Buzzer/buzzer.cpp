@@ -1,5 +1,7 @@
 #include "Buzzer/buzzer.hpp"
 
+#include "Buzzer/buzzer.h"
+
 #include "Buzzer/notes.hpp"
 
 #include "stm32wbxx_hal.h"
@@ -32,6 +34,30 @@ static constexpr uint16_t SONG_STARTUP_NOTE_LENGTH_MS = 250;
 static constexpr Note SONG_STARTUP_NOTES[] = {
     NOTE_D_5,
     NOTE_D_6,
+};
+
+//
+// BLE connect tone.
+//
+
+static constexpr uint16_t SONG_BLE_CONNECT_NOTE_LENGTH_MS = 250;
+
+static constexpr Note SONG_BLE_CONNECT_NOTES[] = {
+    NOTE_E_5,
+    NOTE_G_5,
+    NOTE_E_6,
+};
+
+//
+// BLE disconnect tone.
+//
+
+static constexpr uint16_t SONG_BLE_DISCONNECT_NOTE_LENGTH_MS = 250;
+
+static constexpr Note SONG_BLE_DISCONNECT_NOTES[] = {
+    NOTE_E_5,
+    NOTE_G_5,
+    NOTE_G_4
 };
 
 //
@@ -92,6 +118,12 @@ static constexpr SongHandle SONGS[] = {
     // STARTUP
     {SONG_STARTUP_NOTES, SONG_STARTUP_NOTE_LENGTH_MS / ROBOT_UPDATE_PERIOD_MS},
 
+    // BLE_CONNECT
+    {SONG_BLE_CONNECT_NOTES, SONG_BLE_CONNECT_NOTE_LENGTH_MS / ROBOT_UPDATE_PERIOD_MS},
+
+    // BLE_DISCONNECT
+    {SONG_BLE_DISCONNECT_NOTES, SONG_BLE_DISCONNECT_NOTE_LENGTH_MS / ROBOT_UPDATE_PERIOD_MS},
+
     // HOME_DEPOT
     {SONG_HOME_DEPOT_NOTES, SONG_HOME_DEPOT_NOTE_LENGTH_MS / ROBOT_UPDATE_PERIOD_MS},
 
@@ -118,7 +150,7 @@ void Buzzer::process() {
 
   if (m_note_index == 0 && m_note_ticks == 0) {
     *s_is_playing = 1;
-    Custom_STM_App_Update_Char(CUSTOM_STM_ISPLAYINGCHAR, s_is_playing);
+    Custom_STM_App_Update_Char(CUSTOM_STM_MUSIC_ISPLAYING_CHAR, s_is_playing);
   }
 
   if (m_note_ticks++ == 0) {
@@ -142,6 +174,10 @@ void Buzzer::process() {
   }
 }
 
+void Buzzer::on_connect_send_feedback() {
+  Custom_STM_App_Update_Char(CUSTOM_STM_MUSIC_ISPLAYING_CHAR, s_is_playing);
+}
+
 void Buzzer::play_song(Song song) {
   m_song_handle = &SONGS[static_cast<uint8_t>(song)];
   m_note_index  = 0;
@@ -160,18 +196,12 @@ void Buzzer::end_song() {
   if (m_song_handle != nullptr) {
     *s_is_playing = 0;
     m_song_handle = nullptr;
-    Custom_STM_App_Update_Char(CUSTOM_STM_ISPLAYINGCHAR, s_is_playing);
+    Custom_STM_App_Update_Char(CUSTOM_STM_MUSIC_ISPLAYING_CHAR, s_is_playing);
   }
 }
 
-//
-// Buzzer notifications.
-//
-
-#include "Buzzer/buzzer_notification.h"
-
 void Buzzer_PlaySong(uint8_t song) {
-  if (song == 0 || song > 3) {
+  if (song == 0 || song > uint8_t(Buzzer::Song::_COUNT)) {
     Buzzer::get().quiet();
     return;
   }

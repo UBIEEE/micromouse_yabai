@@ -37,22 +37,33 @@ extern "C" {
 typedef enum
 {
   /* musicService */
-  CUSTOM_STM_PLAYSONGCHAR,
-  CUSTOM_STM_ISPLAYINGCHAR,
+  CUSTOM_STM_MUSIC_PLAYSONG_CHAR,
+  CUSTOM_STM_MUSIC_ISPLAYING_CHAR,
   /* visionService */
-  CUSTOM_STM_VISIONDATACHAR,
+  CUSTOM_STM_VISION_DATA_CHAR,
+  /* mainService */
+  CUSTOM_STM_MAIN_SETTASK_CHAR,
+  CUSTOM_STM_MAIN_CURRENTTASK_CHAR,
+  CUSTOM_STM_MAIN_APPREADY_CHAR,
 } Custom_STM_Char_Opcode_t;
 
 typedef enum
 {
-  /* playSongWriteChar */
-  CUSTOM_STM_PLAYSONGCHAR_WRITE_EVT,
-  /* isPlayingNotifyChar */
-  CUSTOM_STM_ISPLAYINGCHAR_NOTIFY_ENABLED_EVT,
-  CUSTOM_STM_ISPLAYINGCHAR_NOTIFY_DISABLED_EVT,
-  /* visionDataNotifyChar */
-  CUSTOM_STM_VISIONDATACHAR_NOTIFY_ENABLED_EVT,
-  CUSTOM_STM_VISIONDATACHAR_NOTIFY_DISABLED_EVT,
+  /* music_playSong_writeChar */
+  CUSTOM_STM_MUSIC_PLAYSONG_CHAR_WRITE_EVT,
+  /* music_isPlaying_notifyChar */
+  CUSTOM_STM_MUSIC_ISPLAYING_CHAR_NOTIFY_ENABLED_EVT,
+  CUSTOM_STM_MUSIC_ISPLAYING_CHAR_NOTIFY_DISABLED_EVT,
+  /* vision_data_notifyChar */
+  CUSTOM_STM_VISION_DATA_CHAR_NOTIFY_ENABLED_EVT,
+  CUSTOM_STM_VISION_DATA_CHAR_NOTIFY_DISABLED_EVT,
+  /* main_setTask_writeChar */
+  CUSTOM_STM_MAIN_SETTASK_CHAR_WRITE_EVT,
+  /* main_currentTask_notifyChar */
+  CUSTOM_STM_MAIN_CURRENTTASK_CHAR_NOTIFY_ENABLED_EVT,
+  CUSTOM_STM_MAIN_CURRENTTASK_CHAR_NOTIFY_DISABLED_EVT,
+  /* main_appReady_writeChar */
+  CUSTOM_STM_MAIN_APPREADY_CHAR_WRITE_EVT,
   CUSTOM_STM_NOTIFICATION_COMPLETE_EVT,
 
   CUSTOM_STM_BOOT_REQUEST_EVT
@@ -78,9 +89,12 @@ typedef struct
 /* USER CODE END ET */
 
 /* Exported constants --------------------------------------------------------*/
-extern uint8_t SizePlaysongchar;
-extern uint8_t SizeIsplayingchar;
-extern uint8_t SizeVisiondatachar;
+extern uint8_t SizeMusic_Playsong_Char;
+extern uint8_t SizeMusic_Isplaying_Char;
+extern uint8_t SizeVision_Data_Char;
+extern uint8_t SizeMain_Settask_Char;
+extern uint8_t SizeMain_Currenttask_Char;
+extern uint8_t SizeMain_Appready_Char;
 
 /* USER CODE BEGIN EC */
 

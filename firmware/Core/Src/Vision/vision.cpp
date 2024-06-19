@@ -85,12 +85,9 @@ void Vision::process() {
 }
 
 void Vision::send_feedback() {
-  static bool was_enabled = false;
+  if (!m_enabled) return;
 
-  if (m_enabled || was_enabled) {
-    Custom_STM_App_Update_Char(CUSTOM_STM_VISIONDATACHAR, m_readings);
-  }
-  was_enabled = m_enabled;
+  Custom_STM_App_Update_Char(CUSTOM_STM_VISION_DATA_CHAR, m_readings);
 }
 
 //

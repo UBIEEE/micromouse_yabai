@@ -39,9 +39,11 @@
 typedef struct
 {
   /* musicService */
-  uint8_t               Isplayingchar_Notification_Status;
+  uint8_t               Music_isplaying_char_Notification_Status;
   /* visionService */
-  uint8_t               Visiondatachar_Notification_Status;
+  uint8_t               Vision_data_char_Notification_Status;
+  /* mainService */
+  uint8_t               Main_currenttask_char_Notification_Status;
   /* USER CODE BEGIN CUSTOM_APP_Context_t */
 
   /* USER CODE END CUSTOM_APP_Context_t */
@@ -85,11 +87,14 @@ bool g_robot_tasks_registered = false;
 
 /* Private function prototypes -----------------------------------------------*/
 /* musicService */
-static void Custom_Isplayingchar_Update_Char(void);
-static void Custom_Isplayingchar_Send_Notification(void);
+static void Custom_Music_isplaying_char_Update_Char(void);
+static void Custom_Music_isplaying_char_Send_Notification(void);
 /* visionService */
-static void Custom_Visiondatachar_Update_Char(void);
-static void Custom_Visiondatachar_Send_Notification(void);
+static void Custom_Vision_data_char_Update_Char(void);
+static void Custom_Vision_data_char_Send_Notification(void);
+/* mainService */
+static void Custom_Main_currenttask_char_Update_Char(void);
+static void Custom_Main_currenttask_char_Send_Notification(void);
 
 /* USER CODE BEGIN PFP */
 
@@ -108,35 +113,60 @@ void Custom_STM_App_Notification(Custom_STM_App_Notification_evt_t *pNotificatio
     /* USER CODE END CUSTOM_STM_App_Notification_Custom_Evt_Opcode */
 
     /* musicService */
-    case CUSTOM_STM_PLAYSONGCHAR_WRITE_EVT:
-      /* USER CODE BEGIN CUSTOM_STM_PLAYSONGCHAR_WRITE_EVT */
+    case CUSTOM_STM_MUSIC_PLAYSONG_CHAR_WRITE_EVT:
+      /* USER CODE BEGIN CUSTOM_STM_MUSIC_PLAYSONG_CHAR_WRITE_EVT */
 
-      /* USER CODE END CUSTOM_STM_PLAYSONGCHAR_WRITE_EVT */
+      /* USER CODE END CUSTOM_STM_MUSIC_PLAYSONG_CHAR_WRITE_EVT */
       break;
 
-    case CUSTOM_STM_ISPLAYINGCHAR_NOTIFY_ENABLED_EVT:
-      /* USER CODE BEGIN CUSTOM_STM_ISPLAYINGCHAR_NOTIFY_ENABLED_EVT */
+    case CUSTOM_STM_MUSIC_ISPLAYING_CHAR_NOTIFY_ENABLED_EVT:
+      /* USER CODE BEGIN CUSTOM_STM_MUSIC_ISPLAYING_CHAR_NOTIFY_ENABLED_EVT */
 
-      /* USER CODE END CUSTOM_STM_ISPLAYINGCHAR_NOTIFY_ENABLED_EVT */
+      /* USER CODE END CUSTOM_STM_MUSIC_ISPLAYING_CHAR_NOTIFY_ENABLED_EVT */
       break;
 
-    case CUSTOM_STM_ISPLAYINGCHAR_NOTIFY_DISABLED_EVT:
-      /* USER CODE BEGIN CUSTOM_STM_ISPLAYINGCHAR_NOTIFY_DISABLED_EVT */
+    case CUSTOM_STM_MUSIC_ISPLAYING_CHAR_NOTIFY_DISABLED_EVT:
+      /* USER CODE BEGIN CUSTOM_STM_MUSIC_ISPLAYING_CHAR_NOTIFY_DISABLED_EVT */
 
-      /* USER CODE END CUSTOM_STM_ISPLAYINGCHAR_NOTIFY_DISABLED_EVT */
+      /* USER CODE END CUSTOM_STM_MUSIC_ISPLAYING_CHAR_NOTIFY_DISABLED_EVT */
       break;
 
     /* visionService */
-    case CUSTOM_STM_VISIONDATACHAR_NOTIFY_ENABLED_EVT:
-      /* USER CODE BEGIN CUSTOM_STM_VISIONDATACHAR_NOTIFY_ENABLED_EVT */
+    case CUSTOM_STM_VISION_DATA_CHAR_NOTIFY_ENABLED_EVT:
+      /* USER CODE BEGIN CUSTOM_STM_VISION_DATA_CHAR_NOTIFY_ENABLED_EVT */
 
-      /* USER CODE END CUSTOM_STM_VISIONDATACHAR_NOTIFY_ENABLED_EVT */
+      /* USER CODE END CUSTOM_STM_VISION_DATA_CHAR_NOTIFY_ENABLED_EVT */
       break;
 
-    case CUSTOM_STM_VISIONDATACHAR_NOTIFY_DISABLED_EVT:
-      /* USER CODE BEGIN CUSTOM_STM_VISIONDATACHAR_NOTIFY_DISABLED_EVT */
+    case CUSTOM_STM_VISION_DATA_CHAR_NOTIFY_DISABLED_EVT:
+      /* USER CODE BEGIN CUSTOM_STM_VISION_DATA_CHAR_NOTIFY_DISABLED_EVT */
 
-      /* USER CODE END CUSTOM_STM_VISIONDATACHAR_NOTIFY_DISABLED_EVT */
+      /* USER CODE END CUSTOM_STM_VISION_DATA_CHAR_NOTIFY_DISABLED_EVT */
+      break;
+
+    /* mainService */
+    case CUSTOM_STM_MAIN_SETTASK_CHAR_WRITE_EVT:
+      /* USER CODE BEGIN CUSTOM_STM_MAIN_SETTASK_CHAR_WRITE_EVT */
+
+      /* USER CODE END CUSTOM_STM_MAIN_SETTASK_CHAR_WRITE_EVT */
+      break;
+
+    case CUSTOM_STM_MAIN_CURRENTTASK_CHAR_NOTIFY_ENABLED_EVT:
+      /* USER CODE BEGIN CUSTOM_STM_MAIN_CURRENTTASK_CHAR_NOTIFY_ENABLED_EVT */
+
+      /* USER CODE END CUSTOM_STM_MAIN_CURRENTTASK_CHAR_NOTIFY_ENABLED_EVT */
+      break;
+
+    case CUSTOM_STM_MAIN_CURRENTTASK_CHAR_NOTIFY_DISABLED_EVT:
+      /* USER CODE BEGIN CUSTOM_STM_MAIN_CURRENTTASK_CHAR_NOTIFY_DISABLED_EVT */
+
+      /* USER CODE END CUSTOM_STM_MAIN_CURRENTTASK_CHAR_NOTIFY_DISABLED_EVT */
+      break;
+
+    case CUSTOM_STM_MAIN_APPREADY_CHAR_WRITE_EVT:
+      /* USER CODE BEGIN CUSTOM_STM_MAIN_APPREADY_CHAR_WRITE_EVT */
+
+      /* USER CODE END CUSTOM_STM_MAIN_APPREADY_CHAR_WRITE_EVT */
       break;
 
     case CUSTOM_STM_NOTIFICATION_COMPLETE_EVT:
@@ -170,12 +200,16 @@ void Custom_APP_Notification(Custom_App_ConnHandle_Not_evt_t *pNotification)
     /* USER CODE END P2PS_CUSTOM_Notification_Custom_Evt_Opcode */
     case CUSTOM_CONN_HANDLE_EVT :
       /* USER CODE BEGIN CUSTOM_CONN_HANDLE_EVT */
-
+      
+      Robot_OnConnect();
+      
       /* USER CODE END CUSTOM_CONN_HANDLE_EVT */
       break;
 
     case CUSTOM_DISCON_HANDLE_EVT :
       /* USER CODE BEGIN CUSTOM_DISCON_HANDLE_EVT */
+
+      Robot_OnDisconnect();
 
       /* USER CODE END CUSTOM_DISCON_HANDLE_EVT */
       break;
@@ -236,81 +270,121 @@ void Custom_APP_Init(void)
  *************************************************************/
 
 /* musicService */
-void Custom_Isplayingchar_Update_Char(void) /* Property Read */
+void Custom_Music_isplaying_char_Update_Char(void) /* Property Read */
 {
   uint8_t updateflag = 0;
 
-  /* USER CODE BEGIN Isplayingchar_UC_1*/
+  /* USER CODE BEGIN Music_isplaying_char_UC_1*/
 
-  /* USER CODE END Isplayingchar_UC_1*/
+  /* USER CODE END Music_isplaying_char_UC_1*/
 
   if (updateflag != 0)
   {
-    Custom_STM_App_Update_Char(CUSTOM_STM_ISPLAYINGCHAR, (uint8_t *)UpdateCharData);
+    Custom_STM_App_Update_Char(CUSTOM_STM_MUSIC_ISPLAYING_CHAR, (uint8_t *)UpdateCharData);
   }
 
-  /* USER CODE BEGIN Isplayingchar_UC_Last*/
+  /* USER CODE BEGIN Music_isplaying_char_UC_Last*/
 
-  /* USER CODE END Isplayingchar_UC_Last*/
+  /* USER CODE END Music_isplaying_char_UC_Last*/
   return;
 }
 
-void Custom_Isplayingchar_Send_Notification(void) /* Property Notification */
+void Custom_Music_isplaying_char_Send_Notification(void) /* Property Notification */
 {
   uint8_t updateflag = 0;
 
-  /* USER CODE BEGIN Isplayingchar_NS_1*/
+  /* USER CODE BEGIN Music_isplaying_char_NS_1*/
 
-  /* USER CODE END Isplayingchar_NS_1*/
+  /* USER CODE END Music_isplaying_char_NS_1*/
 
   if (updateflag != 0)
   {
-    Custom_STM_App_Update_Char(CUSTOM_STM_ISPLAYINGCHAR, (uint8_t *)NotifyCharData);
+    Custom_STM_App_Update_Char(CUSTOM_STM_MUSIC_ISPLAYING_CHAR, (uint8_t *)NotifyCharData);
   }
 
-  /* USER CODE BEGIN Isplayingchar_NS_Last*/
+  /* USER CODE BEGIN Music_isplaying_char_NS_Last*/
 
-  /* USER CODE END Isplayingchar_NS_Last*/
+  /* USER CODE END Music_isplaying_char_NS_Last*/
 
   return;
 }
 
 /* visionService */
-void Custom_Visiondatachar_Update_Char(void) /* Property Read */
+void Custom_Vision_data_char_Update_Char(void) /* Property Read */
 {
   uint8_t updateflag = 0;
 
-  /* USER CODE BEGIN Visiondatachar_UC_1*/
+  /* USER CODE BEGIN Vision_data_char_UC_1*/
 
-  /* USER CODE END Visiondatachar_UC_1*/
+  /* USER CODE END Vision_data_char_UC_1*/
 
   if (updateflag != 0)
   {
-    Custom_STM_App_Update_Char(CUSTOM_STM_VISIONDATACHAR, (uint8_t *)UpdateCharData);
+    Custom_STM_App_Update_Char(CUSTOM_STM_VISION_DATA_CHAR, (uint8_t *)UpdateCharData);
   }
 
-  /* USER CODE BEGIN Visiondatachar_UC_Last*/
+  /* USER CODE BEGIN Vision_data_char_UC_Last*/
 
-  /* USER CODE END Visiondatachar_UC_Last*/
+  /* USER CODE END Vision_data_char_UC_Last*/
   return;
 }
 
-void Custom_Visiondatachar_Send_Notification(void) /* Property Notification */
+void Custom_Vision_data_char_Send_Notification(void) /* Property Notification */
 {
   uint8_t updateflag = 0;
 
-  /* USER CODE BEGIN Visiondatachar_NS_1*/
+  /* USER CODE BEGIN Vision_data_char_NS_1*/
 
-  /* USER CODE END Visiondatachar_NS_1*/
+  /* USER CODE END Vision_data_char_NS_1*/
 
   if (updateflag != 0)
   {
-    Custom_STM_App_Update_Char(CUSTOM_STM_VISIONDATACHAR, (uint8_t *)NotifyCharData);
+    Custom_STM_App_Update_Char(CUSTOM_STM_VISION_DATA_CHAR, (uint8_t *)NotifyCharData);
   }
 
-  /* USER CODE BEGIN Visiondatachar_NS_Last*/
+  /* USER CODE BEGIN Vision_data_char_NS_Last*/
 
-  /* USER CODE END Visiondatachar_NS_Last*/
+  /* USER CODE END Vision_data_char_NS_Last*/
+
+  return;
+}
+
+/* mainService */
+void Custom_Main_currenttask_char_Update_Char(void) /* Property Read */
+{
+  uint8_t updateflag = 0;
+
+  /* USER CODE BEGIN Main_currenttask_char_UC_1*/
+
+  /* USER CODE END Main_currenttask_char_UC_1*/
+
+  if (updateflag != 0)
+  {
+    Custom_STM_App_Update_Char(CUSTOM_STM_MAIN_CURRENTTASK_CHAR, (uint8_t *)UpdateCharData);
+  }
+
+  /* USER CODE BEGIN Main_currenttask_char_UC_Last*/
+
+  /* USER CODE END Main_currenttask_char_UC_Last*/
+  return;
+}
+
+void Custom_Main_currenttask_char_Send_Notification(void) /* Property Notification */
+{
+  uint8_t updateflag = 0;
+
+  /* USER CODE BEGIN Main_currenttask_char_NS_1*/
+
+  /* USER CODE END Main_currenttask_char_NS_1*/
+
+  if (updateflag != 0)
+  {
+    Custom_STM_App_Update_Char(CUSTOM_STM_MAIN_CURRENTTASK_CHAR, (uint8_t *)NotifyCharData);
+  }
+
+  /* USER CODE BEGIN Main_currenttask_char_NS_Last*/
+
+  /* USER CODE END Main_currenttask_char_NS_Last*/
 
   return;
 }
