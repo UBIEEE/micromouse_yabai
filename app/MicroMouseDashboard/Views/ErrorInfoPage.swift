@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct ErrorInfoView: View {
+struct ErrorInfoPage: View {
   @EnvironmentObject var btManager: BluetoothManager
   
   var body: some View {
@@ -28,6 +28,6 @@ struct ErrorInfoView: View {
 }
 
 #Preview {
-  ErrorInfoView()
+  ErrorInfoPage()
     .environmentObject(BluetoothManager())
 }

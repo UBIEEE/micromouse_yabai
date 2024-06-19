@@ -1,11 +1,11 @@
 import SwiftUI
 
-struct MusicView: View {
+struct MusicPage: View {
   @EnvironmentObject var btManager: BluetoothManager
   
   enum Song: UInt8, CaseIterable, Identifiable {
-    case homeDepot = 2
-    case nokiaRingtone = 3
+    case homeDepot = 4
+    case nokiaRingtone = 5
     
     var id: Self { self }
   }
@@ -47,6 +47,6 @@ struct MusicView: View {
 }
 
 #Preview {
-  MusicView()
+  MusicPage()
     .environmentObject(BluetoothManager())
 }

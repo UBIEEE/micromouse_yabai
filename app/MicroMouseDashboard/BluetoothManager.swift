@@ -50,10 +50,29 @@ class BluetoothManager: NSObject, ObservableObject,
     
     var visionService = VisionService()
     
+    //
+    // Main service
+    //
+    
+    struct MainService {
+      var serviceFound = false
+      var setTaskChar: CBCharacteristic?
+      var currentTaskChar: CBCharacteristic?
+      var appReadyChar: CBCharacteristic?
+      
+      var isReady: Bool {
+        get {
+          return serviceFound && setTaskChar != nil && currentTaskChar != nil && appReadyChar != nil
+        }
+      }
+    }
+    
+    var mainService = MainService()
+    
     var isReady : Bool {
       get {
         return deviceFound && deviceConnected &&
-               musicService.isReady
+        musicService.isReady && visionService.isReady && mainService.isReady
       }
     }
   }
@@ -97,6 +116,16 @@ class BluetoothManager: NSObject, ObservableObject,
   }
   
   @Published var visionService = VisionService()
+  
+  //
+  // Main service
+  //
+  
+  struct MainService {
+    var currentTask: UInt8 = 0
+  }
+  
+  @Published var mainService = MainService()
   
   //
   // Basic stuff
@@ -175,6 +204,8 @@ class BluetoothManager: NSObject, ObservableObject,
           connectionState.musicService.serviceFound = true
         case AppConstants.Bluetooth.VisionService.ServiceUUID:
           connectionState.visionService.serviceFound = true
+        case AppConstants.Bluetooth.MainService.ServiceUUID:
+          connectionState.mainService.serviceFound = true
         default:
           print("Unknown Service Discovered: \(service.uuid.uuidString)")
         }
@@ -206,6 +237,15 @@ class BluetoothManager: NSObject, ObservableObject,
           connectionState.visionService.dataChar = ch
           setNotify()
           
+        // Main service
+        case AppConstants.Bluetooth.MainService.SetTaskUUID: // Write
+          connectionState.mainService.setTaskChar = ch
+        case AppConstants.Bluetooth.MainService.CurrentTaskUUID: // Notify
+          connectionState.mainService.currentTaskChar = ch
+          setNotify()
+        case AppConstants.Bluetooth.MainService.AppReadyUUID: // Write
+          connectionState.mainService.appReadyChar = ch
+          
         default:
           print("Unknown Characteristic Discovered: \(ch.uuid)")
         }
@@ -225,9 +265,10 @@ class BluetoothManager: NSObject, ObservableObject,
     // Vision service
     case AppConstants.Bluetooth.VisionService.DataUUID:
       visionService.sensorData = characteristic.value![0...3]
-      if (visionService.sensorData.count != 4) {
-        print("Vision data wrong size!")
-      }
+      
+    // Main service
+    case AppConstants.Bluetooth.MainService.CurrentTaskUUID:
+      mainService.currentTask = characteristic.value![0]
       
     default:
       print("Unknown Characteristic Update: \(characteristic.uuid)")

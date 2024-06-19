@@ -5,36 +5,45 @@ struct NavigationView: View {
   
   var body: some View {
     TabView {
-      Tab("Main", systemImage: "hare") {
-        MainView()
-          .environmentObject(btManager)
+      Tab("Main", systemImage: "ant") {
+        MainPage()
       }
       Tab("Maze", systemImage: "map") {
-        MazeView()
+        MazePage()
       }
       Tab("Settings", systemImage: "gear") {
-        SettingsView()
+        SettingsPage()
       }
       Tab("Error Info", systemImage: "exclamationmark.triangle") {
-        ErrorInfoView()
-          .environmentObject(btManager)
+        ErrorInfoPage()
       }
 
       TabSection("Subsystems") {
         Tab("Drive", systemImage: "car.side") {
-          Text("Drive")
+          DrivePage()
         }
         Tab("IMU", systemImage: "gauge.open.with.lines.needle.33percent") {
-          Text("IMU")
+          IMUPage()
         }
         Tab("Vision", systemImage: "eyes") {
-          VisionView()
+          VisionPage()
         }
         Tab("Music", systemImage: "music.note") {
-          MusicView()
+          MusicPage()
         }
       }
     }
+    // When app is ready, send a message to the MicroMouse.
+    .onAppear(perform: ({
+      // Don't crash the preview!
+      guard ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] != "1" else {
+        return
+      }
+      
+      let appReadyChar = btManager.connectionState.mainService.appReadyChar!
+      let appReadyData = Data([1])
+      btManager.writeValueToChar(appReadyChar, appReadyData)
+    }))
     // Sidebar on ipadOS and macOS.
     .tabViewStyle(.sidebarAdaptable)
   }

@@ -1,16 +1,18 @@
 import SwiftUI
 
-struct MainView: View {
+struct IMUPage: View {
   @EnvironmentObject var btManager: BluetoothManager
-
+  
   var body: some View {
-    VStack {
-      Text("Main")
+    NavigationStack {
+      List {
+      }
+      .navigationTitle("IMU")
     }
   }
 }
 
 #Preview {
-  MainView()
+  IMUPage()
     .environmentObject(BluetoothManager())
 }

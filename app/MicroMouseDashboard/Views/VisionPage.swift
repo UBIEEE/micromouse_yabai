@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct VisionView: View {
+struct VisionPage: View {
   @EnvironmentObject var btManager: BluetoothManager
   
   var body: some View {
@@ -25,6 +25,6 @@ struct VisionView: View {
 }
 
 #Preview {
-  VisionView()
+  VisionPage()
     .environmentObject(BluetoothManager())
 }

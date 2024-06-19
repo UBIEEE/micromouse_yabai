@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct BluetoothDisabledView: View {
+struct BluetoothDisabledPage: View {
   var body: some View {
     VStack(spacing: 5) {
       Text("🤯")
@@ -13,5 +13,5 @@ struct BluetoothDisabledView: View {
 }
 
 #Preview {
-  BluetoothDisabledView()
+  BluetoothDisabledPage()
 }

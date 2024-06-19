@@ -6,11 +6,11 @@ struct ContentView: View {
   var body: some View {
     // Bluetooth is disabled in Settings.
     if !btManager.isBluetoothEnabled {
-      BluetoothDisabledView()
+      BluetoothDisabledPage()
     }
     // MicroMouse isn't found/connected/ready yet.
     else if !btManager.connectionState.isReady {
-      NotReadyView()
+      ConnectionStatusPage()
         .environmentObject(btManager)
     }
     // App is ready to go!

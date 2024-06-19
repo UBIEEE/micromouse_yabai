@@ -1,6 +1,6 @@
 import SwiftUI
 
-struct NotReadyView: View {
+struct ConnectionStatusPage: View {
   @EnvironmentObject var btManager : BluetoothManager
   
   var body: some View {
@@ -11,6 +11,7 @@ struct NotReadyView: View {
       VStack(alignment: .leading, spacing: 5) {
         Text("\(Utilities.boolToEmoji(btManager.connectionState.deviceFound)) Device found")
         Text("\(Utilities.boolToEmoji(btManager.connectionState.deviceConnected)) Device connected")
+        Text("\(Utilities.boolToEmoji(btManager.connectionState.mainService.isReady)) Main Service ready")
         Text("\(Utilities.boolToEmoji(btManager.connectionState.musicService.isReady)) Music Service ready")
         Text("\(Utilities.boolToEmoji(btManager.connectionState.visionService.isReady)) Vision Service ready")
       }
@@ -21,6 +22,6 @@ struct NotReadyView: View {
 }
 
 #Preview {
-  NotReadyView()
+  ConnectionStatusPage()
     .environmentObject(BluetoothManager())
 }

@@ -55,16 +55,18 @@
 		75DE0A1D2C1F99CF00B7DEDE /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
-				BluetoothDisabledView.swift,
+				BluetoothDisabledPage.swift,
+				ConnectionStatusPage.swift,
 				ContentView.swift,
-				ErrorInfoView.swift,
-				MainView.swift,
-				MazeView.swift,
-				MusicView.swift,
+				DrivePage.swift,
+				ErrorInfoPage.swift,
+				IMUPage.swift,
+				MainPage.swift,
+				MazePage.swift,
+				MusicPage.swift,
 				NavigationView.swift,
-				NotReadyView.swift,
-				SettingsView.swift,
-				VisionView.swift,
+				SettingsPage.swift,
+				VisionPage.swift,
 			);
 			target = 75DE09E32C1E177E00B7DEDE /* MicroMouseDashboard */;
 		};
