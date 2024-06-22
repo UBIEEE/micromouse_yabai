@@ -69,10 +69,28 @@ class BluetoothManager: NSObject, ObservableObject,
     
     var mainService = MainService()
     
+    //
+    // Drive service
+    //
+    
+    struct DriveService {
+      var serviceFound = false
+      var dataChar: CBCharacteristic?
+      
+      var isReady: Bool {
+        get {
+          return serviceFound && dataChar != nil
+        }
+      }
+    }
+    
+    var driveService = DriveService()
+    
     var isReady : Bool {
       get {
         return deviceFound && deviceConnected &&
-        musicService.isReady && visionService.isReady && mainService.isReady
+               musicService.isReady && visionService.isReady &&
+               mainService.isReady && driveService.isReady
       }
     }
   }
@@ -126,6 +144,41 @@ class BluetoothManager: NSObject, ObservableObject,
   }
   
   @Published var mainService = MainService()
+  
+  //
+  // Drive service
+  //
+  
+  struct DriveService {
+    var motorData = Data([0, 0, 0, 0,
+                          0, 0, 0, 0,
+                          0, 0, 0, 0,
+                          0, 0, 0, 0])
+    
+    private func getValue(at index: Int) -> Float32 {
+      let data = Data(motorData[index..<index+4])
+      let value = data.withUnsafeBytes { $0.load(as: Float32.self) }
+      return value
+    }
+    
+    var motorLeftPosition: Float32 {
+      return getValue(at: 0)
+    }
+    
+    var motorRightPosition: Float32 {
+      return getValue(at: 4)
+    }
+    
+    var motorLeftVelocity: Float32 {
+      return getValue(at: 8)
+    }
+    
+    var motorRightVelocity: Float32 {
+      return getValue(at: 12)
+    }
+  }
+  
+  @Published var driveService = DriveService()
   
   //
   // Basic stuff
@@ -206,6 +259,8 @@ class BluetoothManager: NSObject, ObservableObject,
           connectionState.visionService.serviceFound = true
         case AppConstants.Bluetooth.MainService.ServiceUUID:
           connectionState.mainService.serviceFound = true
+        case AppConstants.Bluetooth.DriveService.ServiceUUID:
+          connectionState.driveService.serviceFound = true
         default:
           print("Unknown Service Discovered: \(service.uuid.uuidString)")
         }
@@ -246,6 +301,11 @@ class BluetoothManager: NSObject, ObservableObject,
         case AppConstants.Bluetooth.MainService.AppReadyUUID: // Write
           connectionState.mainService.appReadyChar = ch
           
+        // Drive service
+        case AppConstants.Bluetooth.DriveService.DataUUID: // Notify
+          connectionState.driveService.dataChar = ch
+          setNotify()
+          
         default:
           print("Unknown Characteristic Discovered: \(ch.uuid)")
         }
@@ -264,11 +324,15 @@ class BluetoothManager: NSObject, ObservableObject,
       
     // Vision service
     case AppConstants.Bluetooth.VisionService.DataUUID:
-      visionService.sensorData = characteristic.value![0...3]
+      visionService.sensorData = characteristic.value![0..<4]
       
     // Main service
     case AppConstants.Bluetooth.MainService.CurrentTaskUUID:
       mainService.currentTask = characteristic.value![0]
+      
+    // Drive service
+    case AppConstants.Bluetooth.DriveService.DataUUID:
+      driveService.motorData = characteristic.value![0..<16]
       
     default:
       print("Unknown Characteristic Update: \(characteristic.uuid)")

@@ -25,5 +25,11 @@ class AppConstants {
       static let CurrentTaskUUID = CBUUID(string: "00000004-8E22-4541-9D4C-21EDAE82ED19") // Notify
       static let AppReadyUUID = CBUUID(string: "00000005-8E22-4541-9D4C-21EDAE82ED19") // Write
     }
+    
+    class DriveService {
+      static let ServiceUUID = CBUUID(string: "00000003-CC7A-482A-984A-7F2ED5B3E58F")
+      
+      static let DataUUID = CBUUID(string: "00000006-8E22-4541-9D4C-21EDAE82ED19") // Notify
+    }
   }
 }

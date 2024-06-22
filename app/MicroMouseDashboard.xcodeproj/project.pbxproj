@@ -36,7 +36,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		75DE09E42C1E177E00B7DEDE /* MicroMouseDashboard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MicroMouseDashboard.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		75DE09E42C1E177E00B7DEDE /* MicroMouse.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MicroMouse.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75DE09E72C1E177E00B7DEDE /* MicroMouseDashboardApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MicroMouseDashboardApp.swift; sourceTree = "<group>"; };
 		75DE09EB2C1E177F00B7DEDE /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		75DE09ED2C1E177F00B7DEDE /* MicroMouseDashboard.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = MicroMouseDashboard.entitlements; sourceTree = "<group>"; };
@@ -127,7 +127,7 @@
 		75DE09E52C1E177E00B7DEDE /* Products */ = {
 			isa = PBXGroup;
 			children = (
-				75DE09E42C1E177E00B7DEDE /* MicroMouseDashboard.app */,
+				75DE09E42C1E177E00B7DEDE /* MicroMouse.app */,
 				75DE09F52C1E177F00B7DEDE /* MicroMouseDashboardTests.xctest */,
 				75DE09FF2C1E177F00B7DEDE /* MicroMouseDashboardUITests.xctest */,
 			);
@@ -192,7 +192,7 @@
 			);
 			name = MicroMouseDashboard;
 			productName = MicroMouseDashboard;
-			productReference = 75DE09E42C1E177E00B7DEDE /* MicroMouseDashboard.app */;
+			productReference = 75DE09E42C1E177E00B7DEDE /* MicroMouse.app */;
 			productType = "com.apple.product-type.application";
 		};
 		75DE09F42C1E177F00B7DEDE /* MicroMouseDashboardTests */ = {
@@ -472,7 +472,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "MicroMouse Dashboard";
+				INFOPLIST_KEY_CFBundleDisplayName = MicroMouse;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "The Dashboard needs to connect to the MicroMouse via Bluetooth";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
@@ -491,7 +491,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = io.github.petelilley.MicroMouseDashboard;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = MicroMouse;
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SUPPORTS_MACCATALYST = NO;
@@ -515,7 +515,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				INFOPLIST_KEY_CFBundleDisplayName = "MicroMouse Dashboard";
+				INFOPLIST_KEY_CFBundleDisplayName = MicroMouse;
 				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.developer-tools";
 				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "The Dashboard needs to connect to the MicroMouse via Bluetooth";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
@@ -534,7 +534,7 @@
 				MACOSX_DEPLOYMENT_TARGET = 15.0;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = io.github.petelilley.MicroMouseDashboard;
-				PRODUCT_NAME = "$(TARGET_NAME)";
+				PRODUCT_NAME = MicroMouse;
 				SDKROOT = auto;
 				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx";
 				SUPPORTS_MACCATALYST = NO;
