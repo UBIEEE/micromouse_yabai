@@ -5,14 +5,18 @@
 #include <cstdint>
 
 class Drive : public SubsystemSingleton<Drive> {
-  float m_left_dist_mm = 0.f;
-  float m_right_dist_mm = 0.f;
 
-  float m_left_vel_mmps = 0.f;
-  float m_right_vel_mmps = 0.f;
+  struct {
+    float left_dist_mm = 0.f;
+    float right_dist_mm = 0.f;
+
+    float left_vel_mmps = 0.f;
+    float right_vel_mmps = 0.f;
+  } m_data;
 
 public:
   void process() override;
+  void send_feedback() override;
 
   void stop() { set_speed_dir(0, GPIO_PIN_RESET, 0, GPIO_PIN_RESET); };
 

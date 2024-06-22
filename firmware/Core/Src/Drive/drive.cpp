@@ -3,6 +3,8 @@
 #include <cmath>
 #include <numbers>
 
+#include "custom_stm.h"
+
 //
 // External variables.
 //
@@ -80,12 +82,16 @@ void Drive::update_encoders() {
   __HAL_TIM_SET_COUNTER(&htim2, 0);
 
   // Update the distance.
-  m_left_dist_mm += left_delta_mm;
-  m_right_dist_mm += right_delta_mm;
+  m_data.left_dist_mm += left_delta_mm;
+  m_data.right_dist_mm += right_delta_mm;
 
   // Calculate the velocity.
-  m_left_vel_mmps  = left_delta_mm / ROBOT_UPDATE_PERIOD_S;
-  m_right_vel_mmps = right_delta_mm / ROBOT_UPDATE_PERIOD_S;
+  m_data.left_vel_mmps  = left_delta_mm / ROBOT_UPDATE_PERIOD_S;
+  m_data.right_vel_mmps = right_delta_mm / ROBOT_UPDATE_PERIOD_S;
+}
+
+void Drive::send_feedback() {
+  Custom_STM_App_Update_Char(CUSTOM_STM_DRIVE_DATA_CHAR, (uint8_t*)&m_data);
 }
 
 //

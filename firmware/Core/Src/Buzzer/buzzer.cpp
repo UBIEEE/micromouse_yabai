@@ -182,6 +182,7 @@ void Buzzer::play_song(Song song) {
   m_song_handle = &SONGS[static_cast<uint8_t>(song)];
   m_note_index  = 0;
   m_note_ticks  = 0;
+  m_should_stop = false;
 }
 
 void Buzzer::set_note(uint32_t counter_period) {

@@ -45,6 +45,8 @@ typedef enum
   CUSTOM_STM_MAIN_SETTASK_CHAR,
   CUSTOM_STM_MAIN_CURRENTTASK_CHAR,
   CUSTOM_STM_MAIN_APPREADY_CHAR,
+  /* driveService */
+  CUSTOM_STM_DRIVE_DATA_CHAR,
 } Custom_STM_Char_Opcode_t;
 
 typedef enum
@@ -64,6 +66,9 @@ typedef enum
   CUSTOM_STM_MAIN_CURRENTTASK_CHAR_NOTIFY_DISABLED_EVT,
   /* main_appReady_writeChar */
   CUSTOM_STM_MAIN_APPREADY_CHAR_WRITE_EVT,
+  /* drive_data_notifyChar */
+  CUSTOM_STM_DRIVE_DATA_CHAR_NOTIFY_ENABLED_EVT,
+  CUSTOM_STM_DRIVE_DATA_CHAR_NOTIFY_DISABLED_EVT,
   CUSTOM_STM_NOTIFICATION_COMPLETE_EVT,
 
   CUSTOM_STM_BOOT_REQUEST_EVT
@@ -95,6 +100,7 @@ extern uint8_t SizeVision_Data_Char;
 extern uint8_t SizeMain_Settask_Char;
 extern uint8_t SizeMain_Currenttask_Char;
 extern uint8_t SizeMain_Appready_Char;
+extern uint8_t SizeDrive_Data_Char;
 
 /* USER CODE BEGIN EC */
 

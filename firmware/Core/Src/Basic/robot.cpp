@@ -71,12 +71,12 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
   switch (GPIO_Pin) {
   case BUTTON_1_Pin:
     Buzzer::get().play_song(Buzzer::Song::HOME_DEPOT);
-    // Drive::get().set_speed(-0.5, -0.5);
+    Drive::get().set_speed(-0.3, -0.3);
     Vision::get().set_enabled(true);
     break;
   case BUTTON_2_Pin:
     Buzzer::get().quiet();
-    // Drive::get().stop();
+    Drive::get().stop();
     Vision::get().set_enabled(false);
     break;
   case IMU_INT1_Pin:
