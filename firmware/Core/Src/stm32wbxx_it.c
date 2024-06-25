@@ -197,24 +197,18 @@ void SysTick_Handler(void)
   HAL_IncTick();
   /* USER CODE BEGIN SysTick_IRQn 1 */
 
-  //
   // Make sure the tasks are registered with the sequencer before telling the
   // sequencer to run the tasks!
-  //
   if (!g_robot_tasks_registered) return;
 
   const uint32_t ticks = HAL_GetTick();
 
-  //
-  // Tell the sequencer to run the main robot task.
-  //
-  if (ticks % ROBOT_UPDATE_PERIOD_MS == 0) {
-    UTIL_SEQ_SetTask(1 << CFG_TASK_ROBOT_UPDATE_ID, CFG_SCH_PRIO_0);
-  }
+  // Tell the sequencer to run the main robot task every tick.
+  // if (ticks % ROBOT_UPDATE_PERIOD_MS == 0) {
+  UTIL_SEQ_SetTask(1 << CFG_TASK_ROBOT_UPDATE_ID, CFG_SCH_PRIO_0);
+  // }
 
-  //
-  // Tell the sequencer to run the send feedback robot task.
-  //
+  // Tell the sequencer to run the send feedback robot task less often.
   if (ticks % ROBOT_SEND_FEEDBACK_PERIOD_MS == 0) {
     UTIL_SEQ_SetTask(1 << CFG_TASK_ROBOT_SEND_FEEDBACK_ID, CFG_SCH_PRIO_0);
   }
