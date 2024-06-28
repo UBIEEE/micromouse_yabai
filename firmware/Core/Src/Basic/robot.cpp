@@ -1,9 +1,11 @@
 #include "Basic/robot.h"
 
+#include "Basic/error_manager.hpp"
 #include "Buzzer/buzzer.hpp"
 #include "Control/robot_control.hpp"
 #include "Drive/drive.hpp"
 #include "Vision/vision.hpp"
+#include "Drive/imu.hpp"
 
 #include "main.h"
 #include <array>
@@ -12,11 +14,9 @@
 // Static variables.
 //
 
-static constexpr std::array<Subsystem*, 4> s_subsystems = {
-    &Buzzer::get(),
-    &Drive::get(),
-    &Vision::get(),
-    &RobotControl::get(),
+static constexpr std::array<Subsystem*, 5> s_subsystems = {
+    &Buzzer::get(),       &Drive::get(),        &Vision::get(),
+    &RobotControl::get(), &ErrorManager::get(),
 };
 
 static bool s_ble_connected = false;
@@ -29,6 +29,7 @@ void Robot_Init() {
   for (auto s : s_subsystems) {
     s->init();
   }
+  IMU::get().init();
 }
 
 void Robot_Update() {
@@ -37,9 +38,7 @@ void Robot_Update() {
   }
 }
 
-void Robot_OnConnect() {
-  Buzzer::get().play_song(Buzzer::Song::BLE_CONECT);
-}
+void Robot_OnConnect() { Buzzer::get().play_song(Buzzer::Song::BLE_CONECT); }
 
 void Robot_DashboardAppReady() {
   for (auto s : s_subsystems) {
@@ -80,6 +79,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
     Vision::get().set_enabled(false);
     break;
   case IMU_INT1_Pin:
+    IMU::get().interrupt_handler();
     break;
   }
 }
