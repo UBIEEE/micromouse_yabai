@@ -1,5 +1,7 @@
 #pragma once
 
+#include "Basic/singleton.hpp"
+
 #include "main.h"
 
 // Base class for subsystems.
@@ -23,14 +25,8 @@ protected:
   Subsystem() = default;
 };
 
-// Singleton base class for subsystems.
 template <typename T>
-class SubsystemSingleton : public Subsystem {
-public:
-  static constexpr T& get() { return s_instance; }
-
+class SubsystemSingleton : public Subsystem, public Singleton<T> {
 protected:
   SubsystemSingleton() = default;
-
-  inline static T s_instance;
 };
