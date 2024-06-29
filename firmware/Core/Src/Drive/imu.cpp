@@ -65,7 +65,7 @@ void IMU::init() {
   buf[0] = 0;
   buf[0] |= 0b01000000; // ±500 dps
   m_gyro_conversion = 500.f / INT16_MAX;
-  buf[0] |= 0b00000110; // 800 Hz (Low Noise mode)
+  buf[0] |= 0b00000110; // 800 Hz
   status = write_register(REG_GYRO_CONFIG0, buf[0]);
   fail_if(HAL_OK != status);
 
@@ -81,7 +81,9 @@ void IMU::init() {
 
   // Turn on the sensors (Page 55).
   buf[0] = 0b00001100; // Enable gyro and enter Low Noise mode.
-  // buf[0] |= 0b00000011; // Enable accelerometer and enter Low Noise mode.
+  if constexpr (m_accel_enabled) {
+    buf[0] |= 0b00000011; // Enable accelerometer and enter Low Noise mode.
+  }
   status = write_register(REG_PWR_MGMT0, buf[0]);
   fail_if(HAL_OK != status);
 
@@ -119,46 +121,66 @@ HAL_StatusTypeDef IMU::read_register(uint8_t reg, uint8_t* buf, uint8_t len) {
   return status;
 }
 
-void IMU::interrupt_handler() {
-  if (!m_init) return;
+void IMU::int1_handler() {
+  if (!m_init || m_is_receiving) return;
 
-  read_gyro();
+  HAL_StatusTypeDef status;
+
+  uint8_t addr = m_accel_enabled ? REG_ACCEL_DATA_X1 : REG_GYRO_DATA_X1;
+
+  // Write register address.
+  status = HAL_I2C_Master_Transmit(&hi2c1, IMU_ADDR, &addr, 1, I2C_TIMEOUT);
+  if (status != HAL_OK) return;
+
+  uint16_t size = m_accel_enabled ? 12 : 6;
+
+  // Read data.
+  status = HAL_I2C_Master_Receive_DMA(&hi2c1, IMU_ADDR, m_data_raw, size);
+  if (status != HAL_OK) return;
+
+  m_is_receiving = true;
+}
+
+void IMU::read_complete_handler() {
+  if (!m_init || !m_is_receiving) return;
+
+  const int16_t x = (m_data_raw[0] << 8) | m_data_raw[1];
+  const int16_t y = (m_data_raw[2] << 8) | m_data_raw[3];
+  const int16_t z = (m_data_raw[4] << 8) | m_data_raw[5];
 
   if constexpr (m_accel_enabled) {
-    read_accelerometer();
+    const int16_t gyro_x = (m_data_raw[6] << 8) | m_data_raw[7];
+    const int16_t gyro_y = (m_data_raw[8] << 8) | m_data_raw[9];
+    const int16_t gyro_z = (m_data_raw[10] << 8) | m_data_raw[11];
+
+    m_accel_g[Axis::X] = x * m_accel_conversion;
+    m_accel_g[Axis::Y] = y * m_accel_conversion;
+    m_accel_g[Axis::Z] = z * m_accel_conversion;
+
+    m_gyro_vel_dps[Axis::X] = gyro_x * m_gyro_conversion;
+    m_gyro_vel_dps[Axis::Y] = gyro_y * m_gyro_conversion;
+    m_gyro_vel_dps[Axis::Z] = gyro_z * m_gyro_conversion;
   }
-}
-
-void IMU::read_gyro() {
-  const int16_t x = read_axis(REG_GYRO_DATA_X1, REG_GYRO_DATA_X0);
-  const int16_t y = read_axis(REG_GYRO_DATA_Y1, REG_GYRO_DATA_Y0);
-  const int16_t z = read_axis(REG_GYRO_DATA_Z1, REG_GYRO_DATA_Z0);
-
-  m_gyro_vel_dps[Axis::X] = x * m_gyro_conversion;
-  m_gyro_vel_dps[Axis::Y] = y * m_gyro_conversion;
-  m_gyro_vel_dps[Axis::Z] = z * m_gyro_conversion;
+  else {
+    m_gyro_vel_dps[Axis::X] = x * m_gyro_conversion;
+    m_gyro_vel_dps[Axis::Y] = y * m_gyro_conversion;
+    m_gyro_vel_dps[Axis::Z] = z * m_gyro_conversion;
+  }
 
   // TODO: Differentiate to get angle.
+
+  m_is_receiving = false;
 }
 
-void IMU::read_accelerometer() {
-  const int16_t x = read_axis(REG_ACCEL_DATA_X1, REG_ACCEL_DATA_X0);
-  const int16_t y = read_axis(REG_ACCEL_DATA_Y1, REG_ACCEL_DATA_Y0);
-  const int16_t z = read_axis(REG_ACCEL_DATA_Z1, REG_ACCEL_DATA_Z0);
+//
+// Callbacks.
+//
 
-  m_accel_g[Axis::X] = x * m_accel_conversion;
-  m_accel_g[Axis::Y] = y * m_accel_conversion;
-  m_accel_g[Axis::Z] = z * m_accel_conversion;
-}
+// I2C DMA interrupt callback.
+void HAL_I2C_MasterRxCpltCallback(I2C_HandleTypeDef* hi2c) {
+  assert_param(hi2c != nullptr);
+  assert_param(hi2c == &hi2c1);
+  UNUSED(hi2c);
 
-int16_t IMU::read_axis(uint8_t reg_upper_byte, uint8_t reg_lower_byte) {
-  uint8_t buf[1];
-  int16_t val = 0;
-
-  read_register(reg_upper_byte, buf, 1);
-  val = buf[0] << 8;
-  read_register(reg_lower_byte, buf, 1);
-  val |= buf[0];
-
-  return val;
+  IMU::get().read_complete_handler();
 }
