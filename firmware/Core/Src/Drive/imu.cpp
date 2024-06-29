@@ -132,10 +132,11 @@ void IMU::int1_handler() {
   status = HAL_I2C_Master_Transmit(&hi2c1, IMU_ADDR, &addr, 1, I2C_TIMEOUT);
   if (status != HAL_OK) return;
 
+  uint8_t* data = m_accel_enabled ? m_data_raw : (m_data_raw + 6);
   uint16_t size = m_accel_enabled ? 12 : 6;
 
   // Read data.
-  status = HAL_I2C_Master_Receive_DMA(&hi2c1, IMU_ADDR, m_data_raw, size);
+  status = HAL_I2C_Master_Receive_DMA(&hi2c1, IMU_ADDR, data, size);
   if (status != HAL_OK) return;
 
   m_is_receiving = true;
@@ -144,28 +145,23 @@ void IMU::int1_handler() {
 void IMU::read_complete_handler() {
   if (!m_init || !m_is_receiving) return;
 
-  const int16_t x = (m_data_raw[0] << 8) | m_data_raw[1];
-  const int16_t y = (m_data_raw[2] << 8) | m_data_raw[3];
-  const int16_t z = (m_data_raw[4] << 8) | m_data_raw[5];
-
   if constexpr (m_accel_enabled) {
-    const int16_t gyro_x = (m_data_raw[6] << 8) | m_data_raw[7];
-    const int16_t gyro_y = (m_data_raw[8] << 8) | m_data_raw[9];
-    const int16_t gyro_z = (m_data_raw[10] << 8) | m_data_raw[11];
+    const int16_t accel_x = (m_data_raw[0] << 8) | m_data_raw[1];
+    const int16_t accel_y = (m_data_raw[2] << 8) | m_data_raw[3];
+    const int16_t accel_z = (m_data_raw[4] << 8) | m_data_raw[5];
 
-    m_accel_g[Axis::X] = x * m_accel_conversion;
-    m_accel_g[Axis::Y] = y * m_accel_conversion;
-    m_accel_g[Axis::Z] = z * m_accel_conversion;
+    m_accel_g[Axis::X] = accel_x * m_accel_conversion;
+    m_accel_g[Axis::Y] = accel_y * m_accel_conversion;
+    m_accel_g[Axis::Z] = accel_z * m_accel_conversion;
+  }
 
-    m_gyro_vel_dps[Axis::X] = gyro_x * m_gyro_conversion;
-    m_gyro_vel_dps[Axis::Y] = gyro_y * m_gyro_conversion;
-    m_gyro_vel_dps[Axis::Z] = gyro_z * m_gyro_conversion;
-  }
-  else {
-    m_gyro_vel_dps[Axis::X] = x * m_gyro_conversion;
-    m_gyro_vel_dps[Axis::Y] = y * m_gyro_conversion;
-    m_gyro_vel_dps[Axis::Z] = z * m_gyro_conversion;
-  }
+  const int16_t gyro_x = (m_data_raw[6] << 8) | m_data_raw[7];
+  const int16_t gyro_y = (m_data_raw[8] << 8) | m_data_raw[9];
+  const int16_t gyro_z = (m_data_raw[10] << 8) | m_data_raw[11];
+
+  m_gyro_vel_dps[Axis::X] = gyro_x * m_gyro_conversion;
+  m_gyro_vel_dps[Axis::Y] = gyro_y * m_gyro_conversion;
+  m_gyro_vel_dps[Axis::Z] = gyro_z * m_gyro_conversion;
 
   // TODO: Differentiate to get angle.
 
