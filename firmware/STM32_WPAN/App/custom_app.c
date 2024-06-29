@@ -44,6 +44,7 @@ typedef struct
   uint8_t               Vision_data_char_Notification_Status;
   /* mainService */
   uint8_t               Main_currenttask_char_Notification_Status;
+  uint8_t               Main_errorcode_char_Notification_Status;
   /* driveService */
   uint8_t               Drive_data_char_Notification_Status;
   /* USER CODE BEGIN CUSTOM_APP_Context_t */
@@ -97,6 +98,8 @@ static void Custom_Vision_data_char_Send_Notification(void);
 /* mainService */
 static void Custom_Main_currenttask_char_Update_Char(void);
 static void Custom_Main_currenttask_char_Send_Notification(void);
+static void Custom_Main_errorcode_char_Update_Char(void);
+static void Custom_Main_errorcode_char_Send_Notification(void);
 /* driveService */
 static void Custom_Drive_data_char_Update_Char(void);
 static void Custom_Drive_data_char_Send_Notification(void);
@@ -172,6 +175,18 @@ void Custom_STM_App_Notification(Custom_STM_App_Notification_evt_t *pNotificatio
       /* USER CODE BEGIN CUSTOM_STM_MAIN_APPREADY_CHAR_WRITE_EVT */
 
       /* USER CODE END CUSTOM_STM_MAIN_APPREADY_CHAR_WRITE_EVT */
+      break;
+
+    case CUSTOM_STM_MAIN_ERRORCODE_CHAR_NOTIFY_ENABLED_EVT:
+      /* USER CODE BEGIN CUSTOM_STM_MAIN_ERRORCODE_CHAR_NOTIFY_ENABLED_EVT */
+
+      /* USER CODE END CUSTOM_STM_MAIN_ERRORCODE_CHAR_NOTIFY_ENABLED_EVT */
+      break;
+
+    case CUSTOM_STM_MAIN_ERRORCODE_CHAR_NOTIFY_DISABLED_EVT:
+      /* USER CODE BEGIN CUSTOM_STM_MAIN_ERRORCODE_CHAR_NOTIFY_DISABLED_EVT */
+
+      /* USER CODE END CUSTOM_STM_MAIN_ERRORCODE_CHAR_NOTIFY_DISABLED_EVT */
       break;
 
     /* driveService */
@@ -403,6 +418,45 @@ void Custom_Main_currenttask_char_Send_Notification(void) /* Property Notificati
   /* USER CODE BEGIN Main_currenttask_char_NS_Last*/
 
   /* USER CODE END Main_currenttask_char_NS_Last*/
+
+  return;
+}
+
+void Custom_Main_errorcode_char_Update_Char(void) /* Property Read */
+{
+  uint8_t updateflag = 0;
+
+  /* USER CODE BEGIN Main_errorcode_char_UC_1*/
+
+  /* USER CODE END Main_errorcode_char_UC_1*/
+
+  if (updateflag != 0)
+  {
+    Custom_STM_App_Update_Char(CUSTOM_STM_MAIN_ERRORCODE_CHAR, (uint8_t *)UpdateCharData);
+  }
+
+  /* USER CODE BEGIN Main_errorcode_char_UC_Last*/
+
+  /* USER CODE END Main_errorcode_char_UC_Last*/
+  return;
+}
+
+void Custom_Main_errorcode_char_Send_Notification(void) /* Property Notification */
+{
+  uint8_t updateflag = 0;
+
+  /* USER CODE BEGIN Main_errorcode_char_NS_1*/
+
+  /* USER CODE END Main_errorcode_char_NS_1*/
+
+  if (updateflag != 0)
+  {
+    Custom_STM_App_Update_Char(CUSTOM_STM_MAIN_ERRORCODE_CHAR, (uint8_t *)NotifyCharData);
+  }
+
+  /* USER CODE BEGIN Main_errorcode_char_NS_Last*/
+
+  /* USER CODE END Main_errorcode_char_NS_Last*/
 
   return;
 }
