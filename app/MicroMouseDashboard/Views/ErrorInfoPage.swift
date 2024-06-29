@@ -18,6 +18,11 @@ struct ErrorInfoPage: View {
             btManager.readRSSI()
           }
         }
+        Section("Errors") {
+          ForEach(btManager.mainService.errorCodes, id: \.self) { errorCode in
+            Text("\(errorCode)")
+          }
+        }
       }
       .navigationTitle("Error Info")
     }
