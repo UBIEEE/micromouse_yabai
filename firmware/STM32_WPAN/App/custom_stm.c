@@ -87,7 +87,7 @@ uint8_t SizeMain_Currenttask_Char = 1;
 uint8_t SizeMain_Appready_Char = 1;
 uint8_t SizeMain_Errorcode_Char = 1;
 uint8_t SizeDrive_Data_Char = 16;
-uint8_t SizeDrive_Gyrodata_Char = 4*3;
+uint8_t SizeDrive_Gyrodata_Char = 4*6;
 uint8_t SizeDrive_Acceldata_Char = 4*3;
 
 /**
