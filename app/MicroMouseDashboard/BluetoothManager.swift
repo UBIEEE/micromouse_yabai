@@ -63,7 +63,8 @@ class BluetoothManager: NSObject, ObservableObject,
       
       var isReady: Bool {
         get {
-          return serviceFound && setTaskChar != nil && currentTaskChar != nil && appReadyChar != nil && errorCodeChar != nil
+          return serviceFound && setTaskChar != nil && currentTaskChar != nil &&
+                 appReadyChar != nil && errorCodeChar != nil
         }
       }
     }
@@ -77,10 +78,13 @@ class BluetoothManager: NSObject, ObservableObject,
     struct DriveService {
       var serviceFound = false
       var dataChar: CBCharacteristic?
+      var imuGyroChar: CBCharacteristic?
+      var imuAccelChar: CBCharacteristic?
       
       var isReady: Bool {
         get {
-          return serviceFound && dataChar != nil
+          return serviceFound && dataChar != nil && imuGyroChar != nil &&
+                 imuAccelChar != nil
         }
       }
     }
@@ -89,9 +93,9 @@ class BluetoothManager: NSObject, ObservableObject,
     
     var isReady : Bool {
       get {
-        return deviceFound && deviceConnected &&
-               musicService.isReady && visionService.isReady &&
-               mainService.isReady && driveService.isReady
+        return deviceFound && deviceConnected && musicService.isReady &&
+               visionService.isReady && mainService.isReady &&
+               driveService.isReady
       }
     }
   }
@@ -152,31 +156,42 @@ class BluetoothManager: NSObject, ObservableObject,
   //
   
   struct DriveService {
-    var motorData = Data([0, 0, 0, 0,
-                          0, 0, 0, 0,
-                          0, 0, 0, 0,
-                          0, 0, 0, 0])
+    var rawMotorData = Data(repeating: 0, count: 4*4)
+    var rawIMUGyroData = Data(repeating: 0, count: 4*3)
+    var rawIMUAccelData = Data(repeating: 0, count: 4*3)
     
-    private func getValue(at index: Int) -> Float32 {
-      let data = Data(motorData[index..<index+4])
-      let value = data.withUnsafeBytes { $0.load(as: Float32.self) }
+    private func getValue(_ data: Data, at index: Int) -> Float32 {
+      let varData = Data(data[index..<index+4])
+      let value = varData.withUnsafeBytes { $0.load(as: Float32.self) }
       return value
     }
     
     var motorLeftPosition: Float32 {
-      return getValue(at: 0)
+      return getValue(rawMotorData, at: 0)
     }
     
     var motorRightPosition: Float32 {
-      return getValue(at: 4)
+      return getValue(rawMotorData, at: 4)
     }
     
     var motorLeftVelocity: Float32 {
-      return getValue(at: 8)
+      return getValue(rawMotorData, at: 8)
     }
     
     var motorRightVelocity: Float32 {
-      return getValue(at: 12)
+      return getValue(rawMotorData, at: 12)
+    }
+    
+    var imuGyroData: [Float32] {
+      return [getValue(rawIMUGyroData, at: 0),
+              getValue(rawIMUGyroData, at: 4),
+              getValue(rawIMUGyroData, at: 8)]
+    }
+    
+    var imuAccelData: [Float32] {
+      return [getValue(rawIMUAccelData, at: 0),
+              getValue(rawIMUAccelData, at: 4),
+              getValue(rawIMUAccelData, at: 8)]
     }
   }
   
@@ -310,6 +325,12 @@ class BluetoothManager: NSObject, ObservableObject,
         case AppConstants.Bluetooth.DriveService.DataUUID: // Notify
           connectionState.driveService.dataChar = ch
           setNotify()
+        case AppConstants.Bluetooth.DriveService.IMUGyroUUID: // Notify
+          connectionState.driveService.imuGyroChar = ch
+          setNotify()
+        case AppConstants.Bluetooth.DriveService.IMUAccelUUID: // Notify
+          connectionState.driveService.imuAccelChar = ch
+          setNotify()
           
         default:
           print("Unknown Characteristic Discovered: \(ch.uuid)")
@@ -339,7 +360,11 @@ class BluetoothManager: NSObject, ObservableObject,
       
     // Drive service
     case AppConstants.Bluetooth.DriveService.DataUUID:
-      driveService.motorData = characteristic.value![0..<16]
+      driveService.rawMotorData = characteristic.value![0..<4*4]
+    case AppConstants.Bluetooth.DriveService.IMUGyroUUID:
+      driveService.rawIMUGyroData = characteristic.value![0..<4*3]
+    case AppConstants.Bluetooth.DriveService.IMUAccelUUID:
+      driveService.rawIMUAccelData = characteristic.value![0..<4*3]
       
     default:
       print("Unknown Characteristic Update: \(characteristic.uuid)")
