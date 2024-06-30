@@ -2,17 +2,17 @@
 
 #include <cstdint>
 
-#include "Basic/singleton.hpp"
+#include "Basic/subsystem.hpp"
 #include "main.h"
 
 // ICM-42670-P
 //
 // Datasheet:
 // https://product.tdk.com/system/files/dam/doc/product/sensor/mortion-inertial/imu/data_sheet/ds-000451-icm-42670-p.pdf
-class IMU : public Singleton<IMU> {
-  static constexpr bool m_accel_enabled = false;
+class IMU : public SubsystemSingleton<IMU> {
+  static constexpr bool m_accel_enabled = true;
 
-  bool m_init = false;
+  bool m_init         = false;
   bool m_is_receiving = false;
 
   float m_gyro_conversion;
@@ -32,7 +32,8 @@ public:
   };
 
 public:
-  void init();
+  void init() override;
+  void send_feedback() override;
 
   float get_angle(Axis axis) const { return m_gyro_angle_deg[axis]; }
   float get_angular_velocity(Axis axis) const { return m_gyro_vel_dps[axis]; }

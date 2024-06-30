@@ -4,8 +4,8 @@
 #include "Buzzer/buzzer.hpp"
 #include "Control/robot_control.hpp"
 #include "Drive/drive.hpp"
-#include "Vision/vision.hpp"
 #include "Drive/imu.hpp"
+#include "Vision/vision.hpp"
 
 #include "main.h"
 #include <array>
@@ -14,9 +14,9 @@
 // Static variables.
 //
 
-static constexpr std::array<Subsystem*, 5> s_subsystems = {
-    &Buzzer::get(),       &Drive::get(),        &Vision::get(),
-    &RobotControl::get(), &ErrorManager::get(),
+static constexpr std::array<Subsystem*, 6> s_subsystems = {
+    &Buzzer::get(), &Drive::get(),        &IMU::get(),
+    &Vision::get(), &RobotControl::get(), &ErrorManager::get(),
 };
 
 static bool s_ble_connected = false;
@@ -29,7 +29,6 @@ void Robot_Init() {
   for (auto s : s_subsystems) {
     s->init();
   }
-  IMU::get().init();
 }
 
 void Robot_Update() {

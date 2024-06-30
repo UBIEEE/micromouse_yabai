@@ -44,6 +44,8 @@ typedef struct{
   uint16_t  CustomMain_Errorcode_CharHdle;                  /**< main_errorCode_notifyChar handle */
   uint16_t  CustomDriveserviceHdle;                    /**< driveService handle */
   uint16_t  CustomDrive_Data_CharHdle;                  /**< drive_data_notifyChar handle */
+  uint16_t  CustomDrive_Gyrodata_CharHdle;                  /**< drive_gyroData_notifyChar handle */
+  uint16_t  CustomDrive_Acceldata_CharHdle;                  /**< drive_accelData_notifyChar handle */
 /* USER CODE BEGIN Context */
   /* Place holder for Characteristic Descriptors Handle*/
 
@@ -85,6 +87,8 @@ uint8_t SizeMain_Currenttask_Char = 1;
 uint8_t SizeMain_Appready_Char = 1;
 uint8_t SizeMain_Errorcode_Char = 1;
 uint8_t SizeDrive_Data_Char = 16;
+uint8_t SizeDrive_Gyrodata_Char = 4*3;
+uint8_t SizeDrive_Acceldata_Char = 4*3;
 
 /**
  * START of Section BLE_DRIVER_CONTEXT
@@ -154,6 +158,8 @@ do {\
 #define COPY_MAIN_ERRORCODE_NOTIFYCHAR_UUID(uuid_struct)    COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x07,0x8e,0x22,0x45,0x41,0x9d,0x4c,0x21,0xed,0xae,0x82,0xed,0x19)
 #define COPY_DRIVESERVICE_UUID(uuid_struct)          COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x03,0xcc,0x7a,0x48,0x2a,0x98,0x4a,0x7f,0x2e,0xd5,0xb3,0xe5,0x8f)
 #define COPY_DRIVE_DATA_NOTIFYCHAR_UUID(uuid_struct)    COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x06,0x8e,0x22,0x45,0x41,0x9d,0x4c,0x21,0xed,0xae,0x82,0xed,0x19)
+#define COPY_DRIVE_GYRODATA_NOTIFYCHAR_UUID(uuid_struct)    COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x08,0x8e,0x22,0x45,0x41,0x9d,0x4c,0x21,0xed,0xae,0x82,0xed,0x19)
+#define COPY_DRIVE_ACCELDATA_NOTIFYCHAR_UUID(uuid_struct)    COPY_UUID_128(uuid_struct,0x00,0x00,0x00,0x09,0x8e,0x22,0x45,0x41,0x9d,0x4c,0x21,0xed,0xae,0x82,0xed,0x19)
 
 /* USER CODE BEGIN PF */
 
@@ -409,6 +415,94 @@ static SVCCTL_EvtAckStatus_t Custom_STM_Event_Handler(void *Event)
               break;
             }
           }  /* if (attribute_modified->Attr_Handle == (CustomContext.CustomDrive_Data_CharHdle + CHARACTERISTIC_DESCRIPTOR_ATTRIBUTE_OFFSET))*/
+
+          else if (attribute_modified->Attr_Handle == (CustomContext.CustomDrive_Gyrodata_CharHdle + CHARACTERISTIC_DESCRIPTOR_ATTRIBUTE_OFFSET))
+          {
+            return_value = SVCCTL_EvtAckFlowEnable;
+            /* USER CODE BEGIN CUSTOM_STM_Service_4_Char_2 */
+
+            /* USER CODE END CUSTOM_STM_Service_4_Char_2 */
+            switch (attribute_modified->Attr_Data[0])
+            {
+              /* USER CODE BEGIN CUSTOM_STM_Service_4_Char_2_attribute_modified */
+
+              /* USER CODE END CUSTOM_STM_Service_4_Char_2_attribute_modified */
+
+              /* Disabled Notification management */
+              case (!(COMSVC_Notification)):
+                /* USER CODE BEGIN CUSTOM_STM_Service_4_Char_2_Disabled_BEGIN */
+
+                /* USER CODE END CUSTOM_STM_Service_4_Char_2_Disabled_BEGIN */
+                Notification.Custom_Evt_Opcode = CUSTOM_STM_DRIVE_GYRODATA_CHAR_NOTIFY_DISABLED_EVT;
+                Custom_STM_App_Notification(&Notification);
+                /* USER CODE BEGIN CUSTOM_STM_Service_4_Char_2_Disabled_END */
+
+                /* USER CODE END CUSTOM_STM_Service_4_Char_2_Disabled_END */
+                break;
+
+              /* Enabled Notification management */
+              case COMSVC_Notification:
+                /* USER CODE BEGIN CUSTOM_STM_Service_4_Char_2_COMSVC_Notification_BEGIN */
+
+                /* USER CODE END CUSTOM_STM_Service_4_Char_2_COMSVC_Notification_BEGIN */
+                Notification.Custom_Evt_Opcode = CUSTOM_STM_DRIVE_GYRODATA_CHAR_NOTIFY_ENABLED_EVT;
+                Custom_STM_App_Notification(&Notification);
+                /* USER CODE BEGIN CUSTOM_STM_Service_4_Char_2_COMSVC_Notification_END */
+
+                /* USER CODE END CUSTOM_STM_Service_4_Char_2_COMSVC_Notification_END */
+                break;
+
+              default:
+                /* USER CODE BEGIN CUSTOM_STM_Service_4_Char_2_default */
+
+                /* USER CODE END CUSTOM_STM_Service_4_Char_2_default */
+              break;
+            }
+          }  /* if (attribute_modified->Attr_Handle == (CustomContext.CustomDrive_Gyrodata_CharHdle + CHARACTERISTIC_DESCRIPTOR_ATTRIBUTE_OFFSET))*/
+
+          else if (attribute_modified->Attr_Handle == (CustomContext.CustomDrive_Acceldata_CharHdle + CHARACTERISTIC_DESCRIPTOR_ATTRIBUTE_OFFSET))
+          {
+            return_value = SVCCTL_EvtAckFlowEnable;
+            /* USER CODE BEGIN CUSTOM_STM_Service_4_Char_3 */
+
+            /* USER CODE END CUSTOM_STM_Service_4_Char_3 */
+            switch (attribute_modified->Attr_Data[0])
+            {
+              /* USER CODE BEGIN CUSTOM_STM_Service_4_Char_3_attribute_modified */
+
+              /* USER CODE END CUSTOM_STM_Service_4_Char_3_attribute_modified */
+
+              /* Disabled Notification management */
+              case (!(COMSVC_Notification)):
+                /* USER CODE BEGIN CUSTOM_STM_Service_4_Char_3_Disabled_BEGIN */
+
+                /* USER CODE END CUSTOM_STM_Service_4_Char_3_Disabled_BEGIN */
+                Notification.Custom_Evt_Opcode = CUSTOM_STM_DRIVE_ACCELDATA_CHAR_NOTIFY_DISABLED_EVT;
+                Custom_STM_App_Notification(&Notification);
+                /* USER CODE BEGIN CUSTOM_STM_Service_4_Char_3_Disabled_END */
+
+                /* USER CODE END CUSTOM_STM_Service_4_Char_3_Disabled_END */
+                break;
+
+              /* Enabled Notification management */
+              case COMSVC_Notification:
+                /* USER CODE BEGIN CUSTOM_STM_Service_4_Char_3_COMSVC_Notification_BEGIN */
+
+                /* USER CODE END CUSTOM_STM_Service_4_Char_3_COMSVC_Notification_BEGIN */
+                Notification.Custom_Evt_Opcode = CUSTOM_STM_DRIVE_ACCELDATA_CHAR_NOTIFY_ENABLED_EVT;
+                Custom_STM_App_Notification(&Notification);
+                /* USER CODE BEGIN CUSTOM_STM_Service_4_Char_3_COMSVC_Notification_END */
+
+                /* USER CODE END CUSTOM_STM_Service_4_Char_3_COMSVC_Notification_END */
+                break;
+
+              default:
+                /* USER CODE BEGIN CUSTOM_STM_Service_4_Char_3_default */
+
+                /* USER CODE END CUSTOM_STM_Service_4_Char_3_default */
+              break;
+            }
+          }  /* if (attribute_modified->Attr_Handle == (CustomContext.CustomDrive_Acceldata_CharHdle + CHARACTERISTIC_DESCRIPTOR_ATTRIBUTE_OFFSET))*/
 
           else if (attribute_modified->Attr_Handle == (CustomContext.CustomMusic_Playsong_CharHdle + CHARACTERISTIC_VALUE_ATTRIBUTE_OFFSET))
           {
@@ -829,16 +923,20 @@ void SVCCTL_InitCustomSvc(void)
   /**
    *          driveService
    *
-   * Max_Attribute_Records = 1 + 2*1 + 1*no_of_char_with_notify_or_indicate_property + 1*no_of_char_with_broadcast_property
+   * Max_Attribute_Records = 1 + 2*3 + 1*no_of_char_with_notify_or_indicate_property + 1*no_of_char_with_broadcast_property
    * service_max_attribute_record = 1 for driveService +
    *                                2 for drive_data_notifyChar +
+   *                                2 for drive_gyroData_notifyChar +
+   *                                2 for drive_accelData_notifyChar +
    *                                1 for drive_data_notifyChar configuration descriptor +
-   *                              = 4
+   *                                1 for drive_gyroData_notifyChar configuration descriptor +
+   *                                1 for drive_accelData_notifyChar configuration descriptor +
+   *                              = 10
    *
    * This value doesn't take into account number of descriptors manually added
    * In case of descriptors added, please update the max_attr_record value accordingly in the next SVCCTL_InitService User Section
    */
-  max_attr_record = 4;
+  max_attr_record = 10;
 
   /* USER CODE BEGIN SVCCTL_InitService */
   /* max_attr_record to be updated if descriptors have been added */
@@ -886,6 +984,58 @@ void SVCCTL_InitCustomSvc(void)
   /* Place holder for Characteristic Descriptors */
 
   /* USER CODE END SVCCTL_Init_Service4_Char1 */
+  /**
+   *  drive_gyroData_notifyChar
+   */
+  COPY_DRIVE_GYRODATA_NOTIFYCHAR_UUID(uuid.Char_UUID_128);
+  ret = aci_gatt_add_char(CustomContext.CustomDriveserviceHdle,
+                          UUID_TYPE_128, &uuid,
+                          SizeDrive_Gyrodata_Char,
+                          CHAR_PROP_NOTIFY,
+                          ATTR_PERMISSION_NONE,
+                          GATT_DONT_NOTIFY_EVENTS,
+                          0x10,
+                          CHAR_VALUE_LEN_CONSTANT,
+                          &(CustomContext.CustomDrive_Gyrodata_CharHdle));
+  if (ret != BLE_STATUS_SUCCESS)
+  {
+    APP_DBG_MSG("  Fail   : aci_gatt_add_char command   : DRIVE_GYRODATA_CHAR, error code: 0x%x \n\r", ret);
+  }
+  else
+  {
+    APP_DBG_MSG("  Success: aci_gatt_add_char command   : DRIVE_GYRODATA_CHAR \n\r");
+  }
+
+  /* USER CODE BEGIN SVCCTL_Init_Service4_Char2/ */
+  /* Place holder for Characteristic Descriptors */
+
+  /* USER CODE END SVCCTL_Init_Service4_Char2 */
+  /**
+   *  drive_accelData_notifyChar
+   */
+  COPY_DRIVE_ACCELDATA_NOTIFYCHAR_UUID(uuid.Char_UUID_128);
+  ret = aci_gatt_add_char(CustomContext.CustomDriveserviceHdle,
+                          UUID_TYPE_128, &uuid,
+                          SizeDrive_Acceldata_Char,
+                          CHAR_PROP_NOTIFY,
+                          ATTR_PERMISSION_NONE,
+                          GATT_DONT_NOTIFY_EVENTS,
+                          0x10,
+                          CHAR_VALUE_LEN_CONSTANT,
+                          &(CustomContext.CustomDrive_Acceldata_CharHdle));
+  if (ret != BLE_STATUS_SUCCESS)
+  {
+    APP_DBG_MSG("  Fail   : aci_gatt_add_char command   : DRIVE_ACCELDATA_CHAR, error code: 0x%x \n\r", ret);
+  }
+  else
+  {
+    APP_DBG_MSG("  Success: aci_gatt_add_char command   : DRIVE_ACCELDATA_CHAR \n\r");
+  }
+
+  /* USER CODE BEGIN SVCCTL_Init_Service4_Char3/ */
+  /* Place holder for Characteristic Descriptors */
+
+  /* USER CODE END SVCCTL_Init_Service4_Char3 */
 
   /* USER CODE BEGIN SVCCTL_InitCustomSvc_2 */
 
@@ -1060,6 +1210,44 @@ tBleStatus Custom_STM_App_Update_Char(Custom_STM_Char_Opcode_t CharOpcode, uint8
       /* USER CODE BEGIN CUSTOM_STM_App_Update_Service_4_Char_1*/
 
       /* USER CODE END CUSTOM_STM_App_Update_Service_4_Char_1*/
+      break;
+
+    case CUSTOM_STM_DRIVE_GYRODATA_CHAR:
+      ret = aci_gatt_update_char_value(CustomContext.CustomDriveserviceHdle,
+                                       CustomContext.CustomDrive_Gyrodata_CharHdle,
+                                       0, /* charValOffset */
+                                       SizeDrive_Gyrodata_Char, /* charValueLen */
+                                       (uint8_t *)  pPayload);
+      if (ret != BLE_STATUS_SUCCESS)
+      {
+        APP_DBG_MSG("  Fail   : aci_gatt_update_char_value DRIVE_GYRODATA_CHAR command, result : 0x%x \n\r", ret);
+      }
+      else
+      {
+        APP_DBG_MSG("  Success: aci_gatt_update_char_value DRIVE_GYRODATA_CHAR command\n\r");
+      }
+      /* USER CODE BEGIN CUSTOM_STM_App_Update_Service_4_Char_2*/
+
+      /* USER CODE END CUSTOM_STM_App_Update_Service_4_Char_2*/
+      break;
+
+    case CUSTOM_STM_DRIVE_ACCELDATA_CHAR:
+      ret = aci_gatt_update_char_value(CustomContext.CustomDriveserviceHdle,
+                                       CustomContext.CustomDrive_Acceldata_CharHdle,
+                                       0, /* charValOffset */
+                                       SizeDrive_Acceldata_Char, /* charValueLen */
+                                       (uint8_t *)  pPayload);
+      if (ret != BLE_STATUS_SUCCESS)
+      {
+        APP_DBG_MSG("  Fail   : aci_gatt_update_char_value DRIVE_ACCELDATA_CHAR command, result : 0x%x \n\r", ret);
+      }
+      else
+      {
+        APP_DBG_MSG("  Success: aci_gatt_update_char_value DRIVE_ACCELDATA_CHAR command\n\r");
+      }
+      /* USER CODE BEGIN CUSTOM_STM_App_Update_Service_4_Char_3*/
+
+      /* USER CODE END CUSTOM_STM_App_Update_Service_4_Char_3*/
       break;
 
     default:

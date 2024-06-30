@@ -48,6 +48,8 @@ typedef enum
   CUSTOM_STM_MAIN_ERRORCODE_CHAR,
   /* driveService */
   CUSTOM_STM_DRIVE_DATA_CHAR,
+  CUSTOM_STM_DRIVE_GYRODATA_CHAR,
+  CUSTOM_STM_DRIVE_ACCELDATA_CHAR,
 } Custom_STM_Char_Opcode_t;
 
 typedef enum
@@ -73,6 +75,12 @@ typedef enum
   /* drive_data_notifyChar */
   CUSTOM_STM_DRIVE_DATA_CHAR_NOTIFY_ENABLED_EVT,
   CUSTOM_STM_DRIVE_DATA_CHAR_NOTIFY_DISABLED_EVT,
+  /* drive_gyroData_notifyChar */
+  CUSTOM_STM_DRIVE_GYRODATA_CHAR_NOTIFY_ENABLED_EVT,
+  CUSTOM_STM_DRIVE_GYRODATA_CHAR_NOTIFY_DISABLED_EVT,
+  /* drive_accelData_notifyChar */
+  CUSTOM_STM_DRIVE_ACCELDATA_CHAR_NOTIFY_ENABLED_EVT,
+  CUSTOM_STM_DRIVE_ACCELDATA_CHAR_NOTIFY_DISABLED_EVT,
   CUSTOM_STM_NOTIFICATION_COMPLETE_EVT,
 
   CUSTOM_STM_BOOT_REQUEST_EVT
@@ -106,6 +114,8 @@ extern uint8_t SizeMain_Currenttask_Char;
 extern uint8_t SizeMain_Appready_Char;
 extern uint8_t SizeMain_Errorcode_Char;
 extern uint8_t SizeDrive_Data_Char;
+extern uint8_t SizeDrive_Gyrodata_Char;
+extern uint8_t SizeDrive_Acceldata_Char;
 
 /* USER CODE BEGIN EC */
 

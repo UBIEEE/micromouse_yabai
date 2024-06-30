@@ -2,6 +2,8 @@
 
 #include "Basic/error_manager.hpp"
 
+#include "custom_stm.h"
+
 #include <climits>
 
 //
@@ -166,6 +168,11 @@ void IMU::read_complete_handler() {
   // TODO: Differentiate to get angle.
 
   m_is_receiving = false;
+}
+
+void IMU::send_feedback() {
+  Custom_STM_App_Update_Char(CUSTOM_STM_DRIVE_GYRODATA_CHAR, reinterpret_cast<uint8_t*>(&m_gyro_vel_dps));
+  Custom_STM_App_Update_Char(CUSTOM_STM_DRIVE_ACCELDATA_CHAR, reinterpret_cast<uint8_t*>(&m_accel_g));
 }
 
 //
