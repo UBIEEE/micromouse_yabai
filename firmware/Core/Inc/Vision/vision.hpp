@@ -16,8 +16,8 @@ public:
   };
 
 private:
-  uint8_t m_raw_readings[4] = {0}; // From ADC DMA.
-  uint8_t m_readings[4]     = {0};
+  uint8_t m_raw_readings[4]; // From ADC DMA.
+  uint8_t m_readings[4];
 
   Sensor m_sensor = Sensor::FAR_RIGHT;
 
@@ -27,8 +27,9 @@ private:
     READING,
   };
 
-  State m_state           = State::IDLE;
-  uint8_t m_waiting_ticks = 0;
+  State m_state = State::IDLE;
+
+  volatile bool m_adc_ready = false;
 
 public:
   void process() override;
@@ -38,4 +39,12 @@ public:
   bool enabled() const { return m_enabled; };
 
   float get_reading(Sensor sensor) const { return m_readings[sensor]; };
+
+private:
+  void set_emitter(Sensor sensor, GPIO_PinState state);
+
+private:
+  friend void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef*);
+
+  void read_complete_handler();
 };

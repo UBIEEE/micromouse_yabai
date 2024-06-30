@@ -12,9 +12,6 @@ extern ADC_HandleTypeDef hadc1; // main.c
 // Constants.
 //
 
-// Number of ticks waiting for the IR emitters to turn on.
-static constexpr uint8_t WAITING_TICKS = 2;
-
 static constexpr GPIO_TypeDef* EMIT_PORTS[] = {
     IR_FAR_RIGHT_EMIT_GPIO_Port,
     IR_MID_RIGHT_EMIT_GPIO_Port,
@@ -30,12 +27,6 @@ static constexpr uint16_t EMIT_PINS[] = {
 };
 
 //
-// Static variables.
-//
-
-static volatile bool s_adc_ready = false;
-
-//
 // Vision functions.
 //
 
@@ -43,8 +34,7 @@ void Vision::process() {
   if (!m_enabled) {
     if (m_state != State::IDLE) {
       // Turn off the emitter.
-      HAL_GPIO_WritePin(EMIT_PORTS[m_sensor], EMIT_PINS[m_sensor],
-                        GPIO_PIN_RESET);
+      set_emitter(m_sensor, GPIO_PIN_RESET);
       m_state = State::IDLE;
     }
     return;
@@ -52,13 +42,12 @@ void Vision::process() {
 
   switch (m_state) {
   case State::READING:
-    if (!s_adc_ready) return;
-    s_adc_ready = false;
+    if (!m_adc_ready) return;
+    m_adc_ready = false;
     m_state     = State::IDLE;
 
     // Turn off the emitter.
-    HAL_GPIO_WritePin(EMIT_PORTS[m_sensor], EMIT_PINS[m_sensor],
-                      GPIO_PIN_RESET);
+    set_emitter(m_sensor, GPIO_PIN_RESET);
 
     m_readings[m_sensor] = m_raw_readings[m_sensor];
 
@@ -68,21 +57,24 @@ void Vision::process() {
 
   case State::IDLE:
     // Turn on the emitter.
-    HAL_GPIO_WritePin(EMIT_PORTS[m_sensor], EMIT_PINS[m_sensor], GPIO_PIN_SET);
+    set_emitter(m_sensor, GPIO_PIN_SET);
 
-    m_state         = State::WAITING;
-    m_waiting_ticks = 0;
+    m_state = State::WAITING; // Wait one tick for the emitter to turn on.
     break;
 
   case State::WAITING:
-    if (++m_waiting_ticks < WAITING_TICKS) return;
-
     // Start DMA read.
     HAL_ADC_Start_DMA(&hadc1, reinterpret_cast<uint32_t*>(&m_raw_readings), 4);
     m_state = State::READING;
     break;
   }
 }
+
+void Vision::set_emitter(Sensor sensor, GPIO_PinState state) {
+  HAL_GPIO_WritePin(EMIT_PORTS[sensor], EMIT_PINS[sensor], state);
+}
+
+void Vision::read_complete_handler() { m_adc_ready = true; }
 
 void Vision::send_feedback() {
   if (!m_enabled) return;
@@ -98,5 +90,6 @@ void Vision::send_feedback() {
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc) {
   assert_param(hadc->Instance == ADC1);
   UNUSED(hadc);
-  s_adc_ready = true;
+
+  Vision::get().read_complete_handler();
 }
