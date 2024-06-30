@@ -26,8 +26,11 @@ struct SongHandle {
 };
 
 //
-// Startup tone.
+// Constants.
 //
+// clang-format off
+
+// Startup tone.
 
 static constexpr uint16_t SONG_STARTUP_NOTE_LENGTH_MS = 250;
 
@@ -36,9 +39,7 @@ static constexpr Note SONG_STARTUP_NOTES[] = {
     NOTE_D_6,
 };
 
-//
 // BLE connect tone.
-//
 
 static constexpr uint16_t SONG_BLE_CONNECT_NOTE_LENGTH_MS = 250;
 
@@ -48,25 +49,20 @@ static constexpr Note SONG_BLE_CONNECT_NOTES[] = {
     NOTE_E_6,
 };
 
-//
 // BLE disconnect tone.
-//
 
 static constexpr uint16_t SONG_BLE_DISCONNECT_NOTE_LENGTH_MS = 250;
 
 static constexpr Note SONG_BLE_DISCONNECT_NOTES[] = {
-    NOTE_E_5,
-    NOTE_G_5,
-    NOTE_G_4
+  NOTE_E_5,
+  NOTE_G_5,
+  NOTE_G_4
 };
 
-//
 // Home Depot theme song.
-//
 
 static constexpr uint16_t SONG_HOME_DEPOT_NOTE_LENGTH_MS = 250;
 
-// clang-format off
 static constexpr Note SONG_HOME_DEPOT_NOTES[] = {
     // Intro
     NOTE_A_4, NOTE_A_4, NOTE_D_5, NOTE_A_4, REST, NOTE_A_4, REST, NOTE_A_4, NOTE_C_5, NOTE_A_4, REST, NOTE_A_4, REST, NOTE_A_4, NOTE_G_4, NOTE_A_4,
@@ -88,11 +84,8 @@ static constexpr Note SONG_HOME_DEPOT_NOTES[] = {
     // End
     NOTE_A_4, NOTE_D_5, NOTE_A_4, NOTE_A_4,
 };
-// clang-format on
 
-//
 // Nokia ringtone.
-//
 
 static constexpr uint16_t SONG_NOKIA_NOTE_LENGTH_MS = 180;
 
@@ -107,10 +100,7 @@ static constexpr Note SONG_NOKIA_NOTES[] = {
     NOTE_A_5,  NOTE_A_5, NOTE_A_5,  NOTE_A_5,  REST,
 };
 
-//
 // All songs.
-//
-
 static constexpr SongHandle SONGS[] = {
     // NONE
     {},
@@ -131,7 +121,7 @@ static constexpr SongHandle SONGS[] = {
     {SONG_NOKIA_NOTES, SONG_NOKIA_NOTE_LENGTH_MS / ROBOT_UPDATE_PERIOD_MS, false},
 };
 
-static uint8_t s_is_playing[1] = {0};
+// clang-format on
 
 //
 // Buzzer functions.
@@ -149,8 +139,8 @@ void Buzzer::process() {
   }
 
   if (m_note_index == 0 && m_note_ticks == 0) {
-    *s_is_playing = 1;
-    Custom_STM_App_Update_Char(CUSTOM_STM_MUSIC_ISPLAYING_CHAR, s_is_playing);
+    m_is_playing = true;
+    Custom_STM_App_Update_Char(CUSTOM_STM_MUSIC_ISPLAYING_CHAR, &m_is_playing);
   }
 
   if (m_note_ticks++ == 0) {
@@ -175,7 +165,7 @@ void Buzzer::process() {
 }
 
 void Buzzer::on_connect_send_feedback() {
-  Custom_STM_App_Update_Char(CUSTOM_STM_MUSIC_ISPLAYING_CHAR, s_is_playing);
+  Custom_STM_App_Update_Char(CUSTOM_STM_MUSIC_ISPLAYING_CHAR, &m_is_playing);
 }
 
 void Buzzer::play_song(Song song) {
@@ -195,9 +185,9 @@ void Buzzer::set_note(uint32_t counter_period) {
 void Buzzer::end_song() {
   set_note(0);
   if (m_song_handle != nullptr) {
-    *s_is_playing = 0;
+    m_is_playing  = false;
     m_song_handle = nullptr;
-    Custom_STM_App_Update_Char(CUSTOM_STM_MUSIC_ISPLAYING_CHAR, s_is_playing);
+    Custom_STM_App_Update_Char(CUSTOM_STM_MUSIC_ISPLAYING_CHAR, &m_is_playing);
   }
 }
 

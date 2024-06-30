@@ -15,7 +15,7 @@ public:
     BLE_DISCONECT = 3,
     HOME_DEPOT    = 4,
     NOKIA         = 5,
-    
+
     _COUNT,
   };
 
@@ -24,7 +24,8 @@ private:
   uint16_t m_note_index           = 0;
   uint16_t m_note_ticks           = 0;
 
-  bool m_should_stop = false;
+  bool m_should_stop   = false;
+  uint8_t m_is_playing = false;
 
 public:
   void init() override;
