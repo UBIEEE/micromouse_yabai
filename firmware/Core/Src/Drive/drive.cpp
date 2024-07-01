@@ -1,7 +1,6 @@
 #include "Drive/drive.hpp"
 
 #include <cmath>
-#include <numbers>
 
 #include "custom_stm.h"
 
@@ -9,44 +8,24 @@
 // External variables.
 //
 
-extern LPTIM_HandleTypeDef hlptim1; // Left encoder
-extern TIM_HandleTypeDef htim2;     // Right encoder
+// Left encoder
+extern LPTIM_HandleTypeDef hlptim1; // main.c
+// Right encoder
+extern TIM_HandleTypeDef htim2; // main.c
 
 //
 // Constants.
 //
 
-static constexpr int8_t PWM_PERIOD = 10; // The resolution of the PWM.
-
-// Encoder constants.
-static constexpr int8_t ENCODER_MAGNET_POLES = 6;
-static constexpr float GEAR_RATIO            = 20.f;
-static constexpr float ENCODER_TICKS_PER_ROTATION =
-    (ENCODER_MAGNET_POLES * GEAR_RATIO);
-
-static constexpr float WHEEL_DIAMETER_MM = 25.f;
-static constexpr float WHEEL_CIRCUMFERENCE_MM =
-    (WHEEL_DIAMETER_MM * std::numbers::pi_v<float>);
-
-static constexpr float ENCODER_TICKS_PER_MM =
-    (ENCODER_TICKS_PER_ROTATION / WHEEL_CIRCUMFERENCE_MM);
-static constexpr float ENCODER_MM_PER_TICK = (1.f / ENCODER_TICKS_PER_MM);
+static constexpr int8_t PWM_PERIOD = 20; // The resolution of the PWM.
 
 // PID constants.
-static constexpr float TRANSLATIONAL_KP = 0.1f;
+static constexpr float TRANSLATIONAL_KP = 0.001f;
 static constexpr float TRANSLATIONAL_KI = 0.0f;
 static constexpr float TRANSLATIONAL_KD = 0.0f;
 static constexpr float ANGULAR_KP       = 0.1f;
 static constexpr float ANGULAR_KI       = 0.0f;
 static constexpr float ANGULAR_KD       = 0.0f;
-
-//
-// Static variables.
-//
-
-static uint8_t s_pwm_counter     = 0;
-static uint8_t s_pwm_pulse_right = 0;
-static uint8_t s_pwm_pulse_left  = 0;
 
 //
 // Drive functions.
@@ -59,7 +38,16 @@ Drive::Drive()
                               TRANSLATIONAL_KD, ROBOT_UPDATE_PERIOD_S),
     m_angular_pid(ANGULAR_KP, ANGULAR_KI, ANGULAR_KD, ROBOT_UPDATE_PERIOD_S) {}
 
-void Drive::process() { update_encoders(); }
+void Drive::process() {
+  update_encoders();
+
+  // TODO: Implement PID control.
+}
+
+void Drive::set_speed(float left_mmps, float right_mmps) {
+  m_target_left_vel_mmps  = left_mmps;
+  m_target_right_vel_mmps = right_mmps;
+}
 
 void Drive::set_speed_raw(float left_percent, float right_percent) {
   const int8_t left(left_percent * PWM_PERIOD);
@@ -77,85 +65,65 @@ void Drive::set_speed_raw(float left_percent, float right_percent) {
   set_speed_dir_raw(left_out, left_dir_pin, right_out, right_dir_pin);
 }
 
-void Drive::set_speed(float left_mmps, float right_mmps) {}
-
 void Drive::set_speed_dir_raw(uint8_t left, GPIO_PinState left_dir,
                               uint8_t right, GPIO_PinState right_dir) {
 
   HAL_GPIO_WritePin(MOTOR_LEFT_DIR_GPIO_Port, MOTOR_LEFT_DIR_Pin, left_dir);
   HAL_GPIO_WritePin(MOTOR_RIGHT_DIR_GPIO_Port, MOTOR_RIGHT_DIR_Pin, right_dir);
 
-  s_pwm_pulse_left  = left;
-  s_pwm_pulse_right = right;
+  m_pwm_pulse_left  = left;
+  m_pwm_pulse_right = right;
 }
 
 void Drive::update_encoders() {
-  // Encoders are configured to overflow at 0xFFFF.
+  m_time_us += 20;
+
   const uint16_t left_ticks  = hlptim1.Instance->CNT;
   const uint16_t right_ticks = htim2.Instance->CNT / 2;
 
-  const auto calc_delta_ticks = [](const auto current, const auto last) {
-    int32_t delta_ticks = current - last;
+  const Encoder::Data left_data  = m_left_encoder.update(left_ticks, m_time_us);
+  const Encoder::Data right_data = m_right_encoder.update(right_ticks, m_time_us);
 
-    const bool signbit            = std::signbit(delta_ticks);
-    const int32_t abs_delta_ticks = signbit ? -delta_ticks : delta_ticks;
+  m_encoder_data.left  = left_data;
+  m_encoder_data.right = right_data;
+}
 
-    // If the delta is big, there must have been an overflow.
-    if (abs_delta_ticks > INT16_MAX) {
-      // Add 0xFFFF when deep negative, subtract when positive.
-      delta_ticks += UINT16_MAX * (signbit ? 1 : -1);
-    }
+void Drive::update_pwm() {
+  if (m_pwm_counter < m_pwm_pulse_right) {
+    MOTOR_RIGHT_GPIO_Port->BSRR = uint32_t(MOTOR_RIGHT_Pin); // Set
+  } else {
+    MOTOR_RIGHT_GPIO_Port->BRR = uint32_t(MOTOR_RIGHT_Pin); // Reset
+  }
 
-    return delta_ticks;
-  };
+  if (m_pwm_counter < m_pwm_pulse_left) {
+    MOTOR_LEFT_GPIO_Port->BSRR = uint32_t(MOTOR_LEFT_Pin); // Set
+  } else {
+    MOTOR_LEFT_GPIO_Port->BRR = uint32_t(MOTOR_LEFT_Pin); // Reset
+  }
 
-  const int32_t left_delta_ticks =
-      calc_delta_ticks(left_ticks, m_last_left_encoder_ticks);
-  const int32_t right_delta_ticks =
-      calc_delta_ticks(right_ticks, m_last_right_encoder_ticks);
-
-  m_last_left_encoder_ticks  = left_ticks;
-  m_last_right_encoder_ticks = right_ticks;
-
-  const float left_delta_mm  = left_delta_ticks * ENCODER_MM_PER_TICK;
-  const float right_delta_mm = right_delta_ticks * ENCODER_MM_PER_TICK;
-
-  // Update the distance.
-  m_data.left_dist_mm += left_delta_mm;
-  m_data.right_dist_mm += right_delta_mm;
-
-  // Calculate the velocity.
-  m_data.left_vel_mmps  = left_delta_mm / ROBOT_UPDATE_PERIOD_S;
-  m_data.right_vel_mmps = right_delta_mm / ROBOT_UPDATE_PERIOD_S;
+  m_pwm_counter++;
+  m_pwm_counter %= PWM_PERIOD;
 }
 
 void Drive::send_feedback() {
-  Custom_STM_App_Update_Char(CUSTOM_STM_DRIVE_DATA_CHAR, (uint8_t*)&m_data);
+  static_assert(sizeof(m_encoder_data) == 16);
+
+  Custom_STM_App_Update_Char(CUSTOM_STM_DRIVE_DATA_CHAR,
+                             (uint8_t*)&m_encoder_data);
 }
 
 //
 // Callbacks.
 //
 
-// TIM17 callback.
-// We can't use hardware PWM generation because of a mistake in PCB, so we have
-// to do it manually.
+// TIM17 interrupt callback.
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim) {
-  assert_param(htim->Instance == TIM17);
+  assert_param(htim->Instance == TIM7);
   UNUSED(htim);
 
-  if (s_pwm_counter < s_pwm_pulse_right) {
-    MOTOR_RIGHT_GPIO_Port->BSRR = uint32_t(MOTOR_RIGHT_Pin); // Set
-  } else {
-    MOTOR_RIGHT_GPIO_Port->BRR = uint32_t(MOTOR_RIGHT_Pin); // Reset
-  }
+  Drive::get().update_encoders();
 
-  if (s_pwm_counter < s_pwm_pulse_left) {
-    MOTOR_LEFT_GPIO_Port->BSRR = uint32_t(MOTOR_LEFT_Pin); // Set
-  } else {
-    MOTOR_LEFT_GPIO_Port->BRR = uint32_t(MOTOR_LEFT_Pin); // Reset
-  }
-
-  s_pwm_counter++;
-  s_pwm_counter %= PWM_PERIOD;
+  // We can't use hardware PWM generation because of a mistake in PCB, so we
+  // have to do it manually.
+  Drive::get().update_pwm();
 }
