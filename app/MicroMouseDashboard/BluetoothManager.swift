@@ -170,11 +170,11 @@ class BluetoothManager: NSObject, ObservableObject,
       return getValue(rawMotorData, at: 0)
     }
     
-    var motorRightPosition: Float32 {
+    var motorLeftVelocity: Float32 {
       return getValue(rawMotorData, at: 4)
     }
     
-    var motorLeftVelocity: Float32 {
+    var motorRightPosition: Float32 {
       return getValue(rawMotorData, at: 8)
     }
     
