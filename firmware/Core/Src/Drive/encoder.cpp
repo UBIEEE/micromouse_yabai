@@ -1,5 +1,7 @@
 #include "Drive/encoder.hpp"
 
+#include "main.h"
+
 #include <cmath>
 #include <numbers>
 
@@ -25,21 +27,17 @@ static constexpr float ENCODER_MM_PER_TICK = (1.f / ENCODER_TICKS_PER_MM);
 // Encoder functions.
 //
 
-Encoder::Data Encoder::update(uint16_t ticks, uint64_t time_us) {
+Encoder::Data Encoder::update(uint16_t ticks) {
+
   const int32_t delta_ticks = calc_delta_ticks(ticks, m_last_ticks);
-  m_last_ticks              = ticks;
+
+  m_last_ticks = ticks;
 
   m_ticks += delta_ticks;
+  m_velocity = delta_ticks / ROBOT_ENCODER_UPDATE_S;
 
-  const int32_t delta_us = (time_us - m_last_tick_us);
-  if (delta_ticks) {
-    m_velocity     = delta_ticks / (delta_us * 1e-6f);
-    m_last_tick_us = time_us;
-  } else if (delta_us > 100'000) {
-    m_velocity = 0;
-  }
-
-  return {m_ticks * ENCODER_TICKS_PER_MM, m_velocity * ENCODER_TICKS_PER_MM};
+  return {.position_mm   = m_ticks * ENCODER_TICKS_PER_MM,
+          .velocity_mmps = m_velocity * ENCODER_TICKS_PER_MM};
 }
 
 int32_t Encoder::calc_delta_ticks(uint16_t current, uint16_t last) {

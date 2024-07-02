@@ -16,7 +16,7 @@ class Drive : public SubsystemSingleton<Drive> {
 
   // Encoder stuff.
 
-  uint64_t m_time_us = 0;
+  uint64_t m_time_ms = 0;
 
   Encoder m_left_encoder;
   Encoder m_right_encoder;
@@ -34,6 +34,9 @@ class Drive : public SubsystemSingleton<Drive> {
 
   float m_target_left_vel_mmps  = 0.f;
   float m_target_right_vel_mmps = 0.f;
+
+  float m_left_raw_speed = 0.f;
+  float m_right_raw_speed = 0.f;
 
 public:
   Drive();
@@ -55,10 +58,10 @@ private:
   void set_speed_dir_raw(uint8_t left, GPIO_PinState left_dir, uint8_t right,
                          GPIO_PinState right_dir);
 
+  void update_encoders();
+
 private:
   friend void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*);
-
-  void update_encoders();
 
   // We can't use hardware PWM generation because of a mistake in PCB, so we
   // have to do it manually.

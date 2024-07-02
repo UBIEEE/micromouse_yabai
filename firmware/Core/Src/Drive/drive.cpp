@@ -39,9 +39,11 @@ Drive::Drive()
     m_angular_pid(ANGULAR_KP, ANGULAR_KI, ANGULAR_KD, ROBOT_UPDATE_PERIOD_S) {}
 
 void Drive::process() {
-  update_encoders();
+  m_time_ms += ROBOT_UPDATE_PERIOD_MS;
 
-  // TODO: Implement PID control.
+  if (m_time_ms % ROBOT_ENCODER_UPDATE_MS == 0) {
+    update_encoders();
+  }
 }
 
 void Drive::set_speed(float left_mmps, float right_mmps) {
@@ -76,13 +78,11 @@ void Drive::set_speed_dir_raw(uint8_t left, GPIO_PinState left_dir,
 }
 
 void Drive::update_encoders() {
-  m_time_us += 20;
-
   const uint16_t left_ticks  = hlptim1.Instance->CNT;
   const uint16_t right_ticks = htim2.Instance->CNT / 2;
 
-  const Encoder::Data left_data  = m_left_encoder.update(left_ticks, m_time_us);
-  const Encoder::Data right_data = m_right_encoder.update(right_ticks, m_time_us);
+  const Encoder::Data left_data = m_left_encoder.update(left_ticks);
+  const Encoder::Data right_data = m_right_encoder.update(right_ticks);
 
   m_encoder_data.left  = left_data;
   m_encoder_data.right = right_data;
@@ -120,8 +120,6 @@ void Drive::send_feedback() {
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim) {
   assert_param(htim->Instance == TIM7);
   UNUSED(htim);
-
-  Drive::get().update_encoders();
 
   // We can't use hardware PWM generation because of a mistake in PCB, so we
   // have to do it manually.
