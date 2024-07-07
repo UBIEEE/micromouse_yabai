@@ -38,6 +38,11 @@ class Drive : public SubsystemSingleton<Drive> {
   float m_left_raw_speed = 0.f;
   float m_right_raw_speed = 0.f;
 
+  enum class ControlMode {
+    IDLE,
+    VELOCITY,
+  } m_control_mode = ControlMode::IDLE;
+
 public:
   Drive();
 
@@ -45,10 +50,12 @@ public:
   void process() override;
   void send_feedback() override;
 
-  void hard_stop() { set_speed_dir_raw(0, GPIO_PIN_RESET, 0, GPIO_PIN_RESET); };
-
   // Set the speed of the motors (velocity in mm/s).
   void set_speed(float left_mmps, float right_mmps);
+  void stop();
+
+  float left_encoder_position() const { return m_encoder_data.left.position_mm; }
+  float right_encoder_position() const { return m_encoder_data.right.position_mm; }
 
 private:
   // Set the speed of the motors (percent of max speed).
@@ -59,6 +66,7 @@ private:
                          GPIO_PinState right_dir);
 
   void update_encoders();
+  void update_pid_controllers();
 
 private:
   friend void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*);

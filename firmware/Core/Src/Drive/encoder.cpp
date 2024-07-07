@@ -28,22 +28,22 @@ static constexpr float ENCODER_MM_PER_TICK = (1.f / ENCODER_TICKS_PER_MM);
 //
 
 Encoder::Data Encoder::update(uint16_t ticks) {
-
   const int32_t delta_ticks = calc_delta_ticks(ticks, m_last_ticks);
 
   m_last_ticks = ticks;
 
   m_ticks += delta_ticks;
-  m_velocity = delta_ticks / ROBOT_ENCODER_UPDATE_S;
+  m_velocity = delta_ticks / ROBOT_UPDATE_PERIOD_S;
 
-  return {.position_mm   = m_ticks * ENCODER_TICKS_PER_MM,
-          .velocity_mmps = m_velocity * ENCODER_TICKS_PER_MM};
+  return {.position_mm   = m_ticks * ENCODER_MM_PER_TICK,
+          .velocity_mmps = m_velocity * ENCODER_MM_PER_TICK};
 }
 
 int32_t Encoder::calc_delta_ticks(uint16_t current, uint16_t last) {
   int32_t delta_ticks = current - last;
 
-  const bool signbit            = std::signbit(delta_ticks);
+  const bool signbit = std::signbit(delta_ticks);
+
   const int32_t abs_delta_ticks = signbit ? -delta_ticks : delta_ticks;
 
   // If the delta is big, there must have been an overflow.

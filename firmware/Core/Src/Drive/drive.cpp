@@ -20,7 +20,7 @@ extern TIM_HandleTypeDef htim2; // main.c
 static constexpr int8_t PWM_PERIOD = 20; // The resolution of the PWM.
 
 // PID constants.
-static constexpr float TRANSLATIONAL_KP = 0.001f;
+static constexpr float TRANSLATIONAL_KP = 0.0004616805171f;
 static constexpr float TRANSLATIONAL_KI = 0.0f;
 static constexpr float TRANSLATIONAL_KD = 0.0f;
 static constexpr float ANGULAR_KP       = 0.1f;
@@ -39,16 +39,30 @@ Drive::Drive()
     m_angular_pid(ANGULAR_KP, ANGULAR_KI, ANGULAR_KD, ROBOT_UPDATE_PERIOD_S) {}
 
 void Drive::process() {
-  m_time_ms += ROBOT_UPDATE_PERIOD_MS;
+  update_encoders();
 
-  if (m_time_ms % ROBOT_ENCODER_UPDATE_MS == 0) {
-    update_encoders();
+  if (m_control_mode == ControlMode::VELOCITY) {
+    update_pid_controllers();
+  } else {
+    m_left_raw_speed  = 0.f;
+    m_right_raw_speed = 0.f;
   }
+
+  set_speed_raw(m_left_raw_speed, m_right_raw_speed);
 }
 
 void Drive::set_speed(float left_mmps, float right_mmps) {
   m_target_left_vel_mmps  = left_mmps;
   m_target_right_vel_mmps = right_mmps;
+
+  m_control_mode = ControlMode::VELOCITY;
+}
+
+void Drive::stop() {
+  m_target_left_vel_mmps  = 0.f;
+  m_target_right_vel_mmps = 0.f;
+
+  m_control_mode = ControlMode::IDLE;
 }
 
 void Drive::set_speed_raw(float left_percent, float right_percent) {
@@ -81,11 +95,22 @@ void Drive::update_encoders() {
   const uint16_t left_ticks  = hlptim1.Instance->CNT;
   const uint16_t right_ticks = htim2.Instance->CNT / 2;
 
-  const Encoder::Data left_data = m_left_encoder.update(left_ticks);
+  const Encoder::Data left_data  = m_left_encoder.update(left_ticks);
   const Encoder::Data right_data = m_right_encoder.update(right_ticks);
 
   m_encoder_data.left  = left_data;
   m_encoder_data.right = right_data;
+}
+
+void Drive::update_pid_controllers() {
+  const float left_speed_diff = m_translational_left_pid.calculate(
+      m_encoder_data.left.velocity_mmps, m_target_left_vel_mmps);
+
+  const float right_speed_diff = m_translational_right_pid.calculate(
+      m_encoder_data.right.velocity_mmps, m_target_right_vel_mmps);
+
+  m_left_raw_speed += left_speed_diff;
+  m_right_raw_speed += right_speed_diff;
 }
 
 void Drive::update_pwm() {
