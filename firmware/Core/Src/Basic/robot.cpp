@@ -15,8 +15,8 @@
 //
 
 static constexpr std::array<Subsystem*, 6> s_subsystems = {
-    &Buzzer::get(), &Drive::get(),        &IMU::get(),
-    &Vision::get(), &RobotControl::get(), &ErrorManager::get(),
+    &RobotControl::get(), &Buzzer::get(), &Drive::get(),
+    &IMU::get(),          &Vision::get(), &ErrorManager::get(),
 };
 
 static bool s_ble_connected = false;
