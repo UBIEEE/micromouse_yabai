@@ -6,13 +6,20 @@ struct MainPage: View {
   enum Task: UInt8, CaseIterable, Identifiable {
     case mazeSearch = 1
     case mazeFastSolve = 2
+    case driveStraight = 3
     
     var id: Self { self }
   }
   
-  private let taskToString: [Task: String] = [
+  private let taskNames: [Task: String] = [
     .mazeSearch: "Maze Search",
-    .mazeFastSolve: "Maze Fast Solve"
+    .mazeFastSolve: "Maze Fast Solve",
+    .driveStraight: "Drive Straight (10cm)",
+  ]
+  private let taskDescriptions: [Task: String] = [
+    .mazeSearch: "Search to the center of the maze, then back to the start",
+    .mazeFastSolve: "Solve the maze as fast as possible while using previous search data",
+    .driveStraight: "Drive straight for 10cm at 500mm/s",
   ]
   
   @State private var selectedTask = Task.mazeSearch
@@ -26,7 +33,7 @@ struct MainPage: View {
             Text("None")
           }
           else {
-            Text(taskToString[Task(rawValue: currentTask)!]!)
+            Text(taskNames[Task(rawValue: currentTask)!]!)
           }
         }
         
@@ -34,14 +41,24 @@ struct MainPage: View {
           Text("None")
         }
         
-        Section("User task Selection") {
+        Section(header: Text("User task Selection"), footer: Text(taskDescriptions[selectedTask]!)) {
           Picker("Task", selection: $selectedTask) {
-            Text("Maze Search").tag(Task.mazeSearch)
-            Text("Maze Fast Solve").tag(Task.mazeFastSolve)
+            ForEach(Task.allCases, id: \.self) { task in
+              Text(taskNames[task]!)
+            }
           }
-          Button("Run") {
+        }
+        Section {
+          Button("Run Task") {
             let setTaskChar = btManager.connectionState.mainService.setTaskChar!
             let setTaskData = Data([selectedTask.rawValue])
+            btManager.writeValueToChar(setTaskChar, setTaskData)
+          }
+        }
+        Section {
+          Button("Stop") {
+            let setTaskChar = btManager.connectionState.mainService.setTaskChar!
+            let setTaskData = Data([0])
             btManager.writeValueToChar(setTaskChar, setTaskData)
           }
         }
