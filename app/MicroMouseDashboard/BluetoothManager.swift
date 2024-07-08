@@ -157,7 +157,7 @@ class BluetoothManager: NSObject, ObservableObject,
   
   struct DriveService {
     var rawMotorData = Data(repeating: 0, count: 4*4)
-    var rawIMUGyroData = Data(repeating: 0, count: 4*6)
+    var rawIMUGyroData = Data(repeating: 0, count: 4*3)
     var rawIMUAccelData = Data(repeating: 0, count: 4*3)
     
     private func getValue(_ data: Data, at index: Int) -> Float32 {
@@ -185,11 +185,7 @@ class BluetoothManager: NSObject, ObservableObject,
     var imuGyroData: [Float32] {
       return [getValue(rawIMUGyroData, at: 0),
               getValue(rawIMUGyroData, at: 4),
-              getValue(rawIMUGyroData, at: 8),
-              getValue(rawIMUGyroData, at: 12),
-              getValue(rawIMUGyroData, at: 16),
-              getValue(rawIMUGyroData, at: 20)]
-
+              getValue(rawIMUGyroData, at: 8)]
     }
     
     var imuAccelData: [Float32] {
@@ -366,7 +362,7 @@ class BluetoothManager: NSObject, ObservableObject,
     case AppConstants.Bluetooth.DriveService.DataUUID:
       driveService.rawMotorData = characteristic.value![0..<4*4]
     case AppConstants.Bluetooth.DriveService.IMUGyroUUID:
-      driveService.rawIMUGyroData = characteristic.value![0..<4*6]
+      driveService.rawIMUGyroData = characteristic.value![0..<4*3]
     case AppConstants.Bluetooth.DriveService.IMUAccelUUID:
       driveService.rawIMUAccelData = characteristic.value![0..<4*3]
       

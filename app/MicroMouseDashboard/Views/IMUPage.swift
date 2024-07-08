@@ -7,11 +7,6 @@ struct IMUPage: View {
     NavigationStack {
       List {
         let gyroData = btManager.driveService.imuGyroData
-        Section("Angle (deg)") {
-          Text(String(format: "X: %.2f", gyroData[3]))
-          Text(String(format: "Y: %.2f", gyroData[4]))
-          Text(String(format: "Z: %.2f", gyroData[5]))
-        }
         Section("Angular Velocity (deg/s)") {
           Text(String(format: "X: %.2f", gyroData[0]))
           Text(String(format: "Y: %.2f", gyroData[1]))
