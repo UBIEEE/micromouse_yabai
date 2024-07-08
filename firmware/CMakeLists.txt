@@ -29,14 +29,14 @@ include(gcc-arm-none-eabi)
 # Enable compile commands
 set(CMAKE_EXPORT_COMPILE_COMMANDS TRUE)
 
+# Core project settings
+project(${CMAKE_PROJECT_NAME})
+message("Build type: " ${CMAKE_BUILD_TYPE})
+
 # Languages
 enable_language(C)
 enable_language(CXX)
 enable_language(ASM)
-
-# Core project settings
-project(${CMAKE_PROJECT_NAME})
-message("Build type: " ${CMAKE_BUILD_TYPE})
 
 # Create an executable object type
 add_executable(${CMAKE_PROJECT_NAME})
