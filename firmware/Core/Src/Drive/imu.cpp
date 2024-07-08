@@ -65,46 +65,67 @@ void IMU::init() {
   fail_if(HAL_OK != status);
   fail_if(IMU_WHO_AM_I != buf[0]);
 
-  // Configure gyro range (Page 56).
-  buf[0] = 0;
-  buf[0] |= 0b01000000; // ±500 dps
-  m_gyro_conversion = (500.f / INT16_MAX) * GYRO_VELOCITY_COMPENSATION;
-  buf[0] |= 0b00000110; // 800 Hz
-  m_gyro_read_period = (1.f / 800);
+  const Config::Gyro& gyro_config           = m_config.gyro;
+  const Config::Accelerometer& accel_config = m_config.accel;
 
+  // Configure gyro range and sample rate.
+
+  const uint8_t gyro_range       = uint8_t(gyro_config.range);
+  const uint8_t gyro_sample_rate = uint8_t(gyro_config.sample_rate);
+
+  buf[0] = gyro_range | gyro_sample_rate;
   status = write_register(REG_GYRO_CONFIG0, buf[0]);
   fail_if(HAL_OK != status);
 
-  // Configure accelerometer range (Page 57).
-  if constexpr (m_accel_enabled) {
-    buf[0] = 0;
-    buf[0] |= 0b01000000; // ±4g
-    m_accel_conversion = (4.f / INT16_MAX);
-    buf[0] |= 0b00000110; // 800 Hz (Low Noise mode)
+  // Configure accelerometer range and sample rate.
 
-    status = write_register(REG_ACCEL_CONFIG0, buf[0]);
-    fail_if(HAL_OK != status);
-  }
+  const uint8_t accel_range       = uint8_t(accel_config.range);
+  const uint8_t accel_sample_rate = uint8_t(accel_config.sample_rate);
 
-  // Turn on the sensors (Page 55).
-  buf[0] = 0b00001100; // Enable gyro and enter Low Noise mode.
-  if constexpr (m_accel_enabled) {
-    buf[0] |= 0b00000011; // Enable accelerometer and enter Low Noise mode.
-  }
-  status = write_register(REG_PWR_MGMT0, buf[0]);
+  buf[0] = accel_range | accel_sample_rate;
+  status = write_register(REG_ACCEL_CONFIG0, buf[0]);
   fail_if(HAL_OK != status);
 
-  // Configure INT1 (Page 63).
-  buf[0] = 0b00001000; // Data Ready interrupt routed to INT1.
+  // Configure INT1.
+
+  // Data Ready interrupt routed to INT1 (Page 63).
+  buf[0] = 0b00001000;
   status = write_register(REG_INT_SOURCE0, buf[0]);
   fail_if(HAL_OK != status);
 
-  // Configure INT1 (Page 50).
-  buf[0] = 0b00000010; // Set INT1 drive circuit to push-pull.
+  // Set INT1 drive circuit to push-pull (Page 50).
+  buf[0] = 0b00000010;
   status = write_register(REG_INT_CONFIG, buf[0]);
   fail_if(HAL_OK != status);
 
+  // Default to standby mode.
+
+  set_standby_mode(true);
+
   m_init = true;
+}
+
+void IMU::set_standby_mode(bool on_standby) {
+  using GyroMode  = Config::Gyro::Mode;
+  using AccelMode = Config::Accelerometer::Mode;
+
+  HAL_StatusTypeDef status;
+
+  GyroMode gyro_mode;
+  AccelMode accel_mode;
+
+  if (on_standby) {
+    gyro_mode  = GyroMode::STANDBY;
+    accel_mode = AccelMode::STANDBY;
+  } else {
+    gyro_mode  = m_config.gyro.mode;
+    accel_mode = m_config.accel.mode;
+  }
+
+  const uint8_t value = uint8_t(gyro_mode) | uint8_t(accel_mode);
+
+  status = write_register(REG_PWR_MGMT0, value);
+  UNUSED(status);
 }
 
 HAL_StatusTypeDef IMU::write_register(uint8_t reg, uint8_t value) {
@@ -133,17 +154,14 @@ void IMU::int1_handler() {
 
   HAL_StatusTypeDef status;
 
-  uint8_t addr = m_accel_enabled ? REG_ACCEL_DATA_X1 : REG_GYRO_DATA_X1;
+  uint8_t buf[1] = {REG_ACCEL_DATA_X1};
 
   // Write register address.
-  status = HAL_I2C_Master_Transmit(&hi2c1, IMU_ADDR, &addr, 1, I2C_TIMEOUT);
+  status = HAL_I2C_Master_Transmit(&hi2c1, IMU_ADDR, buf, 1, I2C_TIMEOUT);
   if (status != HAL_OK) return;
 
-  uint8_t* data = m_accel_enabled ? m_data_raw : (m_data_raw + 6);
-  uint16_t size = m_accel_enabled ? 12 : 6;
-
   // Read data.
-  status = HAL_I2C_Master_Receive_DMA(&hi2c1, IMU_ADDR, data, size);
+  status = HAL_I2C_Master_Receive_DMA(&hi2c1, IMU_ADDR, m_data_raw, 12);
   if (status != HAL_OK) return;
 
   m_is_receiving = true;
@@ -152,43 +170,58 @@ void IMU::int1_handler() {
 void IMU::read_complete_handler() {
   if (!m_init || !m_is_receiving) return;
 
-  if constexpr (m_accel_enabled) {
-    const int16_t accel_x = (m_data_raw[0] << 8) | m_data_raw[1];
-    const int16_t accel_y = (m_data_raw[2] << 8) | m_data_raw[3];
-    const int16_t accel_z = (m_data_raw[4] << 8) | m_data_raw[5];
+  const float accel_conversion = [&] {
+    switch (m_config.accel.range) {
+    case Config::Accelerometer::Range::_2_G:
+      return (2.f / INT16_MAX);
+    case Config::Accelerometer::Range::_4_G:
+      return (4.f / INT16_MAX);
+    case Config::Accelerometer::Range::_8_G:
+      return (8.f / INT16_MAX);
+    case Config::Accelerometer::Range::_16_G:
+    default:
+      return (16.f / INT16_MAX);
+    }
+  }();
 
-    m_accel_data.accel_g[Axis::X] = accel_x * m_accel_conversion;
-    m_accel_data.accel_g[Axis::Y] = accel_y * m_accel_conversion;
-    m_accel_data.accel_g[Axis::Z] = accel_z * m_accel_conversion;
-  }
+  const int16_t accel_x = (m_data_raw[0] << 8) | m_data_raw[1];
+  const int16_t accel_y = (m_data_raw[2] << 8) | m_data_raw[3];
+  const int16_t accel_z = (m_data_raw[4] << 8) | m_data_raw[5];
+
+  m_accel_data_g[Axis::X] = accel_x * accel_conversion;
+  m_accel_data_g[Axis::Y] = accel_y * accel_conversion;
+  m_accel_data_g[Axis::Z] = accel_z * accel_conversion;
+
+  const float gyro_conversion = [&] {
+    switch (m_config.gyro.range) {
+    case Config::Gyro::Range::_250_DPS:
+      return (250.f / INT16_MAX);
+    case Config::Gyro::Range::_500_DPS:
+      return (500.f / INT16_MAX);
+    case Config::Gyro::Range::_1000_DPS:
+      return (1000.f / INT16_MAX);
+    case Config::Gyro::Range::_2000_DPS:
+    default:
+      return (2000.f / INT16_MAX);
+    }
+  }();
 
   const int16_t gyro_x = (m_data_raw[6] << 8) | m_data_raw[7];
   const int16_t gyro_y = (m_data_raw[8] << 8) | m_data_raw[9];
   const int16_t gyro_z = (m_data_raw[10] << 8) | m_data_raw[11];
 
-  m_gyro_data.vel_dps[Axis::X] = gyro_x * m_gyro_conversion;
-  m_gyro_data.vel_dps[Axis::Y] = gyro_y * m_gyro_conversion;
-  m_gyro_data.vel_dps[Axis::Z] = gyro_z * m_gyro_conversion;
-
-  // Differentiate angular velocity to get angle.
-
-  m_gyro_data.angle_deg[Axis::X] +=
-      int32_t(m_gyro_data.vel_dps[Axis::X]) * m_gyro_read_period;
-
-  m_gyro_data.angle_deg[Axis::Y] +=
-      int32_t(m_gyro_data.vel_dps[Axis::Y]) * m_gyro_read_period;
-
-  m_gyro_data.angle_deg[Axis::Z] +=
-      int32_t(m_gyro_data.vel_dps[Axis::Z]) * m_gyro_read_period;
+  m_gyro_data_dps[Axis::X] = gyro_x * gyro_conversion;
+  m_gyro_data_dps[Axis::Y] = gyro_y * gyro_conversion;
+  m_gyro_data_dps[Axis::Z] = gyro_z * gyro_conversion;
 
   m_is_receiving = false;
 }
 
 void IMU::send_feedback() {
   Custom_STM_App_Update_Char(CUSTOM_STM_DRIVE_GYRODATA_CHAR,
-                             reinterpret_cast<uint8_t*>(&m_gyro_data));
+                             reinterpret_cast<uint8_t*>(&m_gyro_data_dps));
   Custom_STM_App_Update_Char(CUSTOM_STM_DRIVE_ACCELDATA_CHAR,
-                             reinterpret_cast<uint8_t*>(&m_accel_data));
+                             reinterpret_cast<uint8_t*>(&m_accel_data_g));
 }
 
 //

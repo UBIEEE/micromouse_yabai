@@ -2,6 +2,7 @@
 
 #include "Control/robot_control.h"
 #include "Drive/drive.hpp"
+#include "Drive/imu.hpp"
 
 #include "custom_stm.h"
 
@@ -13,6 +14,9 @@ void RobotControl::process() {
 
     Drive::get().stop();
     m_current_task = m_next_task;
+
+    const bool imu_standby = (m_current_task == Task::NONE);
+    IMU::get().set_standby_mode(imu_standby);
 
     // Start the new tasks.
 
@@ -53,6 +57,8 @@ void RobotControl::process() {
 void RobotControl::on_connect_send_feedback() { send_current_task(); }
 
 void RobotControl::run_task(Task task) {
+  if (m_current_task == task) return;
+
   m_next_task    = task;
   m_is_next_task = true;
 }
