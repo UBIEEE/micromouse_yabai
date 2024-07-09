@@ -6,17 +6,26 @@ struct IMUPage: View {
   var body: some View {
     NavigationStack {
       List {
-        let gyroData = btManager.driveService.imuGyroData
-        Section("Angular Velocity (deg/s)") {
-          Text(String(format: "X: %.2f", gyroData[0]))
-          Text(String(format: "Y: %.2f", gyroData[1]))
-          Text(String(format: "Z: %.2f", gyroData[2]))
+        let imuData = btManager.driveService.imuData
+        Section("Angular Velocity (Deg/s)") {
+          Text("X\t").foregroundColor(.secondary) +
+            Text(String(format: "%.2f", imuData[0]))
+
+          Text("Y\t").foregroundColor(.secondary) +
+            Text(String(format: "%.2f", imuData[1]))
+          
+          Text("Z\t").foregroundColor(.secondary) +
+            Text(String(format: "%.2f", imuData[2]))
         }
-        let accelData = btManager.driveService.imuAccelData
         Section("Linear Acceleration (Gravities)") {
-          Text(String(format: "X: %.2f", accelData[0]))
-          Text(String(format: "Y: %.2f", accelData[1]))
-          Text(String(format: "Z: %.2f", accelData[2]))
+          Text("X\t").foregroundColor(.secondary) +
+            Text(String(format: "%.2f", imuData[3]))
+          
+          Text("Y\t").foregroundColor(.secondary) +
+            Text(String(format: "%.2f", imuData[4]))
+          
+          Text("Z\t").foregroundColor(.secondary) +
+            Text(String(format: "%.2f", imuData[5]))
         }
       }
       .navigationTitle("IMU")

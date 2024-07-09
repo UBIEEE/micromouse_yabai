@@ -30,9 +30,9 @@ class AppConstants {
     class DriveService {
       static let ServiceUUID = CBUUID(string: "00000003-CC7A-482A-984A-7F2ED5B3E58F")
       
-      static let DataUUID = CBUUID(string: "00000006-8E22-4541-9D4C-21EDAE82ED19") // Notify
-      static let IMUGyroUUID = CBUUID(string: "00000008-8E22-4541-9D4C-21EDAE82ED19") // Notify
-      static let IMUAccelUUID = CBUUID(string: "00000009-8E22-4541-9D4C-21EDAE82ED19") // Notify
+      static let MotorDataUUID = CBUUID(string: "00000006-8E22-4541-9D4C-21EDAE82ED19") // Notify
+      static let IMUDataUUID = CBUUID(string: "00000008-8E22-4541-9D4C-21EDAE82ED19") // Notify
+      static let PIDConstantsUUID = CBUUID(string: "00000009-8E22-4541-9D4C-21EDAE82ED19") // Notify
     }
   }
 }

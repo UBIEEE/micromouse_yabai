@@ -6,17 +6,31 @@ struct VisionPage: View {
   var body: some View {
     NavigationStack {
       List {
-        Section("Far Left Sensor") {
-          Text("\(btManager.visionService.farLeftReading)")
-        }
-        Section("Mid Left Sensor") {
-          Text("\(btManager.visionService.midLeftReading)")
-        }
-        Section("Mid Right Sensor") {
-          Text("\(btManager.visionService.midRightReading)")
-        }
-        Section("Far Right Sensor") {
-          Text("\(btManager.visionService.farRightReading)")
+        Section("Raw Sensor Readings") {
+          VStack(alignment: .leading) {
+            Text("\(btManager.visionService.farLeftReading)")
+            Text("Left Edge")
+              .font(.subheadline)
+              .foregroundColor(.secondary)
+          }
+          VStack(alignment: .leading) {
+            Text("\(btManager.visionService.midLeftReading)")
+            Text("Left Middle")
+              .font(.subheadline)
+              .foregroundColor(.secondary)
+          }
+          VStack(alignment: .leading) {
+            Text("\(btManager.visionService.midRightReading)")
+            Text("Right Middle")
+              .font(.subheadline)
+              .foregroundColor(.secondary)
+          }
+          VStack(alignment: .leading) {
+            Text("\(btManager.visionService.farRightReading)")
+            Text("Right Edge")
+              .font(.subheadline)
+              .foregroundColor(.secondary)
+          }
         }
       }
       .navigationTitle("Vision")

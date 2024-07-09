@@ -7,12 +7,32 @@ struct DrivePage: View {
     NavigationStack {
       List {
         Section("Left") {
-          Text("\(btManager.driveService.motorLeftPosition)  mm")
-          Text("\(btManager.driveService.motorLeftVelocity)  mm/s")
+          VStack(alignment: .leading) {
+            Text("\(btManager.driveService.motorLeftPosition)")
+            Text("Position (mm)")
+              .font(.subheadline)
+              .foregroundColor(.secondary)
+          }
+          VStack(alignment: .leading) {
+          Text("\(btManager.driveService.motorLeftVelocity)")
+            Text("Velocity (mm/s)")
+              .font(.subheadline)
+              .foregroundColor(.secondary)
+          }
         }
         Section("Right") {
-          Text("\(btManager.driveService.motorRightPosition)  mm")
-          Text("\(btManager.driveService.motorRightVelocity)  mm/s")
+          VStack(alignment: .leading) {
+            Text("\(btManager.driveService.motorRightPosition)")
+            Text("Position (mm)")
+              .font(.subheadline)
+              .foregroundColor(.secondary)
+          }
+          VStack(alignment: .leading) {
+            Text("\(btManager.driveService.motorRightVelocity)")
+            Text("Velocity (mm/s)")
+              .font(.subheadline)
+              .foregroundColor(.secondary)
+          }
         }
       }
       .navigationTitle("Drive")
