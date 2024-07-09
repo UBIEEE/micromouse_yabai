@@ -14,7 +14,7 @@ public:
   };
 
 private:
-  Task m_current_task = Task::MAZE_FAST_SEARCH;
+  Task m_current_task = Task::NONE;
 
   Task m_next_task    = Task::NONE;
   bool m_is_next_task = false;

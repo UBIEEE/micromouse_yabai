@@ -188,9 +188,9 @@ void IMU::read_complete_handler() {
   const int16_t accel_y = (m_data_raw[2] << 8) | m_data_raw[3];
   const int16_t accel_z = (m_data_raw[4] << 8) | m_data_raw[5];
 
-  m_accel_data_g[Axis::X] = accel_x * accel_conversion;
-  m_accel_data_g[Axis::Y] = accel_y * accel_conversion;
-  m_accel_data_g[Axis::Z] = accel_z * accel_conversion;
+  m_data.accel_data_g[Axis::X] = accel_x * accel_conversion;
+  m_data.accel_data_g[Axis::Y] = accel_y * accel_conversion;
+  m_data.accel_data_g[Axis::Z] = accel_z * accel_conversion;
 
   const float gyro_conversion = [&] {
     switch (m_config.gyro.range) {
@@ -210,18 +210,18 @@ void IMU::read_complete_handler() {
   const int16_t gyro_y = (m_data_raw[8] << 8) | m_data_raw[9];
   const int16_t gyro_z = (m_data_raw[10] << 8) | m_data_raw[11];
 
-  m_gyro_data_dps[Axis::X] = gyro_x * gyro_conversion;
-  m_gyro_data_dps[Axis::Y] = gyro_y * gyro_conversion;
-  m_gyro_data_dps[Axis::Z] = gyro_z * gyro_conversion;
+  m_data.gyro_data_dps[Axis::X] = gyro_x * gyro_conversion;
+  m_data.gyro_data_dps[Axis::Y] = gyro_y * gyro_conversion;
+  m_data.gyro_data_dps[Axis::Z] = gyro_z * gyro_conversion;
 
   m_is_receiving = false;
 }
 
 void IMU::send_feedback() {
-  Custom_STM_App_Update_Char(CUSTOM_STM_DRIVE_GYRODATA_CHAR,
-                             reinterpret_cast<uint8_t*>(&m_gyro_data_dps));
-  Custom_STM_App_Update_Char(CUSTOM_STM_DRIVE_ACCELDATA_CHAR,
-                             reinterpret_cast<uint8_t*>(&m_accel_data_g));
+  static_assert(sizeof(m_data) == 6*4);
+
+  Custom_STM_App_Update_Char(CUSTOM_STM_DRIVE_IMUDATA_CHAR,
+                             reinterpret_cast<uint8_t*>(&m_data));
 }
 
 //

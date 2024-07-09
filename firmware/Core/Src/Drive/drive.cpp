@@ -1,6 +1,7 @@
 #include "Drive/drive.hpp"
 
 #include <cmath>
+#include <cstring>
 
 #include "custom_stm.h"
 
@@ -23,8 +24,8 @@ static constexpr int8_t PWM_PERIOD = 20; // The resolution of the PWM.
 static constexpr float TRANSLATIONAL_KP = 0.0004616805171f;
 static constexpr float TRANSLATIONAL_KI = 0.0f;
 static constexpr float TRANSLATIONAL_KD = 0.0f;
-static constexpr float ANGULAR_KP       = 0.1f;
-static constexpr float ANGULAR_KI       = 0.0f;
+static constexpr float ANGULAR_KP       = 0.0025f;
+static constexpr float ANGULAR_KI       = 0.0025f;
 static constexpr float ANGULAR_KD       = 0.0f;
 
 //
@@ -65,6 +66,11 @@ void Drive::stop() {
   m_control_mode = ControlMode::IDLE;
 }
 
+void Drive::reset_encoders() {
+  m_left_encoder.reset();
+  m_right_encoder.reset();
+}
+
 void Drive::set_speed_raw(float left_percent, float right_percent) {
   const int8_t left(left_percent * PWM_PERIOD);
   const int8_t right(right_percent * PWM_PERIOD);
@@ -103,6 +109,9 @@ void Drive::update_encoders() {
 }
 
 void Drive::update_pid_controllers() {
+  const float angular_diff = m_angular_pid.calculate(
+      IMU::get().get_angular_velocity(IMU::Axis::Z), 0.f);
+
   const float left_speed_diff = m_translational_left_pid.calculate(
       m_encoder_data.left.velocity_mmps, m_target_left_vel_mmps);
 
@@ -111,6 +120,16 @@ void Drive::update_pid_controllers() {
 
   m_left_raw_speed += left_speed_diff;
   m_right_raw_speed += right_speed_diff;
+
+  m_left_raw_speed -= angular_diff;
+  m_right_raw_speed += angular_diff;
+
+  if (std::abs(m_left_raw_speed) < 0.05f) {
+    m_left_raw_speed = 0.f;
+  }
+  if (std::abs(m_right_raw_speed) < 0.05f) {
+    m_right_raw_speed = 0.f;
+  }
 }
 
 void Drive::update_pwm() {
@@ -134,7 +153,32 @@ void Drive::send_feedback() {
   static_assert(sizeof(m_encoder_data) == 16);
 
   Custom_STM_App_Update_Char(CUSTOM_STM_DRIVE_DATA_CHAR,
-                             (uint8_t*)&m_encoder_data);
+                             reinterpret_cast<uint8_t*>(&m_encoder_data));
+}
+
+void Drive::on_connect_send_feedback() {
+  float pid_constants[6] = {m_translational_left_pid.kp(),
+                            m_translational_left_pid.ki(),
+                            m_translational_left_pid.kd(),
+                            m_angular_pid.kp(),
+                            m_angular_pid.ki(),
+                            m_angular_pid.kd()};
+
+  Custom_STM_App_Update_Char(CUSTOM_STM_DRIVE_PIDCONSTANTS_CHAR,
+                             reinterpret_cast<uint8_t*>(pid_constants));
+}
+
+void Drive::update_pid_constants(float* constants) {
+  m_translational_left_pid.set_pid(constants[0], constants[1], constants[2]);
+  m_translational_right_pid.set_pid(constants[0], constants[1], constants[2]);
+  m_angular_pid.set_pid(constants[3], constants[4], constants[5]);
+}
+
+void Drive_UpdatePIDConstants(uint8_t* buf) {
+  float pid_constants[6];
+  std::memcpy(pid_constants, buf, sizeof(pid_constants));
+
+  Drive::get().update_pid_constants(pid_constants);
 }
 
 //

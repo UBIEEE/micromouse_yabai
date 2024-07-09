@@ -13,6 +13,7 @@ void RobotControl::process() {
     // Perform reset stuff.
 
     Drive::get().stop();
+    Drive::get().reset_encoders();
     m_current_task = m_next_task;
 
     const bool imu_standby = (m_current_task == Task::NONE);

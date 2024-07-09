@@ -4,6 +4,7 @@
 #include "Drive/imu.hpp"
 #include "Drive/encoder.hpp"
 #include "Math/pid_controller.hpp"
+#include "Drive/drive.h"
 
 #include <cstdint>
 
@@ -15,8 +16,6 @@ class Drive : public SubsystemSingleton<Drive> {
   uint8_t m_pwm_pulse_left  = 0;
 
   // Encoder stuff.
-
-  uint64_t m_time_ms = 0;
 
   Encoder m_left_encoder;
   Encoder m_right_encoder;
@@ -49,6 +48,7 @@ public:
 public:
   void process() override;
   void send_feedback() override;
+  void on_connect_send_feedback() override;
 
   // Set the speed of the motors (velocity in mm/s).
   void set_speed(float left_mmps, float right_mmps);
@@ -57,6 +57,7 @@ public:
   float left_encoder_position() const { return m_encoder_data.left.position_mm; }
   float right_encoder_position() const { return m_encoder_data.right.position_mm; }
 
+  void reset_encoders();
 private:
   // Set the speed of the motors (percent of max speed).
   // Values should range between [-1.0, 1.0].
@@ -74,4 +75,9 @@ private:
   // We can't use hardware PWM generation because of a mistake in PCB, so we
   // have to do it manually.
   void update_pwm();
+
+private:
+  friend void Drive_UpdatePIDConstants(uint8_t*);
+
+  void update_pid_constants(float* constants);
 };

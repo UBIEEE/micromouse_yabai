@@ -2,11 +2,11 @@
 
 class PIDController {
   // Proportional
-  const float m_kp;
+  float m_kp;
   // Integral
-  const float m_ki;
+  float m_ki;
   // Derivative
-  const float m_kd;
+  float m_kd;
 
   // Time delta
   const float m_dt;
@@ -23,6 +23,16 @@ class PIDController {
 public:
   PIDController(float kp, float ki, float kd, float dt,
                 float min_integral = -1.f, float max_integral = 1.f);
+
+  void set_pid(float kp, float ki, float kd) {
+    m_kp = kp;
+    m_ki = ki;
+    m_kd = kd;
+  }
+
+  float kp() const { return m_kp; }
+  float ki() const { return m_ki; }
+  float kd() const { return m_kd; }
 
   float calculate(float measurement, float setpoint);
 

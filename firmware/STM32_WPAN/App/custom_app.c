@@ -47,8 +47,8 @@ typedef struct
   uint8_t               Main_errorcode_char_Notification_Status;
   /* driveService */
   uint8_t               Drive_data_char_Notification_Status;
-  uint8_t               Drive_gyrodata_char_Notification_Status;
-  uint8_t               Drive_acceldata_char_Notification_Status;
+  uint8_t               Drive_imudata_char_Notification_Status;
+  uint8_t               Drive_pidconstants_char_Notification_Status;
   /* USER CODE BEGIN CUSTOM_APP_Context_t */
 
   /* USER CODE END CUSTOM_APP_Context_t */
@@ -105,10 +105,10 @@ static void Custom_Main_errorcode_char_Send_Notification(void);
 /* driveService */
 static void Custom_Drive_data_char_Update_Char(void);
 static void Custom_Drive_data_char_Send_Notification(void);
-static void Custom_Drive_gyrodata_char_Update_Char(void);
-static void Custom_Drive_gyrodata_char_Send_Notification(void);
-static void Custom_Drive_acceldata_char_Update_Char(void);
-static void Custom_Drive_acceldata_char_Send_Notification(void);
+static void Custom_Drive_imudata_char_Update_Char(void);
+static void Custom_Drive_imudata_char_Send_Notification(void);
+static void Custom_Drive_pidconstants_char_Update_Char(void);
+static void Custom_Drive_pidconstants_char_Send_Notification(void);
 
 /* USER CODE BEGIN PFP */
 
@@ -208,28 +208,34 @@ void Custom_STM_App_Notification(Custom_STM_App_Notification_evt_t *pNotificatio
       /* USER CODE END CUSTOM_STM_DRIVE_DATA_CHAR_NOTIFY_DISABLED_EVT */
       break;
 
-    case CUSTOM_STM_DRIVE_GYRODATA_CHAR_NOTIFY_ENABLED_EVT:
-      /* USER CODE BEGIN CUSTOM_STM_DRIVE_GYRODATA_CHAR_NOTIFY_ENABLED_EVT */
+    case CUSTOM_STM_DRIVE_IMUDATA_CHAR_NOTIFY_ENABLED_EVT:
+      /* USER CODE BEGIN CUSTOM_STM_DRIVE_IMUDATA_CHAR_NOTIFY_ENABLED_EVT */
 
-      /* USER CODE END CUSTOM_STM_DRIVE_GYRODATA_CHAR_NOTIFY_ENABLED_EVT */
+      /* USER CODE END CUSTOM_STM_DRIVE_IMUDATA_CHAR_NOTIFY_ENABLED_EVT */
       break;
 
-    case CUSTOM_STM_DRIVE_GYRODATA_CHAR_NOTIFY_DISABLED_EVT:
-      /* USER CODE BEGIN CUSTOM_STM_DRIVE_GYRODATA_CHAR_NOTIFY_DISABLED_EVT */
+    case CUSTOM_STM_DRIVE_IMUDATA_CHAR_NOTIFY_DISABLED_EVT:
+      /* USER CODE BEGIN CUSTOM_STM_DRIVE_IMUDATA_CHAR_NOTIFY_DISABLED_EVT */
 
-      /* USER CODE END CUSTOM_STM_DRIVE_GYRODATA_CHAR_NOTIFY_DISABLED_EVT */
+      /* USER CODE END CUSTOM_STM_DRIVE_IMUDATA_CHAR_NOTIFY_DISABLED_EVT */
       break;
 
-    case CUSTOM_STM_DRIVE_ACCELDATA_CHAR_NOTIFY_ENABLED_EVT:
-      /* USER CODE BEGIN CUSTOM_STM_DRIVE_ACCELDATA_CHAR_NOTIFY_ENABLED_EVT */
+    case CUSTOM_STM_DRIVE_PIDCONSTANTS_CHAR_WRITE_EVT:
+      /* USER CODE BEGIN CUSTOM_STM_DRIVE_PIDCONSTANTS_CHAR_WRITE_EVT */
 
-      /* USER CODE END CUSTOM_STM_DRIVE_ACCELDATA_CHAR_NOTIFY_ENABLED_EVT */
+      /* USER CODE END CUSTOM_STM_DRIVE_PIDCONSTANTS_CHAR_WRITE_EVT */
       break;
 
-    case CUSTOM_STM_DRIVE_ACCELDATA_CHAR_NOTIFY_DISABLED_EVT:
-      /* USER CODE BEGIN CUSTOM_STM_DRIVE_ACCELDATA_CHAR_NOTIFY_DISABLED_EVT */
+    case CUSTOM_STM_DRIVE_PIDCONSTANTS_CHAR_NOTIFY_ENABLED_EVT:
+      /* USER CODE BEGIN CUSTOM_STM_DRIVE_PIDCONSTANTS_CHAR_NOTIFY_ENABLED_EVT */
 
-      /* USER CODE END CUSTOM_STM_DRIVE_ACCELDATA_CHAR_NOTIFY_DISABLED_EVT */
+      /* USER CODE END CUSTOM_STM_DRIVE_PIDCONSTANTS_CHAR_NOTIFY_ENABLED_EVT */
+      break;
+
+    case CUSTOM_STM_DRIVE_PIDCONSTANTS_CHAR_NOTIFY_DISABLED_EVT:
+      /* USER CODE BEGIN CUSTOM_STM_DRIVE_PIDCONSTANTS_CHAR_NOTIFY_DISABLED_EVT */
+
+      /* USER CODE END CUSTOM_STM_DRIVE_PIDCONSTANTS_CHAR_NOTIFY_DISABLED_EVT */
       break;
 
     case CUSTOM_STM_NOTIFICATION_COMPLETE_EVT:
@@ -531,80 +537,80 @@ void Custom_Drive_data_char_Send_Notification(void) /* Property Notification */
   return;
 }
 
-void Custom_Drive_gyrodata_char_Update_Char(void) /* Property Read */
+void Custom_Drive_imudata_char_Update_Char(void) /* Property Read */
 {
   uint8_t updateflag = 0;
 
-  /* USER CODE BEGIN Drive_gyrodata_char_UC_1*/
+  /* USER CODE BEGIN Drive_imudata_char_UC_1*/
 
-  /* USER CODE END Drive_gyrodata_char_UC_1*/
+  /* USER CODE END Drive_imudata_char_UC_1*/
 
   if (updateflag != 0)
   {
-    Custom_STM_App_Update_Char(CUSTOM_STM_DRIVE_GYRODATA_CHAR, (uint8_t *)UpdateCharData);
+    Custom_STM_App_Update_Char(CUSTOM_STM_DRIVE_IMUDATA_CHAR, (uint8_t *)UpdateCharData);
   }
 
-  /* USER CODE BEGIN Drive_gyrodata_char_UC_Last*/
+  /* USER CODE BEGIN Drive_imudata_char_UC_Last*/
 
-  /* USER CODE END Drive_gyrodata_char_UC_Last*/
+  /* USER CODE END Drive_imudata_char_UC_Last*/
   return;
 }
 
-void Custom_Drive_gyrodata_char_Send_Notification(void) /* Property Notification */
+void Custom_Drive_imudata_char_Send_Notification(void) /* Property Notification */
 {
   uint8_t updateflag = 0;
 
-  /* USER CODE BEGIN Drive_gyrodata_char_NS_1*/
+  /* USER CODE BEGIN Drive_imudata_char_NS_1*/
 
-  /* USER CODE END Drive_gyrodata_char_NS_1*/
+  /* USER CODE END Drive_imudata_char_NS_1*/
 
   if (updateflag != 0)
   {
-    Custom_STM_App_Update_Char(CUSTOM_STM_DRIVE_GYRODATA_CHAR, (uint8_t *)NotifyCharData);
+    Custom_STM_App_Update_Char(CUSTOM_STM_DRIVE_IMUDATA_CHAR, (uint8_t *)NotifyCharData);
   }
 
-  /* USER CODE BEGIN Drive_gyrodata_char_NS_Last*/
+  /* USER CODE BEGIN Drive_imudata_char_NS_Last*/
 
-  /* USER CODE END Drive_gyrodata_char_NS_Last*/
+  /* USER CODE END Drive_imudata_char_NS_Last*/
 
   return;
 }
 
-void Custom_Drive_acceldata_char_Update_Char(void) /* Property Read */
+void Custom_Drive_pidconstants_char_Update_Char(void) /* Property Read */
 {
   uint8_t updateflag = 0;
 
-  /* USER CODE BEGIN Drive_acceldata_char_UC_1*/
+  /* USER CODE BEGIN Drive_pidconstants_char_UC_1*/
 
-  /* USER CODE END Drive_acceldata_char_UC_1*/
+  /* USER CODE END Drive_pidconstants_char_UC_1*/
 
   if (updateflag != 0)
   {
-    Custom_STM_App_Update_Char(CUSTOM_STM_DRIVE_ACCELDATA_CHAR, (uint8_t *)UpdateCharData);
+    Custom_STM_App_Update_Char(CUSTOM_STM_DRIVE_PIDCONSTANTS_CHAR, (uint8_t *)UpdateCharData);
   }
 
-  /* USER CODE BEGIN Drive_acceldata_char_UC_Last*/
+  /* USER CODE BEGIN Drive_pidconstants_char_UC_Last*/
 
-  /* USER CODE END Drive_acceldata_char_UC_Last*/
+  /* USER CODE END Drive_pidconstants_char_UC_Last*/
   return;
 }
 
-void Custom_Drive_acceldata_char_Send_Notification(void) /* Property Notification */
+void Custom_Drive_pidconstants_char_Send_Notification(void) /* Property Notification */
 {
   uint8_t updateflag = 0;
 
-  /* USER CODE BEGIN Drive_acceldata_char_NS_1*/
+  /* USER CODE BEGIN Drive_pidconstants_char_NS_1*/
 
-  /* USER CODE END Drive_acceldata_char_NS_1*/
+  /* USER CODE END Drive_pidconstants_char_NS_1*/
 
   if (updateflag != 0)
   {
-    Custom_STM_App_Update_Char(CUSTOM_STM_DRIVE_ACCELDATA_CHAR, (uint8_t *)NotifyCharData);
+    Custom_STM_App_Update_Char(CUSTOM_STM_DRIVE_PIDCONSTANTS_CHAR, (uint8_t *)NotifyCharData);
   }
 
-  /* USER CODE BEGIN Drive_acceldata_char_NS_Last*/
+  /* USER CODE BEGIN Drive_pidconstants_char_NS_Last*/
 
-  /* USER CODE END Drive_acceldata_char_NS_Last*/
+  /* USER CODE END Drive_pidconstants_char_NS_Last*/
 
   return;
 }

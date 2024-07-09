@@ -16,8 +16,10 @@ class IMU : public SubsystemSingleton<IMU> {
   float m_gyro_conversion;
   float m_accel_conversion;
 
-  float m_gyro_data_dps[3]; // Angular velocity, in degrees per second.
-  float m_accel_data_g[3];  // Acceleration, in gravities.
+  struct {
+    float gyro_data_dps[3]; // Angular velocity, in degrees per second.
+    float accel_data_g[3];  // Acceleration, in gravities.
+  } m_data;
 
   uint8_t m_data_raw[12];
 
@@ -121,8 +123,10 @@ public:
 
   void set_standby_mode(bool on_standby);
 
-  float get_angular_velocity(Axis axis) const { return m_gyro_data_dps[axis]; }
-  float get_acceleration(Axis axis) const { return m_accel_data_g[axis]; }
+  float get_angular_velocity(Axis axis) const {
+    return m_data.gyro_data_dps[axis];
+  }
+  float get_acceleration(Axis axis) const { return m_data.accel_data_g[axis]; }
 
 private:
   HAL_StatusTypeDef write_register(uint8_t reg, uint8_t value);
