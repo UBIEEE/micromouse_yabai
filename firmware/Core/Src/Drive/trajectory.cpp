@@ -111,7 +111,7 @@ void Trajectory::construct_trajectory() {
   v_max        = std::sqrt((v_i * v_i + v_f * v_f) / 2.f + a * d);
 
   // Make sure the max velocity is not greater than the configured max velocity.
-  v_max = std::clamp(v_max, 0.f, m_speed_limits.max_velocity_mmps);
+  v_max = std::min(v_max, m_speed_limits.max_velocity_mmps);
 
   // Calculate the distance to reach max velocity.
   //
@@ -129,8 +129,8 @@ void Trajectory::construct_trajectory() {
   // Distance to cruise at max velocity.
   const float d_cruise = d - (d_rise + d_fall);
 
-  m_time_rise_s = (v_max - v_i) / a;
-  m_time_fall_s = (v_max - v_f) / a;
+  m_time_rise_s   = (v_max - v_i) / a;
+  m_time_fall_s   = (v_max - v_f) / a;
   m_time_cruise_s = d_cruise / v_max;
 
   m_time_total_s = m_time_rise_s + m_time_cruise_s + m_time_fall_s;
@@ -140,5 +140,8 @@ float TrajectoryUtil::calc_ideal_arc_velocity(
     float radius_mm, const Trajectory::SpeedLimits& speed_limits) {
 
   // v^2 = a_c * r
-  return std::sqrt(speed_limits.max_centripetal_acceleration_mmps2 * radius_mm);
+  const float v =
+      std::sqrt(speed_limits.max_centripetal_acceleration_mmps2 * radius_mm);
+
+  return std::min(v, speed_limits.max_velocity_mmps);
 }
