@@ -70,7 +70,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
   case BUTTON_1_Pin:
     Buzzer::get().play_song(Buzzer::Song::HOME_DEPOT);
     Vision::get().set_enabled(true);
-    Drive::get().set_speed(1000, 1000);
+    Drive::get().control_speed_velocity(150.f, 0.f);
     break;
   case BUTTON_2_Pin:
     Buzzer::get().quiet();

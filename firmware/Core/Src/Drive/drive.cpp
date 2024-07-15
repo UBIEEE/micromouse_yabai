@@ -40,28 +40,33 @@ Drive::Drive()
     m_angular_pid(ANGULAR_KP, ANGULAR_KI, ANGULAR_KD, ROBOT_UPDATE_PERIOD_S) {}
 
 void Drive::process() {
+  using enum ControlMode;
+
   update_encoders();
 
-  if (m_control_mode == ControlMode::VELOCITY) {
+  switch (m_control_mode) {
+    using enum ControlMode;
+  case IDLE:
+    m_raw_speed_data = {};
+    break;
+  case MANUAL:
+    // Raw speeds already set, so nothing to do here.
+    break;
+  case VELOCITY:
+    // Update PID controllers with velocity control data to produce raw speed
+    // data.
     update_pid_controllers();
-  } else {
-    m_left_raw_speed  = 0.f;
-    m_right_raw_speed = 0.f;
+    break;
   }
 
-  set_speed_raw(m_left_raw_speed, m_right_raw_speed);
+  // Set the motors.
+  const auto& [left, right] = m_raw_speed_data;
+  set_motors(left, right);
 }
 
-void Drive::set_speed(float left_mmps, float right_mmps) {
-  m_target_left_vel_mmps  = left_mmps;
-  m_target_right_vel_mmps = right_mmps;
-
-  m_control_mode = ControlMode::VELOCITY;
-}
-
-void Drive::stop() {
-  m_target_left_vel_mmps  = 0.f;
-  m_target_right_vel_mmps = 0.f;
+void Drive::reset() {
+  reset_encoders();
+  reset_pid_controllers();
 
   m_control_mode = ControlMode::IDLE;
 }
@@ -71,7 +76,39 @@ void Drive::reset_encoders() {
   m_right_encoder.reset();
 }
 
-void Drive::set_speed_raw(float left_percent, float right_percent) {
+void Drive::reset_pid_controllers() {
+  m_translational_left_pid.reset();
+  m_translational_right_pid.reset();
+  m_angular_pid.reset();
+
+  m_velocity_control_data = {};
+}
+
+void Drive::stop() {
+  m_raw_speed_data = {};
+
+  reset_pid_controllers();
+
+  m_control_mode = ControlMode::IDLE;
+}
+
+void Drive::control_speed_raw(float left_percent, float right_percent) {
+  m_raw_speed_data = {
+      .left  = left_percent,
+      .right = right_percent,
+  };
+
+  m_control_mode = ControlMode::MANUAL;
+}
+
+void Drive::control_speed_velocity(float linear_mmps, float angular_dps) {
+  m_velocity_control_data.linear_velocity_mmps = linear_mmps,
+  m_velocity_control_data.angular_velocity_dps = angular_dps,
+
+  m_control_mode = ControlMode::VELOCITY;
+}
+
+void Drive::set_motors(float left_percent, float right_percent) {
   const int8_t left(left_percent * PWM_PERIOD);
   const int8_t right(right_percent * PWM_PERIOD);
 
@@ -84,11 +121,11 @@ void Drive::set_speed_raw(float left_percent, float right_percent) {
   const GPIO_PinState left_dir_pin  = static_cast<GPIO_PinState>(left_dir);
   const GPIO_PinState right_dir_pin = static_cast<GPIO_PinState>(right_dir);
 
-  set_speed_dir_raw(left_out, left_dir_pin, right_out, right_dir_pin);
+  set_motors_raw(left_out, left_dir_pin, right_out, right_dir_pin);
 }
 
-void Drive::set_speed_dir_raw(uint8_t left, GPIO_PinState left_dir,
-                              uint8_t right, GPIO_PinState right_dir) {
+void Drive::set_motors_raw(uint8_t left, GPIO_PinState left_dir, uint8_t right,
+                           GPIO_PinState right_dir) {
 
   HAL_GPIO_WritePin(MOTOR_LEFT_DIR_GPIO_Port, MOTOR_LEFT_DIR_Pin, left_dir);
   HAL_GPIO_WritePin(MOTOR_RIGHT_DIR_GPIO_Port, MOTOR_RIGHT_DIR_Pin, right_dir);
@@ -109,27 +146,57 @@ void Drive::update_encoders() {
 }
 
 void Drive::update_pid_controllers() {
-  const float angular_diff = m_angular_pid.calculate(
-      IMU::get().get_angular_velocity(IMU::Axis::Z), 0.f);
+  auto& control_data = m_velocity_control_data;
 
-  const float left_speed_diff = m_translational_left_pid.calculate(
-      m_encoder_data.left.velocity_mmps, m_target_left_vel_mmps);
+  float target_left  = control_data.linear_velocity_mmps;
+  float target_right = control_data.linear_velocity_mmps;
 
-  const float right_speed_diff = m_translational_right_pid.calculate(
-      m_encoder_data.right.velocity_mmps, m_target_right_vel_mmps);
+  // Angular PID controller.
+  {
+    const float gyro_z_dps = IMU::get().get_angular_velocity(IMU::Axis::Z);
 
-  m_left_raw_speed += left_speed_diff;
-  m_right_raw_speed += right_speed_diff;
+    const float angular_speed_diff =
+        m_angular_pid.calculate(gyro_z_dps, control_data.angular_velocity_dps);
 
-  m_left_raw_speed -= angular_diff;
-  m_right_raw_speed += angular_diff;
+    const float angular_speed =
+        control_data.last_angular_speed + angular_speed_diff;
 
-  if (std::abs(m_left_raw_speed) < 0.05f) {
-    m_left_raw_speed = 0.f;
+    target_left -= angular_speed;
+    target_right += angular_speed;
+
+    control_data.last_angular_speed = angular_speed;
   }
-  if (std::abs(m_right_raw_speed) < 0.05f) {
-    m_right_raw_speed = 0.f;
+
+  float final_left, final_right;
+
+  // Translational PID controllers.
+  {
+    const float left_speed_diff = m_translational_left_pid.calculate(
+        m_encoder_data.left.velocity_mmps, target_left);
+
+    const float right_speed_diff = m_translational_right_pid.calculate(
+        m_encoder_data.right.velocity_mmps, target_right);
+
+    final_left  = control_data.last_left_speed + left_speed_diff;
+    final_right = control_data.last_right_speed + right_speed_diff;
+
+    control_data.last_left_speed  = final_left;
+    control_data.last_right_speed = final_right;
   }
+
+  // Clamp the values.
+  if (std::abs(final_left) < 0.05f) {
+    final_left = 0.f;
+  }
+  if (std::abs(final_right) < 0.05f) {
+    final_right = 0.f;
+  }
+
+  // Set raw speed data.
+  m_raw_speed_data = {
+      .left  = final_left,
+      .right = final_right,
+  };
 }
 
 void Drive::update_pwm() {
