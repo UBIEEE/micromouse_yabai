@@ -6,6 +6,8 @@
 
 #include <climits>
 
+using namespace drive;
+
 //
 // External variables.
 //

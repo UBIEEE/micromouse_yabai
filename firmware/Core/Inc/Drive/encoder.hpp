@@ -2,6 +2,8 @@
 
 #include <cstdint>
 
+namespace drive {
+
 class Encoder {
   uint16_t m_last_ticks = 0;
 
@@ -25,3 +27,5 @@ public:
 private:
   int32_t calc_delta_ticks(uint16_t current, uint16_t last);
 };
+
+} // namespace drive

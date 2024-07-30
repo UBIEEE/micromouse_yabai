@@ -9,6 +9,8 @@
 
 #include <cstdint>
 
+namespace drive {
+
 class Drive : public SubsystemSingleton<Drive> {
   // Drive stuff.
 
@@ -91,14 +93,18 @@ private:
   void update_pid_controllers();
 
 private:
-  friend void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*);
+  friend void ::HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*);
 
   // We can't use hardware PWM generation because of a mistake in PCB, so we
   // have to do it manually.
   void update_pwm();
 
 private:
-  friend void Drive_UpdatePIDConstants(uint8_t*);
+  friend void ::Drive_UpdatePIDConstants(uint8_t*);
 
   void update_pid_constants(float* constants);
 };
+
+} // namespace drive
+
+using drive::Drive;

@@ -17,7 +17,7 @@ void RobotControl::process() {
     m_current_task = m_next_task;
 
     const bool imu_standby = (m_current_task == Task::NONE);
-    IMU::get().set_standby_mode(imu_standby);
+    drive::IMU::get().set_standby_mode(imu_standby);
 
     // Start the new tasks.
 
@@ -75,7 +75,7 @@ void RobotControl::start_task_maze_search() {}
 void RobotControl::start_task_maze_fast_search() {}
 
 void RobotControl::start_task_drive_10cm() {
-  Drive::get().set_speed(500.f, 500.f);
+  // Drive::get().set_speed(400.f, 400.f);
 }
 
 void RobotControl::process_task_maze_search() {}
@@ -94,9 +94,9 @@ void RobotControl::process_task_drive_10cm() {
     Drive::get().stop();
     task_done();
   } else if (left_done) {
-    Drive::get().set_speed(0.f, 500.f);
+    // Drive::get().set_speed(0.f, 400.f);
   } else if (right_done) {
-    Drive::get().set_speed(500.f, 0.f);
+    // Drive::get().set_speed(400.f, 0.f);
   }
 }
 

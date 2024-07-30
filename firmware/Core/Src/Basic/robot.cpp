@@ -16,7 +16,7 @@
 
 static constexpr std::array<Subsystem*, 6> s_subsystems = {
     &RobotControl::get(), &Buzzer::get(), &Drive::get(),
-    &IMU::get(),          &Vision::get(), &ErrorManager::get(),
+    &drive::IMU::get(),          &Vision::get(), &ErrorManager::get(),
 };
 
 static bool s_ble_connected = false;
@@ -78,7 +78,7 @@ void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
     Drive::get().stop();
     break;
   case IMU_INT1_Pin:
-    IMU::get().int1_handler();
+    drive::IMU::get().int1_handler();
     break;
   }
 }

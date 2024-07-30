@@ -5,6 +5,8 @@
 #include "Basic/subsystem.hpp"
 #include "main.h"
 
+namespace drive {
+
 // ICM-42670-P
 //
 // Datasheet:
@@ -133,13 +135,15 @@ private:
   HAL_StatusTypeDef read_register(uint8_t reg, uint8_t* buf, uint8_t len = 1);
 
 private:
-  friend void HAL_GPIO_EXTI_Callback(uint16_t);
+  friend void ::HAL_GPIO_EXTI_Callback(uint16_t);
 
   // External interrupt from the IMU when data is ready.
   void int1_handler();
 
-  friend void HAL_I2C_MasterRxCpltCallback(I2C_HandleTypeDef*);
+  friend void ::HAL_I2C_MasterRxCpltCallback(I2C_HandleTypeDef*);
 
   // DMA read complete handler.
   void read_complete_handler();
 };
+
+} // namespace drive

@@ -5,6 +5,8 @@
 #include <cmath>
 #include <numbers>
 
+using namespace drive;
+
 //
 // Constants.
 //
