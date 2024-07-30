@@ -156,24 +156,36 @@ class BluetoothManager: NSObject, ObservableObject,
   //
   
   struct DriveService {
-    var motorData    = [Float32](repeating: 0, count: 4)
+    var driveData    = [Float32](repeating: 0, count: 4+3)
     var imuData      = [Float32](repeating: 0, count: 6)
     var pidConstants = [Float32](repeating: 0, count: 6)
     
     var motorLeftPosition: Float32 {
-      return motorData[0]
+      return driveData[0]
     }
     
     var motorLeftVelocity: Float32 {
-      return motorData[1]
+      return driveData[1]
     }
     
     var motorRightPosition: Float32 {
-      return motorData[2]
+      return driveData[2]
     }
     
     var motorRightVelocity: Float32 {
-      return motorData[3]
+      return driveData[3]
+    }
+    
+    var xPos: Float32 {
+      return driveData[4]
+    }
+    
+    var yPos: Float32 {
+      return driveData[5]
+    }
+    
+    var thetaRad: Float32 {
+      return driveData[6]
     }
   }
   
@@ -354,7 +366,7 @@ class BluetoothManager: NSObject, ObservableObject,
       
     // Drive service
     case AppConstants.Bluetooth.DriveService.MotorDataUUID:
-      driveService.motorData = getFloatValues(ch.value!, numValues: 4)
+      driveService.driveData = getFloatValues(ch.value!, numValues: 4+3)
     case AppConstants.Bluetooth.DriveService.IMUDataUUID:
       driveService.imuData = getFloatValues(ch.value!, numValues: 6)
     case AppConstants.Bluetooth.DriveService.PIDConstantsUUID:
