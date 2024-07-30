@@ -1,13 +1,17 @@
 #pragma once
 
 #include "Basic/subsystem.hpp"
+#include "Drive/Controller/continuous_controller.hpp"
+#include "Drive/Controller/incremental_controller.hpp"
 #include "Drive/drive.h"
 #include "Drive/encoder.hpp"
 #include "Drive/imu.hpp"
+#include "Drive/motion.hpp"
+#include "Drive/pose.hpp"
+#include "Drive/trajectory.hpp"
 #include "Math/pid_controller.hpp"
-#include "Drive/drive.h"
-
 #include <cstdint>
+#include <queue>
 
 namespace drive {
 
@@ -24,9 +28,13 @@ class Drive : public SubsystemSingleton<Drive> {
   Encoder m_right_encoder;
 
   struct {
-    Encoder::Data left;
-    Encoder::Data right;
-  } m_encoder_data;
+    struct {
+      Encoder::Data left;
+      Encoder::Data right;
+    } encoder;
+
+    Pose pose;
+  } m_drive_data;
 
   // Control stuff.
 
@@ -38,21 +46,27 @@ class Drive : public SubsystemSingleton<Drive> {
     IDLE,
     MANUAL,
     VELOCITY,
+    CONTROLLER,
   } m_control_mode = ControlMode::IDLE;
 
   struct {
-    float left = 0.f;
+    float left  = 0.f;
     float right = 0.f;
   } m_raw_speed_data;
 
   struct {
-    float linear_velocity_mmps = 0.f;
-    float angular_velocity_dps = 0.f;
+    float target_linear_mmps = 0.f;
+    float target_angular_dps = 0.f;
 
-    float last_angular_speed = 0.f;
-    float last_right_speed = 0.f;
-    float last_left_speed  = 0.f;
+    float final_angular_dps = 0.f;
+    float final_right_speed = 0.f;
+    float final_left_speed  = 0.f;
   } m_velocity_control_data;
+
+  IncrementalController m_search_controller;
+  ContinuousController m_solve_controller;
+
+  DriveController* m_controller = nullptr;
 
 public:
   Drive();
@@ -76,12 +90,28 @@ public:
   // Set the target speed of the motors.
   void control_speed_velocity(float linear_mmps, float angular_dps);
 
-  float left_encoder_position() const {
-    return m_encoder_data.left.position_mm;
-  }
-  float right_encoder_position() const {
-    return m_encoder_data.right.position_mm;
-  }
+  //
+  // Search control functions.
+  //
+  // Control the drivetrain during search runs, where future movements are
+  // unknown, and the robot drives relatively slowly.
+  //
+
+  void begin_search();
+
+  //
+  // Solve control functions.
+  //
+  // Control the drivetrain during solve runs, where the full path to the goal
+  // is already known. The robot will (attempt to) drive at full speed.
+  //
+
+  void begin_solve();
+
+private:
+private:
+  // Performs relevant reset actions when transitioning to a new mode.
+  void reset_to_mode(ControlMode new_mode);
 
 private:
   static void set_motors(float left_percent, float right_percent);
