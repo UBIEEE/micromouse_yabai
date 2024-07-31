@@ -45,6 +45,11 @@ add_executable(${CMAKE_PROJECT_NAME})
 add_subdirectory(cmake/stm32cubemx)
 target_link_libraries(${CMAKE_PROJECT_NAME} stm32cubemx)
 
+# Navigation library
+set(NAV_DESKTOP_TESTS OFF)
+add_subdirectory(NavigationLib)
+target_link_libraries(${CMAKE_PROJECT_NAME} navigation)
+
 # Sources
 file(GLOB_RECURSE USER_SOURCES Core/Src/*.cpp)
 target_sources(${CMAKE_PROJECT_NAME} PRIVATE ${USER_SOURCES})
