@@ -1,7 +1,6 @@
 #pragma once
 
-#include "Maze/constants.hpp"
-
+#include "Basic/constants.hpp"
 #include <cstdint>
 #include <utility>
 

@@ -1,12 +1,12 @@
 #pragma once
 
+#include "Basic/constants.hpp"
 #include "Maze/cell.hpp"
-#include "Maze/constants.hpp"
 #include "Maze/coordinate.hpp"
 #include "Maze/direction.hpp"
-#include <span>
 #include <cstring>
 #include <iterator>
+#include <span>
 
 namespace maze {
 

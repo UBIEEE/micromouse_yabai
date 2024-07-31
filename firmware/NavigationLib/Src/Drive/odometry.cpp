@@ -16,7 +16,7 @@ void Odometry::update(Pose& pose, const float& delta_left,
   const float delta_x = dist * std::cos(pose.theta_rad + (delta_theta / 2.f));
   const float delta_y = dist * std::sin(pose.theta_rad + (delta_theta / 2.f));
 
-  pose.x_mm      = delta_x;
-  pose.y_mm      = delta_y;
-  pose.theta_rad = delta_theta;
+  pose.x_mm      += delta_x;
+  pose.y_mm      += delta_y;
+  pose.theta_rad += delta_theta;
 }
