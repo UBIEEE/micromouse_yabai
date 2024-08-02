@@ -16,7 +16,7 @@
 
 static constexpr std::array<Subsystem*, 6> s_subsystems = {
     &RobotControl::get(), &Buzzer::get(), &Drive::get(),
-    &drive::IMU::get(),          &Vision::get(), &ErrorManager::get(),
+    &drive::IMU::get(),   &Vision::get(), &ErrorManager::get(),
 };
 
 static bool s_ble_connected = false;
@@ -67,18 +67,15 @@ void Robot_SendFeedback() {
 // External interrupt callback.
 void HAL_GPIO_EXTI_Callback(uint16_t GPIO_Pin) {
   switch (GPIO_Pin) {
-  case BUTTON_1_Pin:
-    Buzzer::get().play_song(Buzzer::Song::HOME_DEPOT);
-    Vision::get().set_enabled(true);
-    Drive::get().control_speed_velocity(150.f, 0.f);
+  case BUTTON_1_Pin: // (BOOT0)
+    RobotControl::get().handle_button_1();
     break;
   case BUTTON_2_Pin:
-    Buzzer::get().quiet();
-    Vision::get().set_enabled(false);
-    Drive::get().stop();
+    RobotControl::get().handle_button_2();
     break;
   case IMU_INT1_Pin:
     drive::IMU::get().int1_handler();
     break;
   }
 }
+

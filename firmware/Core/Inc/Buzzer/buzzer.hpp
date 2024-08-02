@@ -16,6 +16,10 @@ public:
     HOME_DEPOT    = 4,
     NOKIA         = 5,
 
+    /* BEGIN_SEARCH, */
+    /* BEGIN_FAST_SOLVE, */
+    /* BEGIN_SLOW_SOLVE, */
+
     _COUNT,
   };
 
