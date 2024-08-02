@@ -15,6 +15,8 @@ class IMU : public SubsystemSingleton<IMU> {
   bool m_init         = false;
   bool m_is_receiving = false;
 
+  bool m_standby = false;
+
   float m_gyro_conversion;
   float m_accel_conversion;
 

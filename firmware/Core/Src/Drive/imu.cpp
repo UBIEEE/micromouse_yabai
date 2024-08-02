@@ -111,6 +111,9 @@ void IMU::set_standby_mode(bool on_standby) {
   using GyroMode  = Config::Gyro::Mode;
   using AccelMode = Config::Accelerometer::Mode;
 
+  if (m_standby == on_standby) return;
+  m_standby = on_standby;
+
   HAL_StatusTypeDef status;
 
   GyroMode gyro_mode;
