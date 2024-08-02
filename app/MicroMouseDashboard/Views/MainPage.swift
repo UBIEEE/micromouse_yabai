@@ -50,21 +50,23 @@ struct MainPage: View {
         }
         Section {
           Button("Run Task") {
-            let setTaskChar = btManager.connectionState.mainService.setTaskChar!
-            let setTaskData = Data([selectedTask.rawValue])
-            btManager.writeValueToChar(setTaskChar, setTaskData)
+            setTask(selectedTask.rawValue)
           }
         }
         Section {
           Button("Stop") {
-            let setTaskChar = btManager.connectionState.mainService.setTaskChar!
-            let setTaskData = Data([0])
-            btManager.writeValueToChar(setTaskChar, setTaskData)
+            setTask(0)
           }
         }
       }
       .navigationTitle("MicroMouse")
     }
+  }
+  
+  func setTask(_ task: UInt8) {
+    let taskChar = btManager.connectionState.mainService.taskChar!
+    let taskData = Data([task])
+    btManager.writeValueToChar(taskChar, taskData)
   }
 }
 

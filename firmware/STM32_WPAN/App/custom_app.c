@@ -43,12 +43,14 @@ typedef struct
   /* visionService */
   uint8_t               Vision_data_char_Notification_Status;
   /* mainService */
-  uint8_t               Main_currenttask_char_Notification_Status;
+  uint8_t               Main_task_char_Notification_Status;
   uint8_t               Main_errorcode_char_Notification_Status;
   /* driveService */
   uint8_t               Drive_data_char_Notification_Status;
   uint8_t               Drive_imudata_char_Notification_Status;
   uint8_t               Drive_pidconstants_char_Notification_Status;
+  /* mazeService */
+  uint8_t               Maze_cell_char_Notification_Status;
   /* USER CODE BEGIN CUSTOM_APP_Context_t */
 
   /* USER CODE END CUSTOM_APP_Context_t */
@@ -98,8 +100,8 @@ static void Custom_Music_isplaying_char_Send_Notification(void);
 static void Custom_Vision_data_char_Update_Char(void);
 static void Custom_Vision_data_char_Send_Notification(void);
 /* mainService */
-static void Custom_Main_currenttask_char_Update_Char(void);
-static void Custom_Main_currenttask_char_Send_Notification(void);
+static void Custom_Main_task_char_Update_Char(void);
+static void Custom_Main_task_char_Send_Notification(void);
 static void Custom_Main_errorcode_char_Update_Char(void);
 static void Custom_Main_errorcode_char_Send_Notification(void);
 /* driveService */
@@ -109,6 +111,9 @@ static void Custom_Drive_imudata_char_Update_Char(void);
 static void Custom_Drive_imudata_char_Send_Notification(void);
 static void Custom_Drive_pidconstants_char_Update_Char(void);
 static void Custom_Drive_pidconstants_char_Send_Notification(void);
+/* mazeService */
+static void Custom_Maze_cell_char_Update_Char(void);
+static void Custom_Maze_cell_char_Send_Notification(void);
 
 /* USER CODE BEGIN PFP */
 
@@ -159,22 +164,22 @@ void Custom_STM_App_Notification(Custom_STM_App_Notification_evt_t *pNotificatio
       break;
 
     /* mainService */
-    case CUSTOM_STM_MAIN_SETTASK_CHAR_WRITE_EVT:
-      /* USER CODE BEGIN CUSTOM_STM_MAIN_SETTASK_CHAR_WRITE_EVT */
+    case CUSTOM_STM_MAIN_TASK_CHAR_WRITE_EVT:
+      /* USER CODE BEGIN CUSTOM_STM_MAIN_TASK_CHAR_WRITE_EVT */
 
-      /* USER CODE END CUSTOM_STM_MAIN_SETTASK_CHAR_WRITE_EVT */
+      /* USER CODE END CUSTOM_STM_MAIN_TASK_CHAR_WRITE_EVT */
       break;
 
-    case CUSTOM_STM_MAIN_CURRENTTASK_CHAR_NOTIFY_ENABLED_EVT:
-      /* USER CODE BEGIN CUSTOM_STM_MAIN_CURRENTTASK_CHAR_NOTIFY_ENABLED_EVT */
+    case CUSTOM_STM_MAIN_TASK_CHAR_NOTIFY_ENABLED_EVT:
+      /* USER CODE BEGIN CUSTOM_STM_MAIN_TASK_CHAR_NOTIFY_ENABLED_EVT */
 
-      /* USER CODE END CUSTOM_STM_MAIN_CURRENTTASK_CHAR_NOTIFY_ENABLED_EVT */
+      /* USER CODE END CUSTOM_STM_MAIN_TASK_CHAR_NOTIFY_ENABLED_EVT */
       break;
 
-    case CUSTOM_STM_MAIN_CURRENTTASK_CHAR_NOTIFY_DISABLED_EVT:
-      /* USER CODE BEGIN CUSTOM_STM_MAIN_CURRENTTASK_CHAR_NOTIFY_DISABLED_EVT */
+    case CUSTOM_STM_MAIN_TASK_CHAR_NOTIFY_DISABLED_EVT:
+      /* USER CODE BEGIN CUSTOM_STM_MAIN_TASK_CHAR_NOTIFY_DISABLED_EVT */
 
-      /* USER CODE END CUSTOM_STM_MAIN_CURRENTTASK_CHAR_NOTIFY_DISABLED_EVT */
+      /* USER CODE END CUSTOM_STM_MAIN_TASK_CHAR_NOTIFY_DISABLED_EVT */
       break;
 
     case CUSTOM_STM_MAIN_APPREADY_CHAR_WRITE_EVT:
@@ -236,6 +241,25 @@ void Custom_STM_App_Notification(Custom_STM_App_Notification_evt_t *pNotificatio
       /* USER CODE BEGIN CUSTOM_STM_DRIVE_PIDCONSTANTS_CHAR_NOTIFY_DISABLED_EVT */
 
       /* USER CODE END CUSTOM_STM_DRIVE_PIDCONSTANTS_CHAR_NOTIFY_DISABLED_EVT */
+      break;
+
+    /* mazeService */
+    case CUSTOM_STM_MAZE_RESET_CHAR_WRITE_EVT:
+      /* USER CODE BEGIN CUSTOM_STM_MAZE_RESET_CHAR_WRITE_EVT */
+
+      /* USER CODE END CUSTOM_STM_MAZE_RESET_CHAR_WRITE_EVT */
+      break;
+
+    case CUSTOM_STM_MAZE_CELL_CHAR_NOTIFY_ENABLED_EVT:
+      /* USER CODE BEGIN CUSTOM_STM_MAZE_CELL_CHAR_NOTIFY_ENABLED_EVT */
+
+      /* USER CODE END CUSTOM_STM_MAZE_CELL_CHAR_NOTIFY_ENABLED_EVT */
+      break;
+
+    case CUSTOM_STM_MAZE_CELL_CHAR_NOTIFY_DISABLED_EVT:
+      /* USER CODE BEGIN CUSTOM_STM_MAZE_CELL_CHAR_NOTIFY_DISABLED_EVT */
+
+      /* USER CODE END CUSTOM_STM_MAZE_CELL_CHAR_NOTIFY_DISABLED_EVT */
       break;
 
     case CUSTOM_STM_NOTIFICATION_COMPLETE_EVT:
@@ -419,41 +443,41 @@ void Custom_Vision_data_char_Send_Notification(void) /* Property Notification */
 }
 
 /* mainService */
-void Custom_Main_currenttask_char_Update_Char(void) /* Property Read */
+void Custom_Main_task_char_Update_Char(void) /* Property Read */
 {
   uint8_t updateflag = 0;
 
-  /* USER CODE BEGIN Main_currenttask_char_UC_1*/
+  /* USER CODE BEGIN Main_task_char_UC_1*/
 
-  /* USER CODE END Main_currenttask_char_UC_1*/
+  /* USER CODE END Main_task_char_UC_1*/
 
   if (updateflag != 0)
   {
-    Custom_STM_App_Update_Char(CUSTOM_STM_MAIN_CURRENTTASK_CHAR, (uint8_t *)UpdateCharData);
+    Custom_STM_App_Update_Char(CUSTOM_STM_MAIN_TASK_CHAR, (uint8_t *)UpdateCharData);
   }
 
-  /* USER CODE BEGIN Main_currenttask_char_UC_Last*/
+  /* USER CODE BEGIN Main_task_char_UC_Last*/
 
-  /* USER CODE END Main_currenttask_char_UC_Last*/
+  /* USER CODE END Main_task_char_UC_Last*/
   return;
 }
 
-void Custom_Main_currenttask_char_Send_Notification(void) /* Property Notification */
+void Custom_Main_task_char_Send_Notification(void) /* Property Notification */
 {
   uint8_t updateflag = 0;
 
-  /* USER CODE BEGIN Main_currenttask_char_NS_1*/
+  /* USER CODE BEGIN Main_task_char_NS_1*/
 
-  /* USER CODE END Main_currenttask_char_NS_1*/
+  /* USER CODE END Main_task_char_NS_1*/
 
   if (updateflag != 0)
   {
-    Custom_STM_App_Update_Char(CUSTOM_STM_MAIN_CURRENTTASK_CHAR, (uint8_t *)NotifyCharData);
+    Custom_STM_App_Update_Char(CUSTOM_STM_MAIN_TASK_CHAR, (uint8_t *)NotifyCharData);
   }
 
-  /* USER CODE BEGIN Main_currenttask_char_NS_Last*/
+  /* USER CODE BEGIN Main_task_char_NS_Last*/
 
-  /* USER CODE END Main_currenttask_char_NS_Last*/
+  /* USER CODE END Main_task_char_NS_Last*/
 
   return;
 }
@@ -611,6 +635,46 @@ void Custom_Drive_pidconstants_char_Send_Notification(void) /* Property Notifica
   /* USER CODE BEGIN Drive_pidconstants_char_NS_Last*/
 
   /* USER CODE END Drive_pidconstants_char_NS_Last*/
+
+  return;
+}
+
+/* mazeService */
+void Custom_Maze_cell_char_Update_Char(void) /* Property Read */
+{
+  uint8_t updateflag = 0;
+
+  /* USER CODE BEGIN Maze_cell_char_UC_1*/
+
+  /* USER CODE END Maze_cell_char_UC_1*/
+
+  if (updateflag != 0)
+  {
+    Custom_STM_App_Update_Char(CUSTOM_STM_MAZE_CELL_CHAR, (uint8_t *)UpdateCharData);
+  }
+
+  /* USER CODE BEGIN Maze_cell_char_UC_Last*/
+
+  /* USER CODE END Maze_cell_char_UC_Last*/
+  return;
+}
+
+void Custom_Maze_cell_char_Send_Notification(void) /* Property Notification */
+{
+  uint8_t updateflag = 0;
+
+  /* USER CODE BEGIN Maze_cell_char_NS_1*/
+
+  /* USER CODE END Maze_cell_char_NS_1*/
+
+  if (updateflag != 0)
+  {
+    Custom_STM_App_Update_Char(CUSTOM_STM_MAZE_CELL_CHAR, (uint8_t *)NotifyCharData);
+  }
+
+  /* USER CODE BEGIN Maze_cell_char_NS_Last*/
+
+  /* USER CODE END Maze_cell_char_NS_Last*/
 
   return;
 }

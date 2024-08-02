@@ -102,12 +102,13 @@ void RobotControl::process_task_drive_10cm() {
 
 void RobotControl::send_current_task() {
 
-  Custom_STM_App_Update_Char(CUSTOM_STM_MAIN_CURRENTTASK_CHAR,
+  Custom_STM_App_Update_Char(CUSTOM_STM_MAIN_TASK_CHAR,
                              (uint8_t*)&m_current_task);
 }
 
 void RobotControl_RunTask(uint8_t task) {
-  if (task > uint8_t(RobotControl::Task::_COUNT)) return;
+  if (task >= uint8_t(RobotControl::Task::_COUNT)) return;
 
   RobotControl::get().run_task(static_cast<RobotControl::Task>(task));
 }
+ 

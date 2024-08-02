@@ -56,15 +56,14 @@ class BluetoothManager: NSObject, ObservableObject,
     
     struct MainService {
       var serviceFound = false
-      var setTaskChar: CBCharacteristic?
-      var currentTaskChar: CBCharacteristic?
+      var taskChar: CBCharacteristic?
       var appReadyChar: CBCharacteristic?
       var errorCodeChar: CBCharacteristic?
       
       var isReady: Bool {
         get {
-          return serviceFound && setTaskChar != nil && currentTaskChar != nil &&
-                 appReadyChar != nil && errorCodeChar != nil
+          return serviceFound && taskChar != nil && appReadyChar != nil &&
+                 errorCodeChar != nil
         }
       }
     }
@@ -304,10 +303,8 @@ class BluetoothManager: NSObject, ObservableObject,
           setNotify()
           
         // Main service
-        case AppConstants.Bluetooth.MainService.SetTaskUUID: // Write
-          connectionState.mainService.setTaskChar = ch
-        case AppConstants.Bluetooth.MainService.CurrentTaskUUID: // Notify
-          connectionState.mainService.currentTaskChar = ch
+        case AppConstants.Bluetooth.MainService.TaskUUID: // Write
+          connectionState.mainService.taskChar = ch
           setNotify()
         case AppConstants.Bluetooth.MainService.AppReadyUUID: // Write
           connectionState.mainService.appReadyChar = ch
@@ -359,7 +356,7 @@ class BluetoothManager: NSObject, ObservableObject,
       visionService.sensorData = ch.value![0..<4]
       
     // Main service
-    case AppConstants.Bluetooth.MainService.CurrentTaskUUID:
+    case AppConstants.Bluetooth.MainService.TaskUUID:
       mainService.currentTask = ch.value![0]
     case AppConstants.Bluetooth.MainService.ErrorCodeUUID:
       mainService.errorCodes.append(ch.value![0])

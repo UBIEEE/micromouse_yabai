@@ -192,7 +192,7 @@ void Buzzer::end_song() {
 }
 
 void Buzzer_PlaySong(uint8_t song) {
-  if (song == 0 || song > uint8_t(Buzzer::Song::_COUNT)) {
+  if (song == 0 || song >= uint8_t(Buzzer::Song::_COUNT)) {
     Buzzer::get().quiet();
     return;
   }

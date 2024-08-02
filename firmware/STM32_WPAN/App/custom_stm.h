@@ -42,14 +42,16 @@ typedef enum
   /* visionService */
   CUSTOM_STM_VISION_DATA_CHAR,
   /* mainService */
-  CUSTOM_STM_MAIN_SETTASK_CHAR,
-  CUSTOM_STM_MAIN_CURRENTTASK_CHAR,
+  CUSTOM_STM_MAIN_TASK_CHAR,
   CUSTOM_STM_MAIN_APPREADY_CHAR,
   CUSTOM_STM_MAIN_ERRORCODE_CHAR,
   /* driveService */
   CUSTOM_STM_DRIVE_DATA_CHAR,
   CUSTOM_STM_DRIVE_IMUDATA_CHAR,
   CUSTOM_STM_DRIVE_PIDCONSTANTS_CHAR,
+  /* mazeService */
+  CUSTOM_STM_MAZE_RESET_CHAR,
+  CUSTOM_STM_MAZE_CELL_CHAR,
 } Custom_STM_Char_Opcode_t;
 
 typedef enum
@@ -62,11 +64,10 @@ typedef enum
   /* vision_data_notifyChar */
   CUSTOM_STM_VISION_DATA_CHAR_NOTIFY_ENABLED_EVT,
   CUSTOM_STM_VISION_DATA_CHAR_NOTIFY_DISABLED_EVT,
-  /* main_setTask_writeChar */
-  CUSTOM_STM_MAIN_SETTASK_CHAR_WRITE_EVT,
-  /* main_currentTask_notifyChar */
-  CUSTOM_STM_MAIN_CURRENTTASK_CHAR_NOTIFY_ENABLED_EVT,
-  CUSTOM_STM_MAIN_CURRENTTASK_CHAR_NOTIFY_DISABLED_EVT,
+  /* main_task_writeNotifyChar */
+  CUSTOM_STM_MAIN_TASK_CHAR_WRITE_EVT,
+  CUSTOM_STM_MAIN_TASK_CHAR_NOTIFY_ENABLED_EVT,
+  CUSTOM_STM_MAIN_TASK_CHAR_NOTIFY_DISABLED_EVT,
   /* main_appReady_writeChar */
   CUSTOM_STM_MAIN_APPREADY_CHAR_WRITE_EVT,
   /* main_errorCode_notifyChar */
@@ -82,6 +83,11 @@ typedef enum
   CUSTOM_STM_DRIVE_PIDCONSTANTS_CHAR_WRITE_EVT,
   CUSTOM_STM_DRIVE_PIDCONSTANTS_CHAR_NOTIFY_ENABLED_EVT,
   CUSTOM_STM_DRIVE_PIDCONSTANTS_CHAR_NOTIFY_DISABLED_EVT,
+  /* maze_reset_writeChar */
+  CUSTOM_STM_MAZE_RESET_CHAR_WRITE_EVT,
+  /* maze_cell_notifyChar */
+  CUSTOM_STM_MAZE_CELL_CHAR_NOTIFY_ENABLED_EVT,
+  CUSTOM_STM_MAZE_CELL_CHAR_NOTIFY_DISABLED_EVT,
   CUSTOM_STM_NOTIFICATION_COMPLETE_EVT,
 
   CUSTOM_STM_BOOT_REQUEST_EVT
@@ -110,13 +116,14 @@ typedef struct
 extern uint8_t SizeMusic_Playsong_Char;
 extern uint8_t SizeMusic_Isplaying_Char;
 extern uint8_t SizeVision_Data_Char;
-extern uint8_t SizeMain_Settask_Char;
-extern uint8_t SizeMain_Currenttask_Char;
+extern uint8_t SizeMain_Task_Char;
 extern uint8_t SizeMain_Appready_Char;
 extern uint8_t SizeMain_Errorcode_Char;
 extern uint8_t SizeDrive_Data_Char;
 extern uint8_t SizeDrive_Imudata_Char;
 extern uint8_t SizeDrive_Pidconstants_Char;
+extern uint8_t SizeMaze_Reset_Char;
+extern uint8_t SizeMaze_Cell_Char;
 
 /* USER CODE BEGIN EC */
 
