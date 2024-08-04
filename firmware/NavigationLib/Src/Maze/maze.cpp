@@ -47,13 +47,13 @@ void Maze::init_boundaries() {
 void Maze::set_wall(Coordinate coord, Direction dir, bool present) {
   m_cells[coord].set_wall(dir, present);
 
-  Cell* neighbor = get_neighbor_cell(coord, dir);
+  Cell* neighbor = neighbor_cell(coord, dir);
   if (neighbor) {
     neighbor->set_wall(opposite(dir), present);
   }
 }
 
-Cell* Maze::get_neighbor_cell(Coordinate coord, Direction direction) {
+Cell* Maze::neighbor_cell(Coordinate coord, Direction direction) {
   int8_t x = coord.x();
   int8_t y = coord.y();
 

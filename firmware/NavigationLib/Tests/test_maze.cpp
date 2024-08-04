@@ -180,19 +180,19 @@ TEST(Maze, TestGetNeighborCell) {
 
   Maze maze;
 
-  Cell* neighbor = maze.get_neighbor_cell(Coordinate(7, 7), NORTH);
+  Cell* neighbor = maze.neighbor_cell(Coordinate(7, 7), NORTH);
   ASSERT_EQ(&maze[Coordinate(7, 8)], neighbor);
 
-  neighbor = maze.get_neighbor_cell(Coordinate(7, 7), EAST);
+  neighbor = maze.neighbor_cell(Coordinate(7, 7), EAST);
   ASSERT_EQ(&maze[Coordinate(8, 7)], neighbor);
 
-  neighbor = maze.get_neighbor_cell(Coordinate(7, 7), SOUTH);
+  neighbor = maze.neighbor_cell(Coordinate(7, 7), SOUTH);
   ASSERT_EQ(&maze[Coordinate(7, 6)], neighbor);
 
-  neighbor = maze.get_neighbor_cell(Coordinate(7, 7), WEST);
+  neighbor = maze.neighbor_cell(Coordinate(7, 7), WEST);
   ASSERT_EQ(&maze[Coordinate(6, 7)], neighbor);
 
-  neighbor = maze.get_neighbor_cell(Coordinate(0, 0), WEST);
+  neighbor = maze.neighbor_cell(Coordinate(0, 0), WEST);
   ASSERT_EQ(nullptr, neighbor);
 }
 

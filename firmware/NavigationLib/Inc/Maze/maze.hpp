@@ -46,10 +46,12 @@ public:
     EAST_OF_GOAL
   };
 
+public:
+  Maze();
+
   // Returns the start endpoints based on the start location.
   static std::span<const Coordinate>
   get_start_endpoints(StartLocation start_location) {
-
     switch (start_location) {
       using enum StartLocation;
     case WEST_OF_GOAL:
@@ -58,8 +60,6 @@ public:
       return EAST_START_ENDPOINTS;
     }
   }
-
-  Maze();
 
   bool operator==(const Maze& other) const {
     return std::memcmp(m_cells, other.m_cells, Constants::MAZE_CELLS) == 0;
@@ -86,18 +86,18 @@ public:
   }
   void set_cell_visited(Coordinate coord) { m_cells[coord].set_visited(); }
 
-  Cell& get_cell(Coordinate coord) { return m_cells[coord]; }
+  Cell& cell(Coordinate coord) { return m_cells[coord]; }
   Cell& operator[](Coordinate coord) { return m_cells[coord]; }
 
   // Returns the coordinate of a cell. The cell must be within the maze.
-  Coordinate get_cell_coordinate(const Cell* cell) const {
+  Coordinate cell_coordinate(const Cell* cell) const {
     return Coordinate(std::distance(m_cells, cell));
   }
 
   // Returns nullptr if the neighbor is out of bounds.
-  Cell* get_neighbor_cell(Coordinate coord, Direction direction);
+  Cell* neighbor_cell(Coordinate coord, Direction direction);
 
-  uint8_t get_cell_value(Coordinate coord) const {
+  uint8_t cell_value(Coordinate coord) const {
     return m_cell_values[coord];
   }
 

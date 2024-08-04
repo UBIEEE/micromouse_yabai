@@ -15,12 +15,12 @@ class Cell final {
   union {
     uint8_t m_data;
     struct {
-      uint8_t m_north : 1;
-      uint8_t m_east : 1;
-      uint8_t m_south : 1;
-      uint8_t m_west : 1;
-      uint8_t m_visited : 4;
-    };
+      uint8_t north : 1;
+      uint8_t east : 1;
+      uint8_t south : 1;
+      uint8_t west : 1;
+      uint8_t visited : 4;
+    } m_bits;
   };
 
 public:
@@ -28,11 +28,11 @@ public:
     : m_data(0x00) {}
 
   Cell(bool north, bool east, bool south, bool west)
-    : m_north(north),
-      m_east(east),
-      m_south(south),
-      m_west(west),
-      m_visited(0) {}
+    : m_bits {.north   = north,
+              .east    = east,
+              .south   = south,
+              .west    = west,
+              .visited = 0} {}
 
   ~Cell() = default;
 
@@ -41,10 +41,10 @@ public:
 
   void reset() { m_data = 0x00; }
 
-  bool is_north() const { return m_north; }
-  bool is_east() const { return m_east; }
-  bool is_south() const { return m_south; }
-  bool is_west() const { return m_west; }
+  bool is_north() const { return m_bits.north; }
+  bool is_east() const { return m_bits.east; }
+  bool is_south() const { return m_bits.south; }
+  bool is_west() const { return m_bits.west; }
 
   bool is_wall(Direction dir) const {
     const uint8_t mask = 1 << static_cast<uint8_t>(dir);
@@ -56,10 +56,10 @@ public:
     return (m_data & mask) == 0;
   }
 
-  void set_north(bool value = true) { m_north = value; }
-  void set_east(bool value = true) { m_east = value; }
-  void set_south(bool value = true) { m_south = value; }
-  void set_west(bool value = true) { m_west = value; }
+  void set_north(bool value = true) { m_bits.north = value; }
+  void set_east(bool value = true) { m_bits.east = value; }
+  void set_south(bool value = true) { m_bits.south = value; }
+  void set_west(bool value = true) { m_bits.west = value; }
 
   void set_wall(Direction dir, bool value = true) {
     const uint8_t mask = 1 << static_cast<uint8_t>(dir);
@@ -70,10 +70,11 @@ public:
     if (value) m_data |= mask;
   }
 
-  bool is_visited() const { return m_visited != 0; }
-  void set_visited() noexcept { m_visited = 1; }
+  bool is_visited() const { return m_bits.visited != 0; }
+  void set_visited() noexcept { m_bits.visited = 1; }
 };
 
 static_assert(sizeof(Cell) == sizeof(uint8_t));
 
 } // namespace maze
+
