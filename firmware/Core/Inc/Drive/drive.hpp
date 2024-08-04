@@ -97,9 +97,8 @@ public:
   void control_speed_velocity(float linear_mmps, float angular_dps);
 
   void begin_incremental_control();
-  void begin_continuous_control();
+  // void begin_continuous_control();
 
-private:
 private:
   // Performs relevant reset actions when transitioning to a new mode.
   void reset_to_mode(ControlMode new_mode);

@@ -3,7 +3,7 @@
 void FloodFillSolver::reset() {
 }
 
-void FloodFillSolver::solve(std::span<maze::Coordinate> endpoints) {
+void FloodFillSolver::solve(maze::CoordinateSpan endpoints) {
   // TODO: Implement flood fill algorithm.
   (void)endpoints;
 }

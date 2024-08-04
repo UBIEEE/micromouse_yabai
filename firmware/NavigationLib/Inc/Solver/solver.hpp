@@ -9,5 +9,5 @@ public:
   virtual ~Solver() = default;
 
   virtual void reset() = 0;
-  virtual void solve(std::span<maze::Coordinate> endpoints) = 0;
+  virtual void solve(maze::CoordinateSpan endpoints) = 0;
 };

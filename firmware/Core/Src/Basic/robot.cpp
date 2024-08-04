@@ -98,7 +98,6 @@ void Robot::end_task() {
 
 void Robot::reset_maze() {
   m_maze.reset();
-  m_search_navigator.reset();
   m_search_done = false;
 }
 
@@ -125,6 +124,9 @@ void Robot::start_next_task() {
   case Task::MAZE_SEARCH:
     start_task_maze_search();
     break;
+  case Task::MAZE_SLOW_SOLVE:
+    start_task_maze_slow_solve();
+    break;
   case Task::MAZE_FAST_SOLVE:
     start_task_maze_fast_solve();
     break;
@@ -138,19 +140,34 @@ void Robot::start_next_task() {
 void Robot::start_task_maze_search() {
   /* m_buzzer.play_song(Buzzer::Song::BEGIN_SEARCH); */
 
-  // TODO: Start
+  m_search_navigator.set_solver_enabled(true);
+  m_search_navigator.set_targets(get_search_targets());
+
+  m_drive.begin_incremental_control();
+}
+
+void Robot::start_task_maze_slow_solve() {
+  /* m_buzzer.play_song(Buzzer::Song::BEGIN_SLOW_SOLVE); */
+
+  m_search_navigator.set_solver_enabled(false);
+  m_search_navigator.set_targets(get_solve_targets());
+
+  m_drive.begin_incremental_control();
 }
 
 void Robot::start_task_maze_fast_solve() {
   /* m_buzzer.play_song(Buzzer::Song::BEGIN_FAST_SOLVE); */
 
-  // TODO: Start
+  // m_drive.begin_continuous_control();
 }
 
 void Robot::process_current_task() {
   switch (m_task) {
   case Task::MAZE_SEARCH:
     process_task_maze_search();
+    break;
+  case Task::MAZE_SLOW_SOLVE:
+    process_task_maze_slow_solve();
     break;
   case Task::MAZE_FAST_SOLVE:
     process_task_maze_fast_solve();
@@ -167,24 +184,30 @@ void Robot::process_task_maze_search() {
   // TODO: Process
 
   /*
-
   if (done) {
     end_task();
   }
+  */
+}
 
-   */
+void Robot::process_task_maze_slow_solve() {
+  // TODO: Process
+
+  /*
+  if (done) {
+    end_task();
+  }
+  */
 }
 
 void Robot::process_task_maze_fast_solve() {
   // TODO: Process
 
   /*
-
   if (done) {
     end_task();
   }
-
-   */
+  */
 }
 
 void Robot::process_armed() {

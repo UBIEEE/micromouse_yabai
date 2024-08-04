@@ -3,6 +3,7 @@
 #include "Basic/constants.hpp"
 #include <cstdint>
 #include <utility>
+#include <span>
 
 namespace maze {
 
@@ -27,5 +28,7 @@ public:
 
   std::pair<uint8_t, uint8_t> to_pair() const { return {x(), y()}; }
 };
+
+using CoordinateSpan = std::span<const Coordinate>;
 
 } // namespace maze

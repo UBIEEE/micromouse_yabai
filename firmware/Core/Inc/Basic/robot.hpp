@@ -2,6 +2,7 @@
 
 #include "Basic/singleton.hpp"
 
+#include "Maze/coordinate.hpp"
 #include "Maze/maze.hpp"
 #include "Navigation/search_navigator.hpp"
 
@@ -17,24 +18,35 @@ class Robot : public Singleton<Robot> {
   Maze m_maze;
   SearchNavigator m_search_navigator {m_maze};
 
+  Maze::StartLocation m_start_location = Maze::StartLocation::WEST_OF_GOAL;
+
   Buzzer m_buzzer;
   Vision m_vision;
   Drive m_drive {m_search_navigator};
 
   const std::array<Subsystem*, 4> m_subsystems = {
-      &ErrorManager::get(), &m_buzzer, &m_vision, &m_drive
-  };
+      &ErrorManager::get(), &m_buzzer, &m_vision, &m_drive};
 
   bool m_ble_connected = false;
+
+private:
+  std::array<maze::CoordinateSpan, 4> get_search_targets() {
+    return {Maze::GOAL_ENDPOINTS, Maze::outside_start(m_start_location),
+            Maze::GOAL_ENDPOINTS, Maze::start(m_start_location)};
+  }
+
+  std::array<maze::CoordinateSpan, 4> get_solve_targets() {
+    return {Maze::GOAL_ENDPOINTS, Maze::start(m_start_location)};
+  }
 
 public:
   Buzzer& buzzer() { return m_buzzer; }
   Vision& vision() { return m_vision; }
   Drive& drive() { return m_drive; }
 
-//
-// General robot control stuff.
-//
+  //
+  // General robot control stuff.
+  //
 private:
   friend void ::Robot_Init(void);
   friend void ::Robot_Update(void);
@@ -50,15 +62,15 @@ private:
   void on_disconnect();
   void send_feedback();
 
-//
-// Task management stuff.
-//
+  //
+  // Task management stuff.
+  //
 public:
   enum class Task : uint8_t {
     NONE            = 0,
     MAZE_SEARCH     = 1,
-    MAZE_FAST_SOLVE = 2,
-    /* MAZE_SLOW_SOLVE = 3, */
+    MAZE_SLOW_SOLVE = 2,
+    MAZE_FAST_SOLVE = 3,
     ARMED,
     _COUNT,
   };
@@ -102,11 +114,13 @@ private:
   void start_next_task();
 
   void start_task_maze_search();
+  void start_task_maze_slow_solve();
   void start_task_maze_fast_solve();
 
   void process_current_task();
 
   void process_task_maze_search();
+  void process_task_maze_slow_solve();
   void process_task_maze_fast_solve();
   void process_armed();
 

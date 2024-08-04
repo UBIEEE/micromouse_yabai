@@ -29,16 +29,27 @@ class Maze {
   Cell m_cells[Constants::MAZE_CELLS];
   uint8_t m_cell_values[Constants::MAZE_CELLS];
 
-public:
+private:
   // Center four cells.
-  inline static constexpr Coordinate GOAL_ENDPOINTS[] = {
+  inline static constexpr Coordinate GOAL_ENDPOINT_ARRAY[] = {
       {7, 7}, {7, 8}, {8, 7}, {8, 8}};
 
   // Southwest corner cell (goal is to the right).
-  inline static constexpr Coordinate WEST_START_ENDPOINTS[] = {{0, 0}};
-
+  inline static constexpr Coordinate WEST_START[] = {{0, 0}};
   // Southeast corner cell (goal is to the left).
-  inline static constexpr Coordinate EAST_START_ENDPOINTS[] = {{15, 0}};
+  inline static constexpr Coordinate EAST_START[] = {{15, 0}};
+
+  // The cell next to the start cell.
+  inline static constexpr Coordinate WEST_OUTSIDE_START[] = {{0, 1}};
+  inline static constexpr Coordinate EAST_OUTSIDE_START[] = {{15, 1}};
+
+  inline static constexpr CoordinateSpan WEST_START_ENDPOINTS = WEST_START;
+  inline static constexpr CoordinateSpan EAST_START_ENDPOINTS = EAST_START;
+
+public:
+  // span of the goal endpoints.
+  inline static constexpr CoordinateSpan GOAL_ENDPOINTS =
+      GOAL_ENDPOINT_ARRAY;
 
   // The two possible start locations for the mouse.
   enum class StartLocation {
@@ -50,14 +61,26 @@ public:
   Maze();
 
   // Returns the start endpoints based on the start location.
-  static std::span<const Coordinate>
-  get_start_endpoints(StartLocation start_location) {
+  static CoordinateSpan start(StartLocation start_location) {
     switch (start_location) {
       using enum StartLocation;
     case WEST_OF_GOAL:
       return WEST_START_ENDPOINTS;
     case EAST_OF_GOAL:
+    default:
       return EAST_START_ENDPOINTS;
+    }
+  }
+
+  // Returns the outside start cell based on the start location.
+  static CoordinateSpan outside_start(StartLocation start_location) {
+    switch (start_location) {
+      using enum StartLocation;
+    case WEST_OF_GOAL:
+      return WEST_OUTSIDE_START;
+    case EAST_OF_GOAL:
+    default:
+      return EAST_OUTSIDE_START;
     }
   }
 
@@ -97,9 +120,7 @@ public:
   // Returns nullptr if the neighbor is out of bounds.
   Cell* neighbor_cell(Coordinate coord, Direction direction);
 
-  uint8_t cell_value(Coordinate coord) const {
-    return m_cell_values[coord];
-  }
+  uint8_t cell_value(Coordinate coord) const { return m_cell_values[coord]; }
 
   void set_cell_value(Coordinate coord, uint8_t value) {
     m_cell_values[coord] = value;

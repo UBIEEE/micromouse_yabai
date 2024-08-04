@@ -99,7 +99,7 @@ void IncrementalController::begin_next_motion() {
   using enum BasicMotion;
 
   // Get the next motion.
-  const BasicMotion next_motion = m_navigator.next_motion();
+  const BasicMotion next_motion = m_navigator.next_motion(/* TODO: Make this right */ maze::Coordinate(0));
 
   // The robot needs to stop before it can rotate in place!
   if (ROTATE_IN_PLACE == next_motion) {

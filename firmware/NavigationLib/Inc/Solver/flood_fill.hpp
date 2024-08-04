@@ -12,5 +12,5 @@ public:
 
   void reset() override;
 
-  void solve(std::span<maze::Coordinate> endpoints) override;
+  void solve(maze::CoordinateSpan endpoints) override;
 };

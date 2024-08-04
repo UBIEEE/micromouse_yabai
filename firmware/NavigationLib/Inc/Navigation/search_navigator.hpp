@@ -4,6 +4,7 @@
 #include "Maze/coordinate.hpp"
 #include "Maze/maze.hpp"
 #include "Solver/flood_fill.hpp"
+#include <queue>
 #include <span>
 
 //
@@ -15,22 +16,22 @@ class SearchNavigator {
 
   bool m_solver_enabled = false;
 
-  std::span<maze::Coordinate> m_endpoints;
+  std::queue<maze::CoordinateSpan> m_targets_queue;
 
 public:
   SearchNavigator(Maze& maze)
     : m_maze(maze),
       m_flood_fill_solver(maze) {}
 
-  void reset();
-
   bool solver_enabled() const { return m_solver_enabled; }
   void set_solver_enabled(bool enabled) { m_solver_enabled = enabled; }
 
-  void set_target(std::span<maze::Coordinate> endpoints) {
-    m_endpoints = endpoints;
+  void set_targets(const std::span<const maze::CoordinateSpan>& targets) {
+    m_targets_queue = {};
+    for (const auto& target : targets) {
+      m_targets_queue.push(target);
+    }
   }
-  std::span<maze::Coordinate> target() const { return m_endpoints; }
 
-  drive::BasicMotion next_motion();
+  drive::BasicMotion next_motion(maze::Coordinate current_position);
 };
