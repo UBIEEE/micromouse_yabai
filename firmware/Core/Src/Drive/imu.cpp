@@ -1,9 +1,7 @@
 #include "Drive/imu.hpp"
 
 #include "Basic/error_manager.hpp"
-
 #include "custom_stm.h"
-
 #include <climits>
 
 using namespace drive;
@@ -50,8 +48,10 @@ static constexpr uint32_t I2C_TIMEOUT = 100;
 // IMU Functions.
 //
 
-void IMU::init() {
+void IMU::init(const Config& config) {
   if (m_init) return;
+
+  m_config = config;
 
   const auto fail_if = [](bool condition) {
     if (condition) {
@@ -222,16 +222,14 @@ void IMU::read_complete_handler() {
   m_is_receiving = false;
 }
 
-void IMU::send_feedback() {
-  static_assert(sizeof(m_data) == 6*4);
+void IMU::send_readings() {
+  static_assert(sizeof(m_data) == 6 * 4);
 
   Custom_STM_App_Update_Char(CUSTOM_STM_DRIVE_IMUDATA_CHAR,
                              reinterpret_cast<uint8_t*>(&m_data));
 }
 
-//
-// Callbacks.
-//
+#include "Basic/robot.hpp"
 
 // I2C DMA interrupt callback.
 void HAL_I2C_MasterRxCpltCallback(I2C_HandleTypeDef* hi2c) {
@@ -239,5 +237,5 @@ void HAL_I2C_MasterRxCpltCallback(I2C_HandleTypeDef* hi2c) {
   assert_param(hi2c == &hi2c1);
   UNUSED(hi2c);
 
-  IMU::get().read_complete_handler();
+  Robot::get().drive().imu().read_complete_handler();
 }

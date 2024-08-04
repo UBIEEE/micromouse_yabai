@@ -1,13 +1,9 @@
 #include "Buzzer/buzzer.hpp"
 
-#include "Buzzer/buzzer.h"
-
 #include "Buzzer/notes.hpp"
-
+#include "custom_stm.h"
 #include "stm32wbxx_hal.h"
 #include <span>
-
-#include "custom_stm.h"
 
 //
 // External variables.
@@ -191,10 +187,12 @@ void Buzzer::end_song() {
   }
 }
 
+#include "Basic/robot.hpp"
+
 void Buzzer_PlaySong(uint8_t song) {
   if (song == 0 || song >= uint8_t(Buzzer::Song::_COUNT)) {
-    Buzzer::get().quiet();
+    Robot::get().buzzer().quiet();
     return;
   }
-  Buzzer::get().play_song(static_cast<Buzzer::Song>(song));
+  Robot::get().buzzer().play_song(static_cast<Buzzer::Song>(song));
 }

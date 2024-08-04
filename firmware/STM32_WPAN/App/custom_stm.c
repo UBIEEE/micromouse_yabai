@@ -25,9 +25,6 @@
 /* USER CODE BEGIN Includes */
 
 #include "Basic/robot.h"
-#include "Buzzer/buzzer.h"
-#include "Control/robot_control.h"
-#include "Drive/drive.h"
 
 /* USER CODE END Includes */
 

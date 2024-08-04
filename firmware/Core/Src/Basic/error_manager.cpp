@@ -1,7 +1,5 @@
 #include "Basic/error_manager.hpp"
 
-#include "Basic/error_manager.h"
-
 #include "custom_stm.h"
 
 //
@@ -16,7 +14,8 @@ static constexpr uint16_t MAX_ERRORS = 64;
 
 void ErrorManager::on_connect_send_feedback() {
   for (auto error : m_errors) {
-    Custom_STM_App_Update_Char(CUSTOM_STM_MAIN_ERRORCODE_CHAR, (uint8_t*)&error);
+    Custom_STM_App_Update_Char(CUSTOM_STM_MAIN_ERRORCODE_CHAR,
+                               (uint8_t*)&error);
   }
 }
 
@@ -37,6 +36,8 @@ void ErrorManager::error_handler() {
   while (1) {
   }
 }
+
+#include "Basic/robot.h"
 
 void ErrorManager_ReportError(void) {
   ErrorManager::get().report_error(ErrorManager::Error::UNKNOWN);

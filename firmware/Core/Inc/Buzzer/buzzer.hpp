@@ -6,7 +6,7 @@
 
 struct SongHandle;
 
-class Buzzer : public SubsystemSingleton<Buzzer> {
+class Buzzer : public Subsystem {
 public:
   enum class Song : uint8_t {
     NONE          = 0,

@@ -1,9 +1,7 @@
 #pragma once
 
-#include <cstdint>
-
-#include "Basic/subsystem.hpp"
 #include "main.h"
+#include <cstdint>
 
 namespace drive {
 
@@ -11,7 +9,7 @@ namespace drive {
 //
 // Datasheet:
 // https://product.tdk.com/system/files/dam/doc/product/sensor/mortion-inertial/imu/data_sheet/ds-000451-icm-42670-p.pdf
-class IMU : public SubsystemSingleton<IMU> {
+class IMU {
   bool m_init         = false;
   bool m_is_receiving = false;
 
@@ -120,10 +118,8 @@ private:
   Config m_config;
 
 public:
-  void set_config(const Config& config) { m_config = config; }
-
-  void init() override;
-  void send_feedback() override;
+  void init(const Config& config);
+  void send_readings();
 
   void set_standby_mode(bool on_standby);
 

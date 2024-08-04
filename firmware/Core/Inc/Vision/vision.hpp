@@ -4,7 +4,7 @@
 
 #include <cstdint>
 
-class Vision : public SubsystemSingleton<Vision> {
+class Vision : public Subsystem {
   bool m_enabled = false;
 
 public:

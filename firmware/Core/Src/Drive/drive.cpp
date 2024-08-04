@@ -2,6 +2,7 @@
 
 #include "Basic/constants.hpp"
 #include "Drive/odometry.hpp"
+#include "Navigation/search_navigator.hpp"
 #include "custom_stm.h"
 #include <cmath>
 #include <cstring>
@@ -33,12 +34,15 @@ static constexpr float ANGULAR_KD       = 0.0f;
 // Drive functions.
 //
 
-Drive::Drive()
+Drive::Drive(SearchNavigator& navigator)
   : m_translational_left_pid(TRANSLATIONAL_KP, TRANSLATIONAL_KI,
                              TRANSLATIONAL_KD, ROBOT_UPDATE_PERIOD_S),
     m_translational_right_pid(TRANSLATIONAL_KP, TRANSLATIONAL_KI,
                               TRANSLATIONAL_KD, ROBOT_UPDATE_PERIOD_S),
-    m_angular_pid(ANGULAR_KP, ANGULAR_KI, ANGULAR_KD, ROBOT_UPDATE_PERIOD_S) {}
+    m_angular_pid(ANGULAR_KP, ANGULAR_KI, ANGULAR_KD, ROBOT_UPDATE_PERIOD_S),
+    m_incremental_ctrl(navigator) {}
+
+void Drive::init() { m_imu.init(IMU::Config {}); }
 
 void Drive::process() {
   using enum ControlMode;
@@ -53,7 +57,7 @@ void Drive::process() {
 
   } else {
     if (CONTROLLER == m_control_mode) {
-      const auto [left, right] = m_search_controller.update();
+      const auto [left, right] = m_controller->update();
       m_velocity_control_data  = {
            .target_linear_mmps = left,
            .target_angular_dps = right,
@@ -114,17 +118,13 @@ void Drive::control_speed_velocity(float linear_mmps, float angular_dps) {
   reset_to_mode(ControlMode::VELOCITY);
 }
 
-void Drive::begin_search() {
-  m_controller = &m_search_controller;
+void Drive::begin_incremental_control() {
+  m_controller = &m_incremental_ctrl;
 
   reset_to_mode(ControlMode::CONTROLLER);
 }
 
-void Drive::begin_solve() {
-  m_controller = &m_solve_controller;
-
-  reset_to_mode(ControlMode::CONTROLLER);
-}
+// void Drive::begin_continuous_control() { }
 
 void Drive::reset_to_mode(ControlMode mode) {
   using enum ControlMode;
@@ -189,7 +189,7 @@ void Drive::update_pid_controllers() {
 
   // Angular PID controller.
   {
-    const float gyro_z_dps = IMU::get().get_angular_velocity(IMU::Axis::Z);
+    const float gyro_z_dps = m_imu.get_angular_velocity(IMU::Axis::Z);
 
     control_data.final_angular_dps +=
         m_angular_pid.calculate(gyro_z_dps, control_data.target_angular_dps);
@@ -271,16 +271,14 @@ void Drive::update_pid_constants(float* constants) {
   m_angular_pid.set_pid(constants[3], constants[4], constants[5]);
 }
 
+#include "Basic/robot.hpp"
+
 void Drive_UpdatePIDConstants(uint8_t* buf) {
   float pid_constants[6];
   std::memcpy(pid_constants, buf, sizeof(pid_constants));
 
-  Drive::get().update_pid_constants(pid_constants);
+  Robot::get().drive().update_pid_constants(pid_constants);
 }
-
-//
-// Callbacks.
-//
 
 // TIM17 interrupt callback.
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim) {
@@ -289,5 +287,5 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim) {
 
   // We can't use hardware PWM generation because of a mistake in PCB, so we
   // have to do it manually.
-  Drive::get().update_pwm();
+  Robot::get().drive().update_pwm();
 }

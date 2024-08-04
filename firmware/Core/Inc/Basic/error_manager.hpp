@@ -1,10 +1,11 @@
 #pragma once
 
 #include "Basic/subsystem.hpp"
+#include "Basic/singleton.hpp"
 
 #include <list>
 
-class ErrorManager : public SubsystemSingleton<ErrorManager> {
+class ErrorManager : public Subsystem, public Singleton<ErrorManager> {
 public:
   enum class Error : uint8_t {
     UNKNOWN = 0,

@@ -82,14 +82,12 @@ void Vision::send_feedback() {
   Custom_STM_App_Update_Char(CUSTOM_STM_VISION_DATA_CHAR, m_readings);
 }
 
-//
-// Callbacks.
-//
+#include "Basic/robot.hpp"
 
 // ADC conversion complete callback.
 void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef* hadc) {
   assert_param(hadc->Instance == ADC1);
   UNUSED(hadc);
 
-  Vision::get().read_complete_handler();
+  Robot::get().vision().read_complete_handler();
 }

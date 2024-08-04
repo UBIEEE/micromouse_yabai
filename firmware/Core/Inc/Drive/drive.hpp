@@ -3,24 +3,27 @@
 #include "Basic/subsystem.hpp"
 #include "Drive/Controller/continuous_controller.hpp"
 #include "Drive/Controller/incremental_controller.hpp"
-#include "Drive/drive.h"
 #include "Drive/encoder.hpp"
 #include "Drive/imu.hpp"
 #include "Drive/motion.hpp"
 #include "Drive/pose.hpp"
 #include "Drive/trajectory.hpp"
 #include "Math/pid_controller.hpp"
+#include "Navigation/search_navigator.hpp"
 #include <cstdint>
 #include <queue>
 
 namespace drive {
 
-class Drive : public SubsystemSingleton<Drive> {
+class Drive : public Subsystem {
   // Drive stuff.
 
   static inline uint8_t m_pwm_counter     = 0;
   static inline uint8_t m_pwm_pulse_right = 0;
   static inline uint8_t m_pwm_pulse_left  = 0;
+
+  // IMU.
+  IMU m_imu;
 
   // Encoder stuff.
 
@@ -63,14 +66,17 @@ class Drive : public SubsystemSingleton<Drive> {
     float final_left_speed  = 0.f;
   } m_velocity_control_data;
 
-  IncrementalController m_search_controller;
-  ContinuousController m_solve_controller;
+  IncrementalController m_incremental_ctrl;
+  ContinuousController m_continuous_ctrl;
 
   DriveController* m_controller = nullptr;
 
 public:
-  Drive();
+  Drive(SearchNavigator& navigator);
 
+  IMU& imu() { return m_imu; }
+
+  void init() override;
   void process() override;
   void send_feedback() override;
   void on_connect_send_feedback() override;
@@ -90,23 +96,8 @@ public:
   // Set the target speed of the motors.
   void control_speed_velocity(float linear_mmps, float angular_dps);
 
-  //
-  // Search control functions.
-  //
-  // Control the drivetrain during search runs, where future movements are
-  // unknown, and the robot drives relatively slowly.
-  //
-
-  void begin_search();
-
-  //
-  // Solve control functions.
-  //
-  // Control the drivetrain during solve runs, where the full path to the goal
-  // is already known. The robot will (attempt to) drive at full speed.
-  //
-
-  void begin_solve();
+  void begin_incremental_control();
+  void begin_continuous_control();
 
 private:
 private:
@@ -123,14 +114,14 @@ private:
   void update_pid_controllers();
 
 private:
-  friend void ::HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef*);
+  friend void ::HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef* htim);
 
   // We can't use hardware PWM generation because of a mistake in PCB, so we
   // have to do it manually.
   void update_pwm();
 
 private:
-  friend void ::Drive_UpdatePIDConstants(uint8_t*);
+  friend void ::Drive_UpdatePIDConstants(uint8_t* pid_constants);
 
   void update_pid_constants(float* constants);
 };

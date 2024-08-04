@@ -1,8 +1,7 @@
 #pragma once
 
-#include "Basic/singleton.hpp"
-
 #include "main.h"
+#include "Basic/robot.h"
 
 // Base class for subsystems.
 // Note: Subclasses should override init() instead of using a constructor
@@ -23,10 +22,4 @@ public:
 
 protected:
   Subsystem() = default;
-};
-
-template <typename T>
-class SubsystemSingleton : public Subsystem, public Singleton<T> {
-protected:
-  SubsystemSingleton() = default;
 };

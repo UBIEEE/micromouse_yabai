@@ -6,6 +6,7 @@
 #include "Drive/pose.hpp"
 #include "Math/math.hpp"
 #include "Utilities/timer.hpp"
+#include "Navigation/search_navigator.hpp"
 
 #include <cmath>
 #include <numbers>
@@ -90,12 +91,17 @@ class IncrementalController : public DriveController {
 
   } m_angular;
 
+  SearchNavigator& m_navigator;
+
   BasicMotion m_current_motion = BasicMotion::STOP;
   Timer m_motion_timer;
 
   Pose m_target_pose = {};
 
 public:
+  IncrementalController(SearchNavigator& navigator)
+    : m_navigator(navigator) {}
+
   void reset() override;
   Trajectory::State update() override;
 
