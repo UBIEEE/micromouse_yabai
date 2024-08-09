@@ -1,8 +1,8 @@
-#include "Math/pid_controller.hpp"
+#include "DriveTools/pid_controller.hpp"
 
 #include <algorithm>
 
-#include "main.h"
+using namespace drive;
 
 PIDController::PIDController(float kp, float ki, float kd, float dt,
                              float min_integral, float max_integral)
@@ -11,12 +11,7 @@ PIDController::PIDController(float kp, float ki, float kd, float dt,
     m_kd(kd),
     m_dt(dt),
     m_min_integral(min_integral),
-    m_max_integral(max_integral) {
-
-  assert_param(kp >= 0.f);
-  assert_param(ki >= 0.f);
-  assert_param(kd >= 0.f);
-}
+    m_max_integral(max_integral) {}
 
 float PIDController::calculate(float measurement, float setpoint) {
   m_prev_error = m_pos_error;

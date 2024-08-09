@@ -145,6 +145,7 @@ class BluetoothManager: NSObject, ObservableObject,
   
   struct MainService {
     var currentTask: UInt8 = 0
+    var startingPosition: UInt8 = 0
     var errorCodes: [UInt8] = []
   }
   
@@ -358,6 +359,7 @@ class BluetoothManager: NSObject, ObservableObject,
     // Main service
     case AppConstants.Bluetooth.MainService.TaskUUID:
       mainService.currentTask = ch.value![0]
+      mainService.startingPosition = ch.value![1]
     case AppConstants.Bluetooth.MainService.ErrorCodeUUID:
       mainService.errorCodes.append(ch.value![0])
       

@@ -1,15 +1,10 @@
 #pragma once
 
 #include "Basic/subsystem.hpp"
-#include "Drive/Controller/continuous_controller.hpp"
-#include "Drive/Controller/incremental_controller.hpp"
 #include "Drive/encoder.hpp"
 #include "Drive/imu.hpp"
-#include "Drive/motion.hpp"
-#include "Drive/pose.hpp"
-#include "Drive/trajectory.hpp"
-#include "Math/pid_controller.hpp"
-#include "Navigation/search_navigator.hpp"
+#include "DriveTools/pose.hpp"
+#include "DriveTools/pid_controller.hpp"
 #include <cstdint>
 #include <queue>
 
@@ -49,7 +44,6 @@ class Drive : public Subsystem {
     IDLE,
     MANUAL,
     VELOCITY,
-    CONTROLLER,
   } m_control_mode = ControlMode::IDLE;
 
   struct {
@@ -66,13 +60,8 @@ class Drive : public Subsystem {
     float final_left_speed  = 0.f;
   } m_velocity_control_data;
 
-  IncrementalController m_incremental_ctrl;
-  ContinuousController m_continuous_ctrl;
-
-  DriveController* m_controller = nullptr;
-
 public:
-  Drive(SearchNavigator& navigator);
+  Drive();
 
   IMU& imu() { return m_imu; }
 
@@ -96,8 +85,13 @@ public:
   // Set the target speed of the motors.
   void control_speed_velocity(float linear_mmps, float angular_dps);
 
-  void begin_incremental_control();
-  // void begin_continuous_control();
+  float left_position_mm() const { return m_drive_data.encoder.left.position_mm; }
+  float right_position_mm() const { return m_drive_data.encoder.right.position_mm; }
+
+  float left_velocity_mmps() const { return m_drive_data.encoder.left.velocity_mmps; }
+  float right_velocity_mmps() const { return m_drive_data.encoder.right.velocity_mmps; }
+
+  const Pose& pose() const { return m_drive_data.pose; }
 
 private:
   // Performs relevant reset actions when transitioning to a new mode.

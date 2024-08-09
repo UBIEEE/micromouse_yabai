@@ -1,8 +1,8 @@
 #include "Drive/drive.hpp"
 
 #include "Basic/constants.hpp"
-#include "Drive/odometry.hpp"
-#include "Navigation/search_navigator.hpp"
+#include "DriveTools/odometry.hpp"
+#include "Utilities/math.hpp"
 #include "custom_stm.h"
 #include <cmath>
 #include <cstring>
@@ -34,13 +34,12 @@ static constexpr float ANGULAR_KD       = 0.0f;
 // Drive functions.
 //
 
-Drive::Drive(SearchNavigator& navigator)
+Drive::Drive()
   : m_translational_left_pid(TRANSLATIONAL_KP, TRANSLATIONAL_KI,
                              TRANSLATIONAL_KD, ROBOT_UPDATE_PERIOD_S),
     m_translational_right_pid(TRANSLATIONAL_KP, TRANSLATIONAL_KI,
                               TRANSLATIONAL_KD, ROBOT_UPDATE_PERIOD_S),
-    m_angular_pid(ANGULAR_KP, ANGULAR_KI, ANGULAR_KD, ROBOT_UPDATE_PERIOD_S),
-    m_incremental_ctrl(navigator) {}
+    m_angular_pid(ANGULAR_KP, ANGULAR_KI, ANGULAR_KD, ROBOT_UPDATE_PERIOD_S) {}
 
 void Drive::init() { m_imu.init(IMU::Config {}); }
 
@@ -49,24 +48,18 @@ void Drive::process() {
 
   update_encoders();
 
-  if (m_control_mode == IDLE) {
+  switch (m_control_mode) {
+  case IDLE:
     m_raw_speed_data = {};
-
-  } else if (m_control_mode == MANUAL) {
+    break;
+  case MANUAL:
     // Raw speeds already set, so nothing to do here.
-
-  } else {
-    if (CONTROLLER == m_control_mode) {
-      const auto [left, right] = m_controller->update();
-      m_velocity_control_data  = {
-           .target_linear_mmps = left,
-           .target_angular_dps = right,
-      };
-    }
-
+    break;
+  case VELOCITY:
     // Update PID controllers with velocity control data to produce raw speed
     // data.
     update_pid_controllers();
+    break;
   }
 
   // Set the motors.
@@ -84,6 +77,8 @@ void Drive::reset() {
 void Drive::reset_encoders() {
   m_left_encoder.reset();
   m_right_encoder.reset();
+
+  m_drive_data = {};
 }
 
 void Drive::reset_pid_controllers() {
@@ -96,8 +91,6 @@ void Drive::reset_pid_controllers() {
 
 void Drive::stop() {
   m_raw_speed_data = {};
-
-  reset_pid_controllers();
 
   reset_to_mode(ControlMode::IDLE);
 }
@@ -118,25 +111,10 @@ void Drive::control_speed_velocity(float linear_mmps, float angular_dps) {
   reset_to_mode(ControlMode::VELOCITY);
 }
 
-void Drive::begin_incremental_control() {
-  m_controller = &m_incremental_ctrl;
-
-  reset_to_mode(ControlMode::CONTROLLER);
-}
-
-// void Drive::begin_continuous_control() { }
-
 void Drive::reset_to_mode(ControlMode mode) {
   using enum ControlMode;
 
-  if (CONTROLLER == mode) {
-    m_controller->reset();
-  }
-
-  if (mode == m_control_mode) {
-    return;
-  }
-
+  if (mode == m_control_mode) return;
   m_control_mode = mode;
 }
 
@@ -199,7 +177,7 @@ void Drive::update_pid_controllers() {
   {
     const float w  = deg_to_rad(control_data.final_angular_dps);
     const float& v = control_data.target_linear_mmps;
-    const float& b = Constants::ROBOT_TRACK_WIDTH_MM;
+    const float& b = Constants::RobotDimensions::TRACK_WIDTH_MM;
 
     const float v_r = v + (w * b) / 2.f;
     const float v_l = v - (w * b) / 2.f;

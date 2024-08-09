@@ -1,5 +1,6 @@
 #include "Basic/robot.hpp"
 
+#include "Basic/constants.hpp"
 #include "custom_stm.h"
 #include "main.h"
 #include <array>
@@ -57,7 +58,7 @@ void Robot::handle_button_1() {
   }
 
   if (m_search_done) {
-    arm_task(Task::MAZE_FAST_SOLVE);
+    arm_task(Task::MAZE_SLOW_SOLVE);
   } else {
     arm_task(Task::MAZE_SEARCH);
   }
@@ -104,6 +105,7 @@ void Robot::reset_maze() {
 void Robot::start_next_task() {
   // Reset stuff.
 
+  m_navigator.stop();
   m_drive.stop();
   m_task = m_next_task;
 
@@ -112,6 +114,9 @@ void Robot::start_next_task() {
 
     if (!idle) {
       m_drive.reset();
+      m_navigator.reset_position(
+          Maze::start(m_start_location), maze::Direction::NORTH,
+          Constants::CellRobotDistances::AT_BACK_WALL_MM);
     }
 
     m_vision.set_enabled(!idle);
@@ -125,10 +130,10 @@ void Robot::start_next_task() {
     start_task_maze_search();
     break;
   case Task::MAZE_SLOW_SOLVE:
-    start_task_maze_slow_solve();
+    start_task_maze_solve(false);
     break;
   case Task::MAZE_FAST_SOLVE:
-    start_task_maze_fast_solve();
+    start_task_maze_solve(true);
     break;
   default:
     break;
@@ -138,28 +143,24 @@ void Robot::start_next_task() {
 }
 
 void Robot::start_task_maze_search() {
-  /* m_buzzer.play_song(Buzzer::Song::BEGIN_SEARCH); */
+  // m_buzzer.play_song(Buzzer::Song::BEGIN_SEARCH);
 
-  m_search_navigator.set_solver_enabled(true);
-  m_search_navigator.set_targets(get_search_targets());
-
-  m_drive.begin_incremental_control();
+  m_search_stage = SearchStage::START_TO_GOAL;
+  m_navigator.navigate_to(Maze::GOAL_ENDPOINTS);
 }
 
-void Robot::start_task_maze_slow_solve() {
-  /* m_buzzer.play_song(Buzzer::Song::BEGIN_SLOW_SOLVE); */
+void Robot::start_task_maze_solve(bool fast) {
+  // m_buzzer.play_song(fast ? Buzzer::Song::BEGIN_FAST_SOLVE
+  //                         : Buzzer::Song::BEGIN_SLOW_SOLVE);
 
-  m_search_navigator.set_solver_enabled(false);
-  m_search_navigator.set_targets(get_solve_targets());
+  using enum Navigator::Mode;
+  const Navigator::Mode mode = fast ? FAST_SOLVE : SLOW_SOLVE;
 
-  m_drive.begin_incremental_control();
+  m_solve_stage = SolveStage::START_TO_GOAL;
+  m_navigator.navigate_to(Maze::GOAL_ENDPOINTS, mode);
 }
 
-void Robot::start_task_maze_fast_solve() {
-  /* m_buzzer.play_song(Buzzer::Song::BEGIN_FAST_SOLVE); */
-
-  // m_drive.begin_continuous_control();
-}
+void Robot::start_task_test_gyro() { m_drive.control_speed_velocity(0.f, 0.f); }
 
 void Robot::process_current_task() {
   switch (m_task) {
@@ -167,10 +168,10 @@ void Robot::process_current_task() {
     process_task_maze_search();
     break;
   case Task::MAZE_SLOW_SOLVE:
-    process_task_maze_slow_solve();
+    process_task_maze_solve(false);
     break;
   case Task::MAZE_FAST_SOLVE:
-    process_task_maze_fast_solve();
+    process_task_maze_solve(true);
     break;
   case Task::ARMED:
     process_armed();
@@ -181,33 +182,52 @@ void Robot::process_current_task() {
 }
 
 void Robot::process_task_maze_search() {
-  // TODO: Process
+  using enum SearchStage;
 
-  /*
-  if (done) {
-    end_task();
+  if (m_navigator.done()) {
+    maze::CoordinateSpan next_target;
+
+    // Check which stage was just finished, and set the next target accordingly.
+    switch (m_search_stage) {
+    case START_TO_GOAL:
+      // Goal -> Outside Start
+      next_target = Maze::outside_start_span(m_start_location);
+      break;
+    case GOAL_TO_OUTSIDE_START:
+      // Outside Start -> Goal
+      next_target = Maze::GOAL_ENDPOINTS;
+      break;
+    case OUTSIDE_START_TO_GOAL:
+      // Goal -> Start
+      next_target = Maze::start_span(m_start_location);
+      break;
+    case GOAL_TO_START:
+      end_task();
+      return;
+    }
+
+    m_navigator.navigate_to(next_target);
+
+    m_search_stage = SearchStage(uint8_t(m_search_stage) + 1);
   }
-  */
 }
 
-void Robot::process_task_maze_slow_solve() {
-  // TODO: Process
+void Robot::process_task_maze_solve(bool fast) {
+  using enum Navigator::Mode;
+  const Navigator::Mode mode = fast ? FAST_SOLVE : SLOW_SOLVE;
 
-  /*
-  if (done) {
-    end_task();
+  if (m_navigator.done()) {
+    switch (m_solve_stage) {
+      using enum SolveStage;
+    case START_TO_GOAL:
+      m_navigator.navigate_to(Maze::start_span(m_start_location), mode);
+      m_solve_stage = GOAL_TO_START;
+      break;
+    case GOAL_TO_START:
+      end_task();
+      return;
+    }
   }
-  */
-}
-
-void Robot::process_task_maze_fast_solve() {
-  // TODO: Process
-
-  /*
-  if (done) {
-    end_task();
-  }
-  */
 }
 
 void Robot::process_armed() {
@@ -215,7 +235,9 @@ void Robot::process_armed() {
 }
 
 void Robot::send_current_task() {
-  Custom_STM_App_Update_Char(CUSTOM_STM_MAIN_TASK_CHAR, (uint8_t*)&m_task);
+  uint8_t data[2] = {uint8_t(m_task), uint8_t(m_start_location)};
+
+  Custom_STM_App_Update_Char(CUSTOM_STM_MAIN_TASK_CHAR, data);
 }
 
 // External interrupt callback.
@@ -242,9 +264,18 @@ void Robot_DashboardAppReady(void) { Robot::get().dashboard_app_ready(); }
 void Robot_OnDisconnect(void) { Robot::get().on_disconnect(); }
 void Robot_SendFeedback(void) { Robot::get().send_feedback(); }
 
-void RobotControl_RunTask(uint8_t task) {
-  if (task >= uint8_t(Robot::Task::_COUNT)) return;
-  Robot::get().run_task(Robot::Task(task));
+void RobotControl_RunTask(uint8_t task, uint8_t start_location) {
+  if (task > 3) return; // TODO: Handle the rest of the tasks...
+  // if (task > 7) return;
+
+  const Robot::Task final_task = Robot::Task(task);
+
+  Robot::get().run_task(final_task);
+
+  if (final_task == Robot::Task::MAZE_SEARCH) {
+    if (start_location >= 2) return;
+    Robot::get().set_start_location(Maze::StartLocation(start_location));
+  }
 }
 
 void RobotControl_ResetMaze(void) { Robot::get().reset_maze(); }

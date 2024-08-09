@@ -21,7 +21,6 @@ struct DrivePage: View {
     
     NavigationStack {
       List {
-        #if false
         Section("Left Encoder") {
           VStack(alignment: .leading) {
             Text("\(btManager.driveService.motorLeftPosition)")
@@ -50,7 +49,6 @@ struct DrivePage: View {
               .foregroundColor(.secondary)
           }
         }
-#endif
         let d = btManager.driveService
         Section("Position (mm)") {
           Text("X\t").foregroundColor(.secondary) +

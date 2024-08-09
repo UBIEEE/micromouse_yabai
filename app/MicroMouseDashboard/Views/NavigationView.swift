@@ -36,9 +36,7 @@ struct NavigationView: View {
     // When app is ready, send a message to the MicroMouse.
     .onAppear(perform: ({
       // Don't crash the preview!
-      guard ProcessInfo.processInfo.environment["XCODE_RUNNING_FOR_PREVIEWS"] != "1" else {
-        return
-      }
+      guard Utilities.isPreviewRunning() == false else { return }
       
       let appReadyChar = btManager.connectionState.mainService.appReadyChar!
       let appReadyData = Data([1])

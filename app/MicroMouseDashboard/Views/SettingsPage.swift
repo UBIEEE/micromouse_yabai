@@ -11,6 +11,13 @@ struct SettingsPage: View {
             Settings_DrivePIDConstantsPage()
           }
         }
+        Section(header: Text("Extra stuff"), footer: Text("Ask the MicroMouse to re-send all values. This shouldn't ever be necessary, but it's here just in case.")) {
+          Button("Update All Values") {
+            let appReadyChar = btManager.connectionState.mainService.appReadyChar!
+            let appReadyData = Data([1])
+            btManager.writeValueToChar(appReadyChar, appReadyData)
+          }
+        }
       }
       .navigationTitle("Settings")
     }
@@ -31,12 +38,15 @@ struct Settings_DrivePIDConstantsPage: View {
   @FocusState private var focusedField: Bool
 
   private func sendValues() {
+    guard Utilities.isPreviewRunning() == false else { return }
+    
     let valuesChar = btManager.connectionState.driveService.pidConstantsChar!
     let valuesData = btManager.driveService.pidConstants.withUnsafeBufferPointer { buffer in
       Data(buffer: buffer)
     }
     
     btManager.writeValueToChar(valuesChar, valuesData)
+      
   }
 
   private func menuItems(index: Int) -> some View {

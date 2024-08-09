@@ -82,7 +82,7 @@ typedef struct{
 uint8_t SizeMusic_Playsong_Char = 1;
 uint8_t SizeMusic_Isplaying_Char = 1;
 uint8_t SizeVision_Data_Char = 4;
-uint8_t SizeMain_Task_Char = 1;
+uint8_t SizeMain_Task_Char = 2;
 uint8_t SizeMain_Appready_Char = 1;
 uint8_t SizeMain_Errorcode_Char = 1;
 uint8_t SizeDrive_Data_Char = 4*4+3*4;
@@ -574,8 +574,8 @@ static SVCCTL_EvtAckStatus_t Custom_STM_Event_Handler(void *Event)
             return_value = SVCCTL_EvtAckFlowEnable;
             /* USER CODE BEGIN CUSTOM_STM_Service_3_Char_1_ACI_GATT_ATTRIBUTE_MODIFIED_VSEVT_CODE */
 
-            if (attribute_modified->Attr_Data_Length == 1) {
-              RobotControl_RunTask(attribute_modified->Attr_Data[0]);
+            if (attribute_modified->Attr_Data_Length == 2) {
+              RobotControl_RunTask(attribute_modified->Attr_Data[0], attribute_modified->Attr_Data[1]);
             }
 
             /* USER CODE END CUSTOM_STM_Service_3_Char_1_ACI_GATT_ATTRIBUTE_MODIFIED_VSEVT_CODE */

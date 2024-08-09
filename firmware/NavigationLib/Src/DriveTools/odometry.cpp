@@ -1,4 +1,4 @@
-#include "Drive/odometry.hpp"
+#include "DriveTools/odometry.hpp"
 
 #include "Basic/constants.hpp"
 #include <cmath>
@@ -8,7 +8,7 @@ using namespace drive;
 void Odometry::update(Pose& pose, const float& delta_left,
                       const float& delta_right) {
 
-  const float& b = Constants::ROBOT_TRACK_WIDTH_MM;
+  const float& b = Constants::RobotDimensions::TRACK_WIDTH_MM;
 
   const float dist        = (delta_right + delta_left) / 2.f;
   const float delta_theta = (delta_right - delta_left) / b;

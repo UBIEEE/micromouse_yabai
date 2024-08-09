@@ -4,25 +4,48 @@ struct MainPage: View {
   @EnvironmentObject var btManager: BluetoothManager
   
   enum Task: UInt8, CaseIterable, Identifiable {
-    case mazeSearch = 1
-    case mazeFastSolve = 2
-    case driveStraight = 3
+    case mazeSearch         = 1
+    case mazeSlowSolve      = 2
+    case mazeFastSolve      = 3
+    case testDriveStraight  = 4
+    case testDriveLeftTurn  = 5
+    case testDriveRightTurn = 6
     
     var id: Self { self }
   }
   
   private let taskNames: [Task: String] = [
-    .mazeSearch: "Maze Search",
-    .mazeFastSolve: "Maze Fast Solve",
-    .driveStraight: "Drive Straight (10cm)",
+    .mazeSearch:         "Maze Search",
+    .mazeSlowSolve:      "Maze Slow Solve",
+    .mazeFastSolve:      "Maze Fast Solve",
+    .testDriveStraight:  "TEST - Drive Straight",
+    .testDriveLeftTurn:  "TEST - Left Turn",
+    .testDriveRightTurn: "TEST - Right Turn",
   ]
   private let taskDescriptions: [Task: String] = [
     .mazeSearch: "Search to the center of the maze, then back to the start",
+    .mazeSlowSolve: "Solve the maze using the same control method as Search mode",
     .mazeFastSolve: "Solve the maze as fast as possible while using previous search data",
-    .driveStraight: "Drive straight for 10cm at 500mm/s",
+    .testDriveStraight: "Drive straight for 2 cell lengths at 500mm/s",
+    .testDriveLeftTurn:  "Make a left turn",
+    .testDriveRightTurn: "Make a right turn",
   ]
   
   @State private var selectedTask = Task.mazeSearch
+  
+  enum StartingPosition: UInt8, CaseIterable, Identifiable {
+    case westOfGoal = 0
+    case eastOfGoal = 1
+    
+    var id: Self { self }
+  }
+  
+  private let startingPositionNames: [StartingPosition: String] = [
+    .westOfGoal: "West of Goal",
+    .eastOfGoal: "East of Goal",
+  ]
+  
+  @State private var startingPosition = StartingPosition.westOfGoal
 
   var body: some View {
     NavigationStack {
@@ -42,6 +65,15 @@ struct MainPage: View {
         }
         
         Section(header: Text("User task Selection"), footer: Text(taskDescriptions[selectedTask]!)) {
+          
+          if (selectedTask == .mazeSearch) {
+            Picker("Starting Position", selection: $startingPosition) {
+              ForEach(StartingPosition.allCases, id: \.self) { startingPosition in
+                Text(startingPositionNames[startingPosition]!)
+              }
+            }
+          }
+          
           Picker("Task", selection: $selectedTask) {
             ForEach(Task.allCases, id: \.self) { task in
               Text(taskNames[task]!)
@@ -65,7 +97,7 @@ struct MainPage: View {
   
   func setTask(_ task: UInt8) {
     let taskChar = btManager.connectionState.mainService.taskChar!
-    let taskData = Data([task])
+    let taskData = Data([task, startingPosition.rawValue])
     btManager.writeValueToChar(taskChar, taskData)
   }
 }

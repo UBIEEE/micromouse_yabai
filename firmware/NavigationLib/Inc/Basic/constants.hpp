@@ -4,14 +4,39 @@
 
 class Constants {
 public:
-  static constexpr float CELL_WIDTH_MM = 180.f;
+  class RobotDimensions {
+  public:
+    static constexpr float LENGTH_MM = 100.f;
+    static constexpr float WIDTH_MM  = 70.f;
 
-  static constexpr uint8_t MAZE_WIDTH_CELLS = 16;
-  static constexpr uint16_t MAZE_CELLS = MAZE_WIDTH_CELLS * MAZE_WIDTH_CELLS;
+    static constexpr float CENTER_TO_FRONT_MM = 55.f;
+    static constexpr float CENTER_TO_BACK_MM  = 45.f;
 
-  static constexpr float ROBOT_LENGTH_MM = 100.f;
-  static constexpr float ROBOT_WIDTH_MM  = 70.f;
+    // Distance between the left and right wheels.
+    static constexpr float TRACK_WIDTH_MM = 50.4f;
+  };
 
-  // Distance between the left and right wheels.
-  static constexpr float ROBOT_TRACK_WIDTH_MM = 50.4f;
+  class Maze {
+  public:
+    static constexpr uint8_t WIDTH_CELLS  = 16;
+    static constexpr uint16_t TOTAL_CELLS = WIDTH_CELLS * WIDTH_CELLS;
+  };
+
+  class Cell {
+  public:
+    static constexpr float WIDTH_MM          = 180.f;
+    static constexpr float WALL_THICKNESS_MM = 12.f;
+
+    static constexpr float FREE_WIDTH_MM = WIDTH_MM - WALL_THICKNESS_MM;
+  };
+
+  class CellRobotDistances {
+  public:
+    static constexpr float AT_BACK_WALL_MM =
+        (RobotDimensions::CENTER_TO_BACK_MM + Cell::WALL_THICKNESS_MM);
+
+    static constexpr float CENTERED_MM = Cell::WIDTH_MM / 2.f;
+
+    static constexpr float AT_SENSING_DIST_MM = CENTERED_MM + 10.f;
+  };
 };

@@ -13,7 +13,7 @@ void Robot_DashboardAppReady(void);
 void Robot_OnDisconnect(void);
 void Robot_SendFeedback(void);
 
-void RobotControl_RunTask(uint8_t task);
+void RobotControl_RunTask(uint8_t task, uint8_t start_location);
 void RobotControl_ResetMaze(void);
 
 void ErrorManager_ReportError(void);

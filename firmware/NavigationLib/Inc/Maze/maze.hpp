@@ -26,8 +26,8 @@ namespace maze {
 // _t_ is the target cell.
 //
 class Maze {
-  Cell m_cells[Constants::MAZE_CELLS];
-  uint8_t m_cell_values[Constants::MAZE_CELLS];
+  Cell m_cells[Constants::Maze::TOTAL_CELLS];
+  uint8_t m_cell_values[Constants::Maze::TOTAL_CELLS];
 
 private:
   // Center four cells.
@@ -48,20 +48,40 @@ private:
 
 public:
   // span of the goal endpoints.
-  inline static constexpr CoordinateSpan GOAL_ENDPOINTS =
-      GOAL_ENDPOINT_ARRAY;
+  inline static constexpr CoordinateSpan GOAL_ENDPOINTS = GOAL_ENDPOINT_ARRAY;
 
   // The two possible start locations for the mouse.
-  enum class StartLocation {
-    WEST_OF_GOAL,
-    EAST_OF_GOAL
+  enum class StartLocation : uint8_t {
+    WEST_OF_GOAL = 0,
+    EAST_OF_GOAL = 1,
   };
 
 public:
   Maze();
 
-  // Returns the start endpoints based on the start location.
-  static CoordinateSpan start(StartLocation start_location) {
+  static Coordinate start(StartLocation start_location) {
+    switch (start_location) {
+      using enum StartLocation;
+    case WEST_OF_GOAL:
+      return WEST_START[0];
+    case EAST_OF_GOAL:
+    default:
+      return EAST_START[0];
+    }
+  }
+
+  static Coordinate outside_start(StartLocation start_location) {
+    switch (start_location) {
+      using enum StartLocation;
+    case WEST_OF_GOAL:
+      return WEST_OUTSIDE_START[0];
+    case EAST_OF_GOAL:
+    default:
+      return EAST_OUTSIDE_START[0];
+    }
+  }
+
+  static CoordinateSpan start_span(StartLocation start_location) {
     switch (start_location) {
       using enum StartLocation;
     case WEST_OF_GOAL:
@@ -72,8 +92,7 @@ public:
     }
   }
 
-  // Returns the outside start cell based on the start location.
-  static CoordinateSpan outside_start(StartLocation start_location) {
+  static CoordinateSpan outside_start_span(StartLocation start_location) {
     switch (start_location) {
       using enum StartLocation;
     case WEST_OF_GOAL:
@@ -85,7 +104,7 @@ public:
   }
 
   bool operator==(const Maze& other) const {
-    return std::memcmp(m_cells, other.m_cells, Constants::MAZE_CELLS) == 0;
+    return std::memcmp(m_cells, other.m_cells, Constants::Maze::TOTAL_CELLS) == 0;
   }
   bool operator!=(const Maze& other) const { return !(*this == other); }
 

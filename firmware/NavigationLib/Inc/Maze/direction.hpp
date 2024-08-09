@@ -24,3 +24,5 @@ constexpr Direction right_of(Direction dir) {
 }
 
 } // namespace maze
+
+using maze::Direction;

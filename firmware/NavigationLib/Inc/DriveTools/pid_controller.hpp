@@ -1,5 +1,7 @@
 #pragma once
 
+namespace drive {
+
 class PIDController {
   // Proportional
   float m_kp;
@@ -38,3 +40,5 @@ public:
 
   void reset();
 };
+
+} // namespace drive

@@ -5,7 +5,7 @@ using namespace maze;
 Maze::Maze() { init_boundaries(); }
 
 void Maze::reset() {
-  for (std::size_t i = 0; i < Constants::MAZE_CELLS; ++i) {
+  for (std::size_t i = 0; i < Constants::Maze::TOTAL_CELLS; ++i) {
     m_cells[i].reset();
   }
 
@@ -25,13 +25,13 @@ void Maze::init_start_cell(StartLocation start_location) {
 void Maze::init_boundaries() {
   using enum Direction;
 
-  for (uint8_t i = 0; i < Constants::MAZE_WIDTH_CELLS; ++i) { // O(n)
+  for (uint8_t i = 0; i < Constants::Maze::WIDTH_CELLS; ++i) { // O(n)
     const uint8_t south = i;
-    const uint8_t north =
-        (i + (Constants::MAZE_WIDTH_CELLS * (Constants::MAZE_WIDTH_CELLS - 1)));
-    const uint8_t west = (i * Constants::MAZE_WIDTH_CELLS);
-    const uint8_t east =
-        ((i * Constants::MAZE_WIDTH_CELLS) + (Constants::MAZE_WIDTH_CELLS - 1));
+    const uint8_t north = (i + (Constants::Maze::WIDTH_CELLS *
+                                (Constants::Maze::WIDTH_CELLS - 1)));
+    const uint8_t west  = (i * Constants::Maze::WIDTH_CELLS);
+    const uint8_t east  = ((i * Constants::Maze::WIDTH_CELLS) +
+                          (Constants::Maze::WIDTH_CELLS - 1));
 
     // (0,0) -> (15,0) have south wall.
     m_cells[south].set_wall(SOUTH);
@@ -73,8 +73,8 @@ Cell* Maze::neighbor_cell(Coordinate coord, Direction direction) {
     break;
   }
 
-  if (x < 0 || x >= Constants::MAZE_WIDTH_CELLS || y < 0 ||
-      y >= Constants::MAZE_WIDTH_CELLS)
+  if (x < 0 || x >= Constants::Maze::WIDTH_CELLS || y < 0 ||
+      y >= Constants::Maze::WIDTH_CELLS)
     return nullptr;
 
   return &m_cells[Coordinate(x, y)];
