@@ -51,6 +51,7 @@ typedef struct
   uint8_t               Drive_pidconstants_char_Notification_Status;
   /* mazeService */
   uint8_t               Maze_cell_char_Notification_Status;
+  uint8_t               Maze_mousepos_char_Notification_Status;
   /* USER CODE BEGIN CUSTOM_APP_Context_t */
 
   /* USER CODE END CUSTOM_APP_Context_t */
@@ -114,6 +115,8 @@ static void Custom_Drive_pidconstants_char_Send_Notification(void);
 /* mazeService */
 static void Custom_Maze_cell_char_Update_Char(void);
 static void Custom_Maze_cell_char_Send_Notification(void);
+static void Custom_Maze_mousepos_char_Update_Char(void);
+static void Custom_Maze_mousepos_char_Send_Notification(void);
 
 /* USER CODE BEGIN PFP */
 
@@ -260,6 +263,18 @@ void Custom_STM_App_Notification(Custom_STM_App_Notification_evt_t *pNotificatio
       /* USER CODE BEGIN CUSTOM_STM_MAZE_CELL_CHAR_NOTIFY_DISABLED_EVT */
 
       /* USER CODE END CUSTOM_STM_MAZE_CELL_CHAR_NOTIFY_DISABLED_EVT */
+      break;
+
+    case CUSTOM_STM_MAZE_MOUSEPOS_CHAR_NOTIFY_ENABLED_EVT:
+      /* USER CODE BEGIN CUSTOM_STM_MAZE_MOUSEPOS_CHAR_NOTIFY_ENABLED_EVT */
+
+      /* USER CODE END CUSTOM_STM_MAZE_MOUSEPOS_CHAR_NOTIFY_ENABLED_EVT */
+      break;
+
+    case CUSTOM_STM_MAZE_MOUSEPOS_CHAR_NOTIFY_DISABLED_EVT:
+      /* USER CODE BEGIN CUSTOM_STM_MAZE_MOUSEPOS_CHAR_NOTIFY_DISABLED_EVT */
+
+      /* USER CODE END CUSTOM_STM_MAZE_MOUSEPOS_CHAR_NOTIFY_DISABLED_EVT */
       break;
 
     case CUSTOM_STM_NOTIFICATION_COMPLETE_EVT:
@@ -675,6 +690,45 @@ void Custom_Maze_cell_char_Send_Notification(void) /* Property Notification */
   /* USER CODE BEGIN Maze_cell_char_NS_Last*/
 
   /* USER CODE END Maze_cell_char_NS_Last*/
+
+  return;
+}
+
+void Custom_Maze_mousepos_char_Update_Char(void) /* Property Read */
+{
+  uint8_t updateflag = 0;
+
+  /* USER CODE BEGIN Maze_mousepos_char_UC_1*/
+
+  /* USER CODE END Maze_mousepos_char_UC_1*/
+
+  if (updateflag != 0)
+  {
+    Custom_STM_App_Update_Char(CUSTOM_STM_MAZE_MOUSEPOS_CHAR, (uint8_t *)UpdateCharData);
+  }
+
+  /* USER CODE BEGIN Maze_mousepos_char_UC_Last*/
+
+  /* USER CODE END Maze_mousepos_char_UC_Last*/
+  return;
+}
+
+void Custom_Maze_mousepos_char_Send_Notification(void) /* Property Notification */
+{
+  uint8_t updateflag = 0;
+
+  /* USER CODE BEGIN Maze_mousepos_char_NS_1*/
+
+  /* USER CODE END Maze_mousepos_char_NS_1*/
+
+  if (updateflag != 0)
+  {
+    Custom_STM_App_Update_Char(CUSTOM_STM_MAZE_MOUSEPOS_CHAR, (uint8_t *)NotifyCharData);
+  }
+
+  /* USER CODE BEGIN Maze_mousepos_char_NS_Last*/
+
+  /* USER CODE END Maze_mousepos_char_NS_Last*/
 
   return;
 }

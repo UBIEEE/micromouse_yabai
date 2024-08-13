@@ -51,20 +51,20 @@ TEST(Maze, TestInit) {
 
   Maze maze;
 
-  for (uint8_t x = 0; x < Constants::MAZE_WIDTH_CELLS; ++x) {
-    for (uint8_t y = 0; y < Constants::MAZE_WIDTH_CELLS; ++y) {
+  for (uint8_t x = 0; x < Constants::Maze::WIDTH_CELLS; ++x) {
+    for (uint8_t y = 0; y < Constants::Maze::WIDTH_CELLS; ++y) {
       const Cell& cell = maze[Coordinate(x, y)];
 
       const bool is_west = (x == 0);
       ASSERT_EQ(is_west, cell.is_wall(WEST));
 
-      const bool is_east = (x == Constants::MAZE_WIDTH_CELLS - 1);
+      const bool is_east = (x == Constants::Maze::WIDTH_CELLS - 1);
       ASSERT_EQ(is_east, cell.is_wall(EAST));
 
       const bool is_south = (y == 0);
       ASSERT_EQ(is_south, cell.is_wall(SOUTH));
 
-      const bool is_north = (y == Constants::MAZE_WIDTH_CELLS - 1);
+      const bool is_north = (y == Constants::Maze::WIDTH_CELLS - 1);
       ASSERT_EQ(is_north, cell.is_wall(NORTH));
     }
   }

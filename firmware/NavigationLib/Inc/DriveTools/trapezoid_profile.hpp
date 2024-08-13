@@ -13,7 +13,7 @@ class TrapezoidProfile {
   float m_dist_cruise;
   float m_dist_fall;
 
-  float m_dist_total;
+  float m_dist_total = 0.f;
 
   float m_time_rise_s;
   float m_time_cruise_s;
@@ -21,11 +21,22 @@ class TrapezoidProfile {
 
   float m_time_total_s;
 
+  bool m_backwards = false;
+
 public:
-  void start(float distance, float max_velocity, float final_velocity,
-             float acceleration);
+  TrapezoidProfile() { configure(0.f, 0.f, 0.f, 0.f); }
+
+  // TODO: Male this work better with negative distances.
+  void configure(float distance, float final_velocity, float max_velocity,
+                 float acceleration);
+
+  void reset() { m_velocity_final = 0.f; }
 
   float duration_s() const { return m_time_total_s; }
+  bool is_done_at(float time_s) { return time_s >= m_time_total_s; }
+
+  float final_distance() const { return m_dist_total; }
+  float final_velocity() const { return m_velocity_final; }
 
   struct Sample {
     float distance;

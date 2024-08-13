@@ -114,9 +114,9 @@ void Robot::start_next_task() {
 
     if (!idle) {
       m_drive.reset();
-      m_navigator.reset_position(
-          Maze::start(m_start_location), maze::Direction::NORTH,
-          Constants::CellRobotDistances::AT_BACK_WALL_MM);
+      m_navigator.reset_position(Maze::start(m_start_location),
+                                 maze::Direction::NORTH,
+                                 Constants::RobotCellPositions::BACK_WALL_MM);
     }
 
     m_vision.set_enabled(!idle);
@@ -146,7 +146,7 @@ void Robot::start_task_maze_search() {
   // m_buzzer.play_song(Buzzer::Song::BEGIN_SEARCH);
 
   m_search_stage = SearchStage::START_TO_GOAL;
-  m_navigator.navigate_to(Maze::GOAL_ENDPOINTS);
+  m_navigator.search_to(Maze::GOAL_ENDPOINTS, m_flood_fill_solver);
 }
 
 void Robot::start_task_maze_solve(bool fast) {
@@ -154,10 +154,8 @@ void Robot::start_task_maze_solve(bool fast) {
   //                         : Buzzer::Song::BEGIN_SLOW_SOLVE);
 
   using enum Navigator::Mode;
-  const Navigator::Mode mode = fast ? FAST_SOLVE : SLOW_SOLVE;
-
   m_solve_stage = SolveStage::START_TO_GOAL;
-  m_navigator.navigate_to(Maze::GOAL_ENDPOINTS, mode);
+  m_navigator.solve_to(Maze::GOAL_ENDPOINTS, fast);
 }
 
 void Robot::start_task_test_gyro() { m_drive.control_speed_velocity(0.f, 0.f); }
@@ -184,7 +182,7 @@ void Robot::process_current_task() {
 void Robot::process_task_maze_search() {
   using enum SearchStage;
 
-  if (m_navigator.done()) {
+  if (m_navigator.is_done()) {
     maze::CoordinateSpan next_target;
 
     // Check which stage was just finished, and set the next target accordingly.
@@ -206,21 +204,18 @@ void Robot::process_task_maze_search() {
       return;
     }
 
-    m_navigator.navigate_to(next_target);
+    m_navigator.search_to(next_target, m_flood_fill_solver);
 
     m_search_stage = SearchStage(uint8_t(m_search_stage) + 1);
   }
 }
 
 void Robot::process_task_maze_solve(bool fast) {
-  using enum Navigator::Mode;
-  const Navigator::Mode mode = fast ? FAST_SOLVE : SLOW_SOLVE;
-
-  if (m_navigator.done()) {
+  if (m_navigator.is_done()) {
     switch (m_solve_stage) {
       using enum SolveStage;
     case START_TO_GOAL:
-      m_navigator.navigate_to(Maze::start_span(m_start_location), mode);
+      m_navigator.solve_to(Maze::start_span(m_start_location), fast);
       m_solve_stage = GOAL_TO_START;
       break;
     case GOAL_TO_START:

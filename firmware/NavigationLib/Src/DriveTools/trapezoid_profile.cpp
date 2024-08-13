@@ -5,11 +5,18 @@
 
 using namespace drive;
 
-void TrapezoidProfile::start(float d, float max_velocity, float v_f, float a) {
-  m_dist_total     = d;
-  m_velocity_init  = m_velocity_final;
-  m_velocity_final = v_f;
-  m_acceleration   = a;
+void TrapezoidProfile::configure(float d, float v_f, float max_velocity,
+                                 float a) {
+  if (d < 0.f) {
+    m_backwards = true;
+    d = -d;
+  }
+
+  v_f = std::min(v_f, max_velocity);
+
+  m_dist_total    = d;
+  m_velocity_init = m_velocity_final;
+  m_acceleration  = a;
 
   const float& v_i = m_velocity_init;
   float& v_max     = m_velocity_cruise;
@@ -22,10 +29,25 @@ void TrapezoidProfile::start(float d, float max_velocity, float v_f, float a) {
     m_time_rise_s = m_time_fall_s = 0.f;
 
     m_dist_cruise  = d;
-    m_time_total_s = d / max_velocity;
+    m_time_total_s = (max_velocity > 0.f) ? (d / max_velocity) : 0.f;
 
     return;
   }
+
+  // Check if it's possible to reach the final velocity.
+  if (v_f < v_i) {
+    const float min_vel_2 = (v_i * v_i) - 2.f * a * d;
+    const float min_vel   = min_vel_2 < 0.f ? 0.f : std::sqrt(min_vel_2);
+
+    v_f = std::max(v_f, min_vel);
+
+  } else if (v_f > v_i) {
+    const float max_vel = std::sqrt((v_i * v_i) + 2.f * a * d);
+
+    v_f = std::min(v_f, max_vel);
+  }
+
+  m_velocity_final = v_f;
 
   // Calculate maximum attainable velocity over the distance with the given
   // acceleration limit.
@@ -77,7 +99,7 @@ void TrapezoidProfile::start(float d, float max_velocity, float v_f, float a) {
   }
 
   m_dist_cruise   = d - (m_dist_rise + m_dist_fall);
-  m_time_cruise_s = m_dist_cruise / v_max;
+  m_time_cruise_s = (v_max > 0.f) ? (m_dist_cruise / v_max) : 0;
 
   m_time_total_s = m_time_rise_s + m_time_cruise_s + m_time_fall_s;
 }
@@ -93,7 +115,7 @@ TrapezoidProfile::Sample TrapezoidProfile::sample(float t) {
 
   if (t > m_time_total_s) {
     v = v_f;
-    d = m_dist_total;
+    d = m_dist_total + v_f * (t - m_time_total_s);
 
   } else if (v_i == v_c && v_i == v_f) {
     v = v_i;
@@ -115,6 +137,11 @@ TrapezoidProfile::Sample TrapezoidProfile::sample(float t) {
     v = v_c - a * t_part;
     d = (m_dist_rise + m_dist_cruise) + v_c * t_part -
         0.5f * a * t_part * t_part;
+  }
+
+  if (m_backwards) {
+    d = -d;
+    v = -v;
   }
 
   return Sample {.distance = d, .velocity = v};

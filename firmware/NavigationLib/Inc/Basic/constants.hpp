@@ -30,13 +30,13 @@ public:
     static constexpr float FREE_WIDTH_MM = WIDTH_MM - WALL_THICKNESS_MM;
   };
 
-  class CellRobotDistances {
+  class RobotCellPositions {
   public:
-    static constexpr float AT_BACK_WALL_MM =
+    static constexpr float BACK_WALL_MM =
         (RobotDimensions::CENTER_TO_BACK_MM + Cell::WALL_THICKNESS_MM);
 
     static constexpr float CENTERED_MM = Cell::WIDTH_MM / 2.f;
 
-    static constexpr float AT_SENSING_DIST_MM = CENTERED_MM + 10.f;
+    static constexpr float SENSING_SPOT_MM = CENTERED_MM + 55.f;
   };
 };

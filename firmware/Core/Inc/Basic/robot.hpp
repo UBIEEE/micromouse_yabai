@@ -9,20 +9,26 @@
 #include "Buzzer/buzzer.hpp"
 #include "Drive/drive.hpp"
 #include "Drive/drive_controller.hpp"
+#include "Drive/speed_config.hpp"
 #include "Navigation/navigator.hpp"
 #include "Vision/vision.hpp"
+
+#include "Solver/flood_fill.hpp"
 
 #include <array>
 
 class Robot : public Singleton<Robot> {
-  Maze m_maze;
-
   Buzzer m_buzzer;
   Vision m_vision;
   Drive m_drive;
 
+  Maze m_maze;
+  FloodFillSolver m_flood_fill_solver {m_maze};
+
   DriveController m_drive_controller {m_drive};
-  Navigator m_navigator {m_drive_controller, m_maze};
+  SpeedConfig m_speeds;
+
+  Navigator m_navigator {m_drive_controller, m_maze, m_speeds};
 
   Maze::StartLocation m_start_location = Maze::StartLocation::WEST_OF_GOAL;
 
