@@ -26,7 +26,13 @@ class TrapezoidProfile {
 public:
   TrapezoidProfile() { configure(0.f, 0.f, 0.f, 0.f); }
 
-  // TODO: Male this work better with negative distances.
+  // Configure the profile.
+  // Remembers the final velocity of the previous configuration.
+  //
+  // To go backwards, make distance negative and leave everything else positive.
+  //
+  // This doesn't work well when transitioning between forward and backward
+  // motion, so make sure to decelerate to stopped before changing directions.
   void configure(float distance, float final_velocity, float max_velocity,
                  float acceleration);
 

@@ -7,9 +7,10 @@ using namespace drive;
 
 void TrapezoidProfile::configure(float d, float v_f, float max_velocity,
                                  float a) {
+  m_backwards = false;
   if (d < 0.f) {
     m_backwards = true;
-    d = -d;
+    d           = -d;
   }
 
   v_f = std::min(v_f, max_velocity);
