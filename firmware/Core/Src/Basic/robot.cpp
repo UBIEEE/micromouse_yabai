@@ -143,17 +143,18 @@ void Robot::start_next_task() {
 }
 
 void Robot::start_task_maze_search() {
-  // m_buzzer.play_song(Buzzer::Song::BEGIN_SEARCH);
+  m_buzzer.play_song(Buzzer::Song::BEGIN_SEARCH);
 
   m_search_stage = SearchStage::START_TO_GOAL;
   m_navigator.search_to(Maze::GOAL_ENDPOINTS, m_flood_fill_solver);
 }
 
 void Robot::start_task_maze_solve(bool fast) {
-  // m_buzzer.play_song(fast ? Buzzer::Song::BEGIN_FAST_SOLVE
-  //                         : Buzzer::Song::BEGIN_SLOW_SOLVE);
+  {
+    using enum Buzzer::Song;
+    m_buzzer.play_song(fast ? BEGIN_FAST_SOLVE : BEGIN_SLOW_SOLVE);
+  }
 
-  using enum Navigator::Mode;
   m_solve_stage = SolveStage::START_TO_GOAL;
   m_navigator.solve_to(Maze::GOAL_ENDPOINTS, fast);
 }

@@ -3,121 +3,12 @@
 #include "Buzzer/notes.hpp"
 #include "custom_stm.h"
 #include "stm32wbxx_hal.h"
-#include <span>
 
 //
 // External variables.
 //
 
 extern TIM_HandleTypeDef htim16; // main.c
-
-//
-// Types.
-//
-
-struct SongHandle {
-  std::span<const Note> notes;
-  uint16_t ticks_per_note;
-  bool pause_between_notes = true;
-};
-
-//
-// Constants.
-//
-// clang-format off
-
-// Startup tone.
-
-static constexpr uint16_t SONG_STARTUP_NOTE_LENGTH_MS = 250;
-
-static constexpr Note SONG_STARTUP_NOTES[] = {
-    NOTE_D_5,
-    NOTE_D_6,
-};
-
-// BLE connect tone.
-
-static constexpr uint16_t SONG_BLE_CONNECT_NOTE_LENGTH_MS = 250;
-
-static constexpr Note SONG_BLE_CONNECT_NOTES[] = {
-    NOTE_E_5,
-    NOTE_G_5,
-    NOTE_E_6,
-};
-
-// BLE disconnect tone.
-
-static constexpr uint16_t SONG_BLE_DISCONNECT_NOTE_LENGTH_MS = 250;
-
-static constexpr Note SONG_BLE_DISCONNECT_NOTES[] = {
-  NOTE_E_5,
-  NOTE_G_5,
-  NOTE_G_4
-};
-
-// Home Depot theme song.
-
-static constexpr uint16_t SONG_HOME_DEPOT_NOTE_LENGTH_MS = 250;
-
-static constexpr Note SONG_HOME_DEPOT_NOTES[] = {
-    // Intro
-    NOTE_A_4, NOTE_A_4, NOTE_D_5, NOTE_A_4, REST, NOTE_A_4, REST, NOTE_A_4, NOTE_C_5, NOTE_A_4, REST, NOTE_A_4, REST, NOTE_A_4, NOTE_G_4, NOTE_A_4,
-    NOTE_A_4, NOTE_A_4, NOTE_D_5, NOTE_A_4, REST, NOTE_A_4, REST, NOTE_A_4, NOTE_C_5, NOTE_A_4, REST, NOTE_A_4, REST, NOTE_A_4, NOTE_G_4, NOTE_A_4,
-    NOTE_A_4, NOTE_A_4, NOTE_D_5, NOTE_A_4, REST, NOTE_A_4, REST, NOTE_A_4, NOTE_C_5, NOTE_A_4, REST, NOTE_A_4, REST, NOTE_A_4, NOTE_G_4, NOTE_A_4,
-
-    // Transition
-    REST, NOTE_A_4, NOTE_D_5, NOTE_A_4, NOTE_C_5, NOTE_D_6, REST,
-
-    // Loop
-    NOTE_A_4, NOTE_D_5, NOTE_A_4, NOTE_C_5, NOTE_A_4, NOTE_G_4, NOTE_D_6, REST,
-    NOTE_A_4, NOTE_D_5, NOTE_A_4, NOTE_C_5, NOTE_A_4, NOTE_G_4, NOTE_D_6, REST,
-    NOTE_A_4, NOTE_D_5, NOTE_A_4, NOTE_C_5, NOTE_A_4, NOTE_G_4, NOTE_D_6, REST,
-    NOTE_A_4, NOTE_D_5, NOTE_A_4, NOTE_C_5, NOTE_A_4, NOTE_G_4, NOTE_D_6, REST,
-    NOTE_A_4, NOTE_D_5, NOTE_A_4, NOTE_C_5, NOTE_A_4, NOTE_G_4, NOTE_D_6, REST,
-    NOTE_A_4, NOTE_D_5, NOTE_A_4, NOTE_C_5, NOTE_A_4, NOTE_G_4, NOTE_D_6, REST,
-    NOTE_A_4, NOTE_D_5, NOTE_A_4, NOTE_C_5, NOTE_A_4, NOTE_G_4, NOTE_D_6, REST,
-
-    // End
-    NOTE_A_4, NOTE_D_5, NOTE_A_4, NOTE_A_4,
-};
-
-// Nokia ringtone.
-
-static constexpr uint16_t SONG_NOKIA_NOTE_LENGTH_MS = 180;
-
-static constexpr Note SONG_NOKIA_NOTES[] = {
-    NOTE_E_6,  NOTE_D_6, NOTE_FS_5, NOTE_FS_5, NOTE_GS_5, NOTE_GS_5,
-    NOTE_CS_6, NOTE_B_5, NOTE_D_5,  NOTE_D_5,  NOTE_E_5,  NOTE_E_5,
-    NOTE_B_5,  NOTE_A_5, NOTE_CS_5, NOTE_CS_5, NOTE_E_5,  NOTE_E_5,
-    NOTE_A_5,  NOTE_A_5, NOTE_A_5,  NOTE_A_5,  REST, REST,
-    NOTE_E_6,  NOTE_D_6, NOTE_FS_5, NOTE_FS_5, NOTE_GS_5, NOTE_GS_5,
-    NOTE_CS_6, NOTE_B_5, NOTE_D_5,  NOTE_D_5,  NOTE_E_5,  NOTE_E_5,
-    NOTE_B_5,  NOTE_A_5, NOTE_CS_5, NOTE_CS_5, NOTE_E_5,  NOTE_E_5,
-    NOTE_A_5,  NOTE_A_5, NOTE_A_5,  NOTE_A_5,  REST,
-};
-
-// All songs.
-static constexpr SongHandle SONGS[] = {
-    // NONE
-    {},
-
-    // STARTUP
-    {SONG_STARTUP_NOTES, SONG_STARTUP_NOTE_LENGTH_MS / ROBOT_UPDATE_PERIOD_MS},
-
-    // BLE_CONNECT
-    {SONG_BLE_CONNECT_NOTES, SONG_BLE_CONNECT_NOTE_LENGTH_MS / ROBOT_UPDATE_PERIOD_MS},
-
-    // BLE_DISCONNECT
-    {SONG_BLE_DISCONNECT_NOTES, SONG_BLE_DISCONNECT_NOTE_LENGTH_MS / ROBOT_UPDATE_PERIOD_MS},
-
-    // HOME_DEPOT
-    {SONG_HOME_DEPOT_NOTES, SONG_HOME_DEPOT_NOTE_LENGTH_MS / ROBOT_UPDATE_PERIOD_MS},
-
-    // NOKIA
-    {SONG_NOKIA_NOTES, SONG_NOKIA_NOTE_LENGTH_MS / ROBOT_UPDATE_PERIOD_MS, false},
-};
-
-// clang-format on
 
 //
 // Buzzer functions.
@@ -165,7 +56,7 @@ void Buzzer::on_connect_send_feedback() {
 }
 
 void Buzzer::play_song(Song song) {
-  m_song_handle = &SONGS[static_cast<uint8_t>(song)];
+  m_song_handle = &m_songs[uint8_t(song)];
   m_note_index  = 0;
   m_note_ticks  = 0;
   m_should_stop = false;

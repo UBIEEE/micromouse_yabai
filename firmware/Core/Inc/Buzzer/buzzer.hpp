@@ -1,29 +1,39 @@
 #pragma once
 
 #include "Basic/subsystem.hpp"
+#include "Buzzer/notes.hpp"
 
 #include <cstdint>
-
-struct SongHandle;
+#include <span>
 
 class Buzzer : public Subsystem {
 public:
   enum class Song : uint8_t {
-    NONE          = 0,
-    STARTUP       = 1,
-    BLE_CONECT    = 2,
-    BLE_DISCONECT = 3,
-    HOME_DEPOT    = 4,
-    NOKIA         = 5,
+    NONE = 0,
+    STARTUP,
+    BLE_CONECT,
+    BLE_DISCONECT,
 
-    /* BEGIN_SEARCH, */
-    /* BEGIN_FAST_SOLVE, */
-    /* BEGIN_SLOW_SOLVE, */
+    HOME_DEPOT = 4,
+    NOKIA      = 5,
+
+    BEGIN_SEARCH,
+    BEGIN_FAST_SOLVE,
+    BEGIN_SLOW_SOLVE,
 
     _COUNT,
   };
 
 private:
+  struct SongHandle {
+    std::span<const Note> notes;
+    uint16_t ticks_per_note;
+    bool pause_between_notes = true;
+  };
+
+private:
+  static const SongHandle m_songs[uint8_t(Song::_COUNT)]; // songs.cpp
+
   const SongHandle* m_song_handle = nullptr;
   uint16_t m_note_index           = 0;
   uint16_t m_note_ticks           = 0;
