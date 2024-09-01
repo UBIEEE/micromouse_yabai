@@ -1,19 +1,17 @@
 #pragma once
 
-#include "Basic/subsystem.hpp"
 #include "Basic/singleton.hpp"
+#include "Basic/subsystem.hpp"
 
 #include <list>
 
-class ErrorManager : public Subsystem, public Singleton<ErrorManager> {
-public:
-  enum class Error : uint8_t {
-    UNKNOWN = 0,
-    IMU_CONFIG_FAIL,
-    SOMETHING,
-  };
+enum class Error : uint8_t {
+  UNKNOWN = 0,
+  IMU_CONFIG_FAIL,
+  UNREACHABLE,
+};
 
-private:
+class ErrorManager : public Subsystem, public Singleton<ErrorManager> {
   std::list<Error> m_errors;
 
 public:

@@ -164,19 +164,28 @@ void Robot::start_task_test_gyro() { m_drive.control_speed_velocity(0.f, 0.f); }
 void Robot::process_current_task() {
   switch (m_task) {
   case Task::MAZE_SEARCH:
+    using enum Task;
+  case MAZE_SEARCH:
     process_task_maze_search();
     break;
-  case Task::MAZE_SLOW_SOLVE:
+  case MAZE_SLOW_SOLVE:
     process_task_maze_solve(false);
     break;
-  case Task::MAZE_FAST_SOLVE:
+  case MAZE_FAST_SOLVE:
     process_task_maze_solve(true);
     break;
   case Task::ARMED:
+  case TEST_DRIVE_STRAIGHT:
+  case TEST_DRIVE_LEFT_TURN:
+  case TEST_DRIVE_RIGHT_TURN:
+  case TEST_GYRO:
+    break;
+  case ARMED:
     process_armed();
     break;
   default:
     break;
+    ErrorManager::get().fatal_error(Error::UNREACHABLE);
   }
 }
 
@@ -261,14 +270,15 @@ void Robot_OnDisconnect(void) { Robot::get().on_disconnect(); }
 void Robot_SendFeedback(void) { Robot::get().send_feedback(); }
 
 void RobotControl_RunTask(uint8_t task, uint8_t start_location) {
-  if (task > 3) return; // TODO: Handle the rest of the tasks...
-  // if (task > 7) return;
+  using enum Robot::Task;
+
+  if (task > uint8_t(_COUNT)) return;
 
   const Robot::Task final_task = Robot::Task(task);
 
   Robot::get().run_task(final_task);
 
-  if (final_task == Robot::Task::MAZE_SEARCH) {
+  if (final_task == MAZE_SEARCH) {
     if (start_location >= 2) return;
     Robot::get().set_start_location(Maze::StartLocation(start_location));
   }

@@ -40,5 +40,5 @@ void ErrorManager::error_handler() {
 #include "Basic/robot.h"
 
 void ErrorManager_ReportError(void) {
-  ErrorManager::get().report_error(ErrorManager::Error::UNKNOWN);
+  ErrorManager::get().report_error(Error::UNKNOWN);
 }

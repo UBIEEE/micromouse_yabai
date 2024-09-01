@@ -91,6 +91,8 @@ public:
     TEST_GYRO = 7,
 
     ARMED,
+
+    _COUNT,
   };
 
 private:

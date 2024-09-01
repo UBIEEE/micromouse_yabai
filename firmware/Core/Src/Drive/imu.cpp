@@ -55,7 +55,7 @@ void IMU::init(const Config& config) {
 
   const auto fail_if = [](bool condition) {
     if (condition) {
-      ErrorManager::get().fatal_error(ErrorManager::Error::IMU_CONFIG_FAIL);
+      ErrorManager::get().fatal_error(Error::IMU_CONFIG_FAIL);
     }
   };
 
