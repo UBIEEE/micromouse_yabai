@@ -6,6 +6,7 @@
 #include "Maze/direction.hpp"
 #include <cstring>
 #include <iterator>
+#include <optional>
 #include <span>
 
 namespace maze {
@@ -104,7 +105,8 @@ public:
   }
 
   bool operator==(const Maze& other) const {
-    return std::memcmp(m_cells, other.m_cells, Constants::Maze::TOTAL_CELLS) == 0;
+    return std::memcmp(m_cells, other.m_cells, Constants::Maze::TOTAL_CELLS) ==
+           0;
   }
   bool operator!=(const Maze& other) const { return !(*this == other); }
 
@@ -136,6 +138,10 @@ public:
     return Coordinate(std::distance(m_cells, cell));
   }
 
+  // Returns nullopt if the neighbor is out of bounds.
+  std::optional<Coordinate> neighbor_coordinate(Coordinate coord,
+                                                Direction direction) const;
+
   // Returns nullptr if the neighbor is out of bounds.
   Cell* neighbor_cell(Coordinate coord, Direction direction);
 
@@ -144,6 +150,8 @@ public:
   void set_cell_value(Coordinate coord, uint8_t value) {
     m_cell_values[coord] = value;
   }
+
+  Direction smallest_neighbor(Coordinate coord) const;
 
 private:
   // Places walls around the perimeter of the maze.

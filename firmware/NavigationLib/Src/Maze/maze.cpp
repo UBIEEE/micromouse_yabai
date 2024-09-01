@@ -53,7 +53,8 @@ void Maze::set_wall(Coordinate coord, Direction dir, bool present) {
   }
 }
 
-Cell* Maze::neighbor_cell(Coordinate coord, Direction direction) {
+std::optional<Coordinate> Maze::neighbor_coordinate(Coordinate coord,
+                                                    Direction direction) const {
   int8_t x = coord.x();
   int8_t y = coord.y();
 
@@ -75,7 +76,34 @@ Cell* Maze::neighbor_cell(Coordinate coord, Direction direction) {
 
   if (x < 0 || x >= Constants::Maze::WIDTH_CELLS || y < 0 ||
       y >= Constants::Maze::WIDTH_CELLS)
-    return nullptr;
+    return std::nullopt;
 
-  return &m_cells[Coordinate(x, y)];
+  return Coordinate(x, y);
+}
+
+Cell* Maze::neighbor_cell(Coordinate coord, Direction direction) {
+  const std::optional<Coordinate> neighbor =
+      neighbor_coordinate(coord, direction);
+  return neighbor ? &m_cells[neighbor.value()] : nullptr;
+}
+
+Direction Maze::smallest_neighbor(Coordinate center_coord) const {
+  using enum Direction;
+
+  Direction smallest;
+  uint8_t smallest_value = 0xFF;
+
+  for (Direction d : {NORTH, EAST, SOUTH, WEST}) {
+    std::optional<Coordinate> c = neighbor_coordinate(center_coord, d);
+    if (!c) continue;
+
+    uint8_t value = cell_value(*c);
+
+    if (value <= smallest_value) {
+      smallest       = d;
+      smallest_value = value;
+    }
+  }
+
+  return smallest;
 }
