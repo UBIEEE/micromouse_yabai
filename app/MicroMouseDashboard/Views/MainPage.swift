@@ -12,6 +12,10 @@ struct MainPage: View {
     case testDriveRightTurn = 6
     case testGyro           = 7
     
+    case armed
+    case armedTriggering
+    case armedTriggered
+    
     var id: Self { self }
   }
   
@@ -23,6 +27,9 @@ struct MainPage: View {
     .testDriveLeftTurn:  "TEST - Left Turn",
     .testDriveRightTurn: "TEST - Right Turn",
     .testGyro:           "TEST - Gyro",
+    .armed:              "Armed",
+    .armedTriggering:    "Armed Triggering",
+    .armedTriggered:     "Armed Triggered",
   ]
   private let taskDescriptions: [Task: String] = [
     .mazeSearch: "Search to the center of the maze, then back to the start",
@@ -79,7 +86,9 @@ struct MainPage: View {
           
           Picker("Task", selection: $selectedTask) {
             ForEach(Task.allCases, id: \.self) { task in
-              Text(taskNames[task]!)
+              if (task.rawValue < Task.armed.rawValue) {
+                Text(taskNames[task]!)
+              }
             }
           }
         }

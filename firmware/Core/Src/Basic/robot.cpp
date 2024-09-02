@@ -52,8 +52,8 @@ void Robot::send_feedback() {
 
 void Robot::handle_button_1() {
   // If the robot's doing something, stop it.
-  if (current_task() != Task::NONE) {
-    run_task(Task::NONE);
+  if (current_task() != Task::STOPPED) {
+    run_task(Task::STOPPED);
     return;
   }
 
@@ -66,8 +66,8 @@ void Robot::handle_button_1() {
 
 void Robot::handle_button_2() {
   // If the robot's doing something, stop it.
-  if (current_task() != Task::NONE) {
-    run_task(Task::NONE);
+  if (current_task() != Task::STOPPED) {
+    run_task(Task::STOPPED);
     return;
   }
 
@@ -84,17 +84,14 @@ void Robot::run_task(Task task) {
 
   m_next_task    = task;
   m_is_next_task = true;
-  m_armed_task   = Task::NONE;
 }
 
 void Robot::end_task() {
-  m_task = Task::NONE;
-
   if (m_task == Task::MAZE_SEARCH) {
     m_search_done = true;
   }
 
-  send_current_task();
+  run_task(Task::STOPPED);
 }
 
 void Robot::reset_maze() {
@@ -105,28 +102,26 @@ void Robot::reset_maze() {
 void Robot::start_next_task() {
   // Reset stuff.
 
+  m_buzzer.quiet();
   m_navigator.stop();
   m_drive.stop();
   m_task = m_next_task;
 
   {
-    const bool idle = (m_task == Task::NONE);
+    const bool idle = (m_task == Task::STOPPED);
 
     if (!idle) {
       m_drive.reset();
-      m_navigator.reset_position(Maze::start(m_start_location),
-                                 maze::Direction::NORTH,
-                                 Constants::RobotCellPositions::BACK_WALL_MM);
     }
 
-    m_vision.set_enabled(!idle);
-    m_drive.imu().set_standby_mode(idle);
+    m_vision.set_enabled(!idle);          // Enable when not idle.
+    m_drive.imu().set_standby_mode(idle); // Standby when idle.
   }
 
   // Start task.
 
   switch (m_task) {
-  case Task::NONE:
+  case Task::STOPPED:
     break;
   case Task::MAZE_SEARCH:
     start_task_maze_search();
@@ -150,6 +145,13 @@ void Robot::start_next_task() {
     start_task_test_gyro();
     break;
   case Task::ARMED:
+    start_task_armed();
+    break;
+  case Task::ARMED_TRIGGERING:
+    start_task_armed_triggering();
+    break;
+  case Task::ARMED_TRIGGERED:
+    start_task_armed_triggered();
     break;
   default:
     ErrorManager::get().fatal_error(Error::UNREACHABLE);
@@ -159,19 +161,22 @@ void Robot::start_next_task() {
 }
 
 void Robot::start_task_maze_search() {
-  m_buzzer.play_song(Buzzer::Song::BEGIN_SEARCH);
-
   m_search_stage = SearchStage::START_TO_GOAL;
+
+  m_navigator.reset_position(Maze::start(m_start_location),
+                             maze::Direction::NORTH,
+                             Constants::RobotCellPositions::BACK_WALL_MM);
+
   m_navigator.search_to(Maze::GOAL_ENDPOINTS, m_flood_fill_solver);
 }
 
 void Robot::start_task_maze_solve(bool fast) {
-  {
-    using enum Buzzer::Song;
-    m_buzzer.play_song(fast ? BEGIN_FAST_SOLVE : BEGIN_SLOW_SOLVE);
-  }
-
   m_solve_stage = SolveStage::START_TO_GOAL;
+
+  m_navigator.reset_position(Maze::start(m_start_location),
+                             maze::Direction::NORTH,
+                             Constants::RobotCellPositions::BACK_WALL_MM);
+
   m_navigator.solve_to(Maze::GOAL_ENDPOINTS, fast);
 }
 
@@ -179,12 +184,52 @@ void Robot::start_task_test_drive_straight() {}
 void Robot::start_task_test_drive_left_turn() {}
 void Robot::start_task_test_drive_right_turn() {}
 
-void Robot::start_task_test_gyro() { m_drive.control_speed_velocity(0.f, 90.f); }
+void Robot::start_task_test_gyro() {
+  m_drive.control_speed_velocity(0.f, 90.f);
+}
+
+void Robot::start_task_armed() {
+  m_buzzer.play_song(Buzzer::Song::ARMED, true);
+}
+
+void Robot::start_task_armed_triggering() {
+  m_buzzer.play_song(Buzzer::Song::ARMED_TRIGGERING, true);
+
+  m_armed_trigger_timer.reset();
+  m_armed_trigger_timer.start();
+}
+
+void Robot::start_task_armed_triggered() {
+  {
+    using enum Buzzer::Song;
+    Buzzer::Song song;
+
+    switch (m_next_task) {
+    case Task::MAZE_SEARCH:
+      song = BEGIN_SEARCH;
+      break;
+    case Task::MAZE_SLOW_SOLVE:
+      song = BEGIN_SLOW_SOLVE;
+      break;
+    case Task::MAZE_FAST_SOLVE:
+      song = BEGIN_FAST_SOLVE;
+      break;
+    default:
+      song = BEGIN_OTHER;
+      break;
+    }
+
+    m_buzzer.play_song(song);
+  }
+
+  m_armed_trigger_timer.reset();
+  m_armed_trigger_timer.start();
+}
 
 void Robot::process_current_task() {
   switch (m_task) {
     using enum Task;
-  case NONE:
+  case STOPPED:
     break;
   case MAZE_SEARCH:
     process_task_maze_search();
@@ -203,7 +248,13 @@ void Robot::process_current_task() {
   case TEST_GYRO:
     break;
   case ARMED:
-    process_armed();
+    process_task_armed();
+    break;
+  case ARMED_TRIGGERING:
+    process_task_armed_triggering();
+    break;
+  case ARMED_TRIGGERED:
+    process_task_armed_triggered();
     break;
   default:
     ErrorManager::get().fatal_error(Error::UNREACHABLE);
@@ -260,8 +311,63 @@ void Robot::process_task_maze_solve(bool fast) {
 
 void Robot::process_task_test_drive() {}
 
-void Robot::process_armed() {
-  // TODO: Check vision sensors.
+void Robot::process_task_armed() {
+
+  using enum Vision::Sensor;
+
+  const bool left_blocked = m_vision.get_distance_mm(FAR_LEFT) <
+                            Constants::Vision::HAND_TRIGGER_THRESHOLD_MM;
+
+  const bool right_blocked = m_vision.get_distance_mm(FAR_RIGHT) <
+                             Constants::Vision::HAND_TRIGGER_THRESHOLD_MM;
+
+  if (!left_blocked && !right_blocked) return;
+
+  m_armed_trigger_side = ArmedTriggerSide::LEFT;
+  if (right_blocked) {
+    m_armed_trigger_side = ArmedTriggerSide::RIGHT;
+  }
+
+  run_task(Task::ARMED_TRIGGERING);
+}
+
+void Robot::process_task_armed_triggering() {
+  using enum Vision::Sensor;
+
+  const Vision::Sensor sensor =
+      (m_armed_trigger_side == ArmedTriggerSide::LEFT) ? FAR_LEFT : FAR_RIGHT;
+
+  const bool blocked = m_vision.get_distance_mm(sensor) <
+                       Constants::Vision::HAND_TRIGGER_THRESHOLD_MM;
+
+  // Don't even think about moving until that hand is gone!
+  if (blocked) return;
+
+  const bool time_over = m_armed_trigger_timer.elapsed_s() >
+                         Constants::Vision::HAND_TRIGGER_TIME_S;
+
+  if (time_over) {
+    run_task(Task::ARMED_TRIGGERED);
+    return;
+  }
+
+  // Go back to armed since they didn't hold their hand there long enough.
+  run_task(Task::ARMED);
+}
+
+void Robot::process_task_armed_triggered() {
+  if (m_armed_trigger_timer.elapsed_s() <
+      Constants::Vision::HAND_TRIGGER_TIME_S)
+    return;
+
+  // Trigger side points to goal.
+  m_start_location = m_armed_trigger_side == ArmedTriggerSide::LEFT
+                         ? Maze::StartLocation::WEST_OF_GOAL
+                         : Maze::StartLocation::EAST_OF_GOAL;
+
+  // TODO: Calibration
+
+  run_task(m_armed_task);
 }
 
 void Robot::send_current_task() {
@@ -297,7 +403,7 @@ void Robot_SendFeedback(void) { Robot::get().send_feedback(); }
 void RobotControl_RunTask(uint8_t task, uint8_t start_location) {
   using enum Robot::Task;
 
-  if (task > uint8_t(_COUNT)) return;
+  if (task >= uint8_t(ARMED)) return;
 
   const Robot::Task final_task = Robot::Task(task);
 

@@ -79,7 +79,7 @@ private:
   //
 public:
   enum class Task : uint8_t {
-    NONE            = 0,
+    STOPPED         = 0,
     MAZE_SEARCH     = 1,
     MAZE_SLOW_SOLVE = 2,
     MAZE_FAST_SOLVE = 3,
@@ -91,17 +91,26 @@ public:
     TEST_GYRO = 7,
 
     ARMED,
+    ARMED_TRIGGERING,
+    ARMED_TRIGGERED,
 
     _COUNT,
   };
 
 private:
-  Task m_task = Task::NONE;
+  Task m_task = Task::STOPPED;
 
-  Task m_next_task    = Task::NONE;
+  Task m_next_task    = Task::STOPPED;
   bool m_is_next_task = false;
 
-  Task m_armed_task = Task::NONE;
+  Task m_armed_task;
+
+  Timer m_armed_trigger_timer;
+
+  enum class ArmedTriggerSide : bool {
+    LEFT,
+    RIGHT,
+  } m_armed_trigger_side;
 
   bool m_search_done = false;
 
@@ -147,21 +156,38 @@ private:
   }
 
 private:
+  //
+  // Start task functions.
+  //
+
   void start_next_task();
 
   void start_task_maze_search();
   void start_task_maze_solve(bool fast);
+
   void start_task_test_drive_straight();
   void start_task_test_drive_left_turn();
   void start_task_test_drive_right_turn();
   void start_task_test_gyro();
 
+  void start_task_armed();
+  void start_task_armed_triggering();
+  void start_task_armed_triggered();
+
+  //
+  // Process task functions.
+  //
+
   void process_current_task();
 
   void process_task_maze_search();
   void process_task_maze_solve(bool fast);
+
   void process_task_test_drive();
-  void process_armed();
+
+  void process_task_armed();
+  void process_task_armed_triggering();
+  void process_task_armed_triggered();
 
 private:
   void send_current_task();

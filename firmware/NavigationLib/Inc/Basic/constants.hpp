@@ -39,4 +39,12 @@ public:
 
     static constexpr float SENSING_SPOT_MM = CENTERED_MM + 55.f;
   };
+
+  class Vision {
+  public:
+    static constexpr float HAND_TRIGGER_TIME_S = 1.f;
+    static constexpr float HAND_TRIGGER_THRESHOLD_MM = 60.f;
+
+    // Wall trigger threshold is determined at runtime during calibration.
+  };
 };
