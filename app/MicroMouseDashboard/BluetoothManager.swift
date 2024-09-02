@@ -39,11 +39,12 @@ class BluetoothManager: NSObject, ObservableObject,
     
     struct VisionService {
       var serviceFound = false
-      var dataChar: CBCharacteristic?
+      var rawDataChar: CBCharacteristic?
+      var normalizedDataChar: CBCharacteristic?
       
       var isReady: Bool {
         get {
-          return serviceFound && dataChar != nil
+          return serviceFound && rawDataChar != nil && normalizedDataChar != nil
         }
       }
     }
@@ -118,22 +119,39 @@ class BluetoothManager: NSObject, ObservableObject,
   //
   
   struct VisionService {
-    var sensorData = Data([0, 0, 0, 0])
-    
-    var farRightReading: UInt8 {
-      get { return sensorData[0] }
+    var rawSensorData = Data([0, 0, 0, 0])
+    var normalizedSensorData = [Float32](repeating: 0, count: 4)
+
+    var rawFarRightReading: UInt8 {
+      get { return rawSensorData[0] }
     }
     
-    var midRightReading: UInt8 {
-      get { return sensorData[1] }
+    var rawMidRightReading: UInt8 {
+      get { return rawSensorData[1] }
     }
     
-    var midLeftReading: UInt8 {
-      get { return sensorData[2] }
+    var rawMidLeftReading: UInt8 {
+      get { return rawSensorData[2] }
     }
     
-    var farLeftReading: UInt8 {
-      get { return sensorData[3] }
+    var rawFarLeftReading: UInt8 {
+      get { return rawSensorData[3] }
+    }
+    
+    var farRightReading: Float32 {
+      get { return normalizedSensorData[0] }
+    }
+    
+    var midRightReading: Float32 {
+      get { return normalizedSensorData[1] }
+    }
+    
+    var midLeftReading: Float32 {
+      get { return normalizedSensorData[2] }
+    }
+    
+    var farLeftReading: Float32 {
+      get { return normalizedSensorData[3] }
     }
   }
   
@@ -299,10 +317,13 @@ class BluetoothManager: NSObject, ObservableObject,
           setNotify()
           
         // Vision service
-        case AppConstants.Bluetooth.VisionService.DataUUID: // Notify
-          connectionState.visionService.dataChar = ch
+        case AppConstants.Bluetooth.VisionService.RawDataUUID: // Notify
+          connectionState.visionService.rawDataChar = ch
           setNotify()
-          
+        case AppConstants.Bluetooth.VisionService.NormalizedDataUUID: // Notify
+          connectionState.visionService.normalizedDataChar = ch
+          setNotify()
+
         // Main service
         case AppConstants.Bluetooth.MainService.TaskUUID: // Write
           connectionState.mainService.taskChar = ch
@@ -353,9 +374,11 @@ class BluetoothManager: NSObject, ObservableObject,
       musicService.isPlaying = ch.value![0] == 1
       
     // Vision service
-    case AppConstants.Bluetooth.VisionService.DataUUID:
-      visionService.sensorData = ch.value![0..<4]
-      
+    case AppConstants.Bluetooth.VisionService.RawDataUUID:
+      visionService.rawSensorData = ch.value![0..<4]
+    case AppConstants.Bluetooth.VisionService.NormalizedDataUUID:
+      visionService.normalizedSensorData = getFloatValues(ch.value!, numValues: 4)
+
     // Main service
     case AppConstants.Bluetooth.MainService.TaskUUID:
       mainService.currentTask = ch.value![0]

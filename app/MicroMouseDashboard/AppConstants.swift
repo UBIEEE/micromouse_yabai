@@ -17,7 +17,8 @@ class AppConstants {
       static let ServiceUUID = CBUUID(string: "00000001-CC7A-482A-984A-7F2ED5B3E58F");
       
       // Characteristics (0005-0009)
-      static let DataUUID = CBUUID(string: "00000005-8E22-4541-9D4C-21EDAE82ED19"); // Notify
+      static let RawDataUUID = CBUUID(string: "00000005-8E22-4541-9D4C-21EDAE82ED19"); // Notify
+      static let NormalizedDataUUID = CBUUID(string: "00000006-8E22-4541-9D4C-21EDAE82ED19"); // Notify
     }
     
     class MainService {

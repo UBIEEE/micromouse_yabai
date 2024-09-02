@@ -110,6 +110,9 @@ void Vision::read_complete_handler() { m_adc_ready = true; }
 void Vision::send_feedback() {
   if (!m_enabled) return;
 
+  Custom_STM_App_Update_Char(CUSTOM_STM_VISION_RAWDATA_CHAR, m_readings);
+  Custom_STM_App_Update_Char(CUSTOM_STM_VISION_NORMALIZEDDATA_CHAR,
+                             (uint8_t*)m_distances);
 }
 
 #include "Basic/robot.hpp"
