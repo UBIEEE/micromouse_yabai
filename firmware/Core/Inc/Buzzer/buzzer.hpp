@@ -20,6 +20,10 @@ public:
     BEGIN_SEARCH,
     BEGIN_FAST_SOLVE,
     BEGIN_SLOW_SOLVE,
+    BEGIN_OTHER,
+
+    ARMED,
+    ARMED_TRIGGERING,
 
     _COUNT,
   };

@@ -98,6 +98,30 @@ static constexpr Note SONG_BEGIN_SLOW_SOLVE_NOTES[] = {
   NOTE_C_5, NOTE_C_5, NOTE_C_5, NOTE_D_6, NOTE_C_5, NOTE_D_6,
 };
 
+// Begin other tone.
+
+static constexpr uint16_t SONG_BEGIN_OTHER_NOTE_LENGTH_MS = 250;
+
+static constexpr Note SONG_BEGIN_OTHER_NOTES[] = {
+  NOTE_C_5, NOTE_C_5, NOTE_C_5, NOTE_C_5,
+};
+
+// Armed tone.
+
+static constexpr uint16_t SONG_ARMED_NOTE_LENGTH_MS = 250;
+
+static constexpr Note SONG_ARMED_NOTES[] = {
+  NOTE_G_4, REST, REST,
+};
+
+// Armed and triggering tone.
+
+static constexpr uint16_t SONG_ARMED_AND_TRIGGERING_NOTE_LENGTH_MS = 250;
+
+static constexpr Note SONG_ARMED_AND_TRIGGERING_NOTES[] = {
+  NOTE_C_5, REST,
+};
+
 const Buzzer::SongHandle Buzzer::m_songs[] = {
     // NONE
     {},
@@ -125,6 +149,15 @@ const Buzzer::SongHandle Buzzer::m_songs[] = {
 
     // BEGIN_SLOW_SOLVE
     {SONG_BEGIN_SLOW_SOLVE_NOTES, SONG_BEGIN_SLOW_SOLVE_NOTE_LENGTH_MS / ROBOT_UPDATE_PERIOD_MS},
+
+    // BEGIN_OTHER
+    {SONG_BEGIN_OTHER_NOTES, SONG_BEGIN_OTHER_NOTE_LENGTH_MS / ROBOT_UPDATE_PERIOD_MS},
+
+    // ARMED
+    {SONG_ARMED_NOTES, SONG_ARMED_NOTE_LENGTH_MS / ROBOT_UPDATE_PERIOD_MS},
+
+    // ARMED_AND_TRIGGERING
+    {SONG_ARMED_AND_TRIGGERING_NOTES, SONG_ARMED_AND_TRIGGERING_NOTE_LENGTH_MS / ROBOT_UPDATE_PERIOD_MS},
 };
 
 // clang-format on
