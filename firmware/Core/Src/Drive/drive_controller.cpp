@@ -42,8 +42,10 @@ void DriveController::process() {
   const auto linear_sample  = m_linear_profile.sample(linear_elapsed_s);
   const auto angular_sample = m_angular_profile.sample(angular_elapsed_s);
 
-  m_drive.control_speed_velocity(linear_sample.velocity,
-                                 angular_sample.velocity);
+  if (m_motion != Motion::NONE) {
+    m_drive.control_speed_velocity(linear_sample.velocity,
+                                  angular_sample.velocity);
+  }
 }
 
 void DriveController::process_turn(bool linear_done, bool angular_done) {
