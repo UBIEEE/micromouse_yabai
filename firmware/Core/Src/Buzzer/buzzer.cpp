@@ -55,8 +55,9 @@ void Buzzer::on_connect_send_feedback() {
   Custom_STM_App_Update_Char(CUSTOM_STM_MUSIC_ISPLAYING_CHAR, &m_is_playing);
 }
 
-void Buzzer::play_song(Song song) {
+void Buzzer::play_song(Song song, bool repeat) {
   m_song_handle = &m_songs[uint8_t(song)];
+  m_song_repeat = repeat;
   m_note_index  = 0;
   m_note_ticks  = 0;
   m_should_stop = false;
@@ -71,6 +72,14 @@ void Buzzer::set_note(uint32_t counter_period) {
 
 void Buzzer::end_song() {
   set_note(0);
+
+  if (m_song_repeat) {
+    m_note_index  = 0;
+    m_note_ticks  = 0;
+    m_should_stop = false;
+    return;
+  }
+
   if (m_song_handle != nullptr) {
     m_is_playing  = false;
     m_song_handle = nullptr;

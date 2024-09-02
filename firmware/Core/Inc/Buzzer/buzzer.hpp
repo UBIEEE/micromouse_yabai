@@ -35,6 +35,7 @@ private:
   static const SongHandle m_songs[uint8_t(Song::_COUNT)]; // songs.cpp
 
   const SongHandle* m_song_handle = nullptr;
+  bool m_song_repeat = false;
   uint16_t m_note_index           = 0;
   uint16_t m_note_ticks           = 0;
 
@@ -47,10 +48,13 @@ public:
   void on_connect_send_feedback() override;
 
   // Starts playing a song from the beginning.
-  void play_song(Song song);
+  void play_song(Song song, bool repeat = false);
 
   // Makes a song stop playing.
-  void quiet() { m_should_stop = true; }
+  void quiet() {
+    m_song_repeat = false;
+    m_should_stop = true;
+  }
 
   bool is_playing() const { return (m_song_handle != nullptr); }
 
