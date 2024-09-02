@@ -10,6 +10,7 @@ struct MainPage: View {
     case testDriveStraight  = 4
     case testDriveLeftTurn  = 5
     case testDriveRightTurn = 6
+    case testGyro           = 7
     
     var id: Self { self }
   }
@@ -21,6 +22,7 @@ struct MainPage: View {
     .testDriveStraight:  "TEST - Drive Straight",
     .testDriveLeftTurn:  "TEST - Left Turn",
     .testDriveRightTurn: "TEST - Right Turn",
+    .testGyro:           "TEST - Gyro",
   ]
   private let taskDescriptions: [Task: String] = [
     .mazeSearch: "Search to the center of the maze, then back to the start",
@@ -29,6 +31,7 @@ struct MainPage: View {
     .testDriveStraight: "Drive straight for 2 cell lengths at 500mm/s",
     .testDriveLeftTurn:  "Make a left turn",
     .testDriveRightTurn: "Make a right turn",
+    .testGyro: "Maintain a rotational velocity of 0 deg/s"
   ]
   
   @State private var selectedTask = Task.mazeSearch

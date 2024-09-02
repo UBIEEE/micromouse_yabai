@@ -126,6 +126,8 @@ void Robot::start_next_task() {
   // Start task.
 
   switch (m_task) {
+  case Task::NONE:
+    break;
   case Task::MAZE_SEARCH:
     start_task_maze_search();
     break;
@@ -135,8 +137,22 @@ void Robot::start_next_task() {
   case Task::MAZE_FAST_SOLVE:
     start_task_maze_solve(true);
     break;
-  default:
+  case Task::TEST_DRIVE_STRAIGHT:
+    start_task_test_drive_straight();
     break;
+  case Task::TEST_DRIVE_LEFT_TURN:
+    start_task_test_drive_left_turn();
+    break;
+  case Task::TEST_DRIVE_RIGHT_TURN:
+    start_task_test_drive_right_turn();
+    break;
+  case Task::TEST_GYRO:
+    start_task_test_gyro();
+    break;
+  case Task::ARMED:
+    break;
+  default:
+    ErrorManager::get().fatal_error(Error::UNREACHABLE);
   }
 
   send_current_task();
@@ -159,12 +175,17 @@ void Robot::start_task_maze_solve(bool fast) {
   m_navigator.solve_to(Maze::GOAL_ENDPOINTS, fast);
 }
 
-void Robot::start_task_test_gyro() { m_drive.control_speed_velocity(0.f, 0.f); }
+void Robot::start_task_test_drive_straight() {}
+void Robot::start_task_test_drive_left_turn() {}
+void Robot::start_task_test_drive_right_turn() {}
+
+void Robot::start_task_test_gyro() { m_drive.control_speed_velocity(0.f, 90.f); }
 
 void Robot::process_current_task() {
   switch (m_task) {
-  case Task::MAZE_SEARCH:
     using enum Task;
+  case NONE:
+    break;
   case MAZE_SEARCH:
     process_task_maze_search();
     break;
@@ -174,17 +195,17 @@ void Robot::process_current_task() {
   case MAZE_FAST_SOLVE:
     process_task_maze_solve(true);
     break;
-  case Task::ARMED:
   case TEST_DRIVE_STRAIGHT:
   case TEST_DRIVE_LEFT_TURN:
   case TEST_DRIVE_RIGHT_TURN:
+    process_task_test_drive();
+    break;
   case TEST_GYRO:
     break;
   case ARMED:
     process_armed();
     break;
   default:
-    break;
     ErrorManager::get().fatal_error(Error::UNREACHABLE);
   }
 }
@@ -212,6 +233,8 @@ void Robot::process_task_maze_search() {
     case GOAL_TO_START:
       end_task();
       return;
+    default:
+      ErrorManager::get().fatal_error(Error::UNREACHABLE);
     }
 
     m_navigator.search_to(next_target, m_flood_fill_solver);
@@ -234,6 +257,8 @@ void Robot::process_task_maze_solve(bool fast) {
     }
   }
 }
+
+void Robot::process_task_test_drive() {}
 
 void Robot::process_armed() {
   // TODO: Check vision sensors.

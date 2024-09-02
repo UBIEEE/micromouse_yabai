@@ -151,13 +151,16 @@ private:
 
   void start_task_maze_search();
   void start_task_maze_solve(bool fast);
+  void start_task_test_drive_straight();
+  void start_task_test_drive_left_turn();
+  void start_task_test_drive_right_turn();
   void start_task_test_gyro();
 
   void process_current_task();
 
   void process_task_maze_search();
   void process_task_maze_solve(bool fast);
-
+  void process_task_test_drive();
   void process_armed();
 
 private:
