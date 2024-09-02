@@ -26,7 +26,7 @@ static constexpr int8_t PWM_PERIOD = 20; // The resolution of the PWM.
 static constexpr float TRANSLATIONAL_KP = 0.0004616805171f;
 static constexpr float TRANSLATIONAL_KI = 0.0f;
 static constexpr float TRANSLATIONAL_KD = 0.0f;
-static constexpr float ANGULAR_KP       = 0.001f;
+static constexpr float ANGULAR_KP       = 0.05f;
 static constexpr float ANGULAR_KI       = 0.00025f;
 static constexpr float ANGULAR_KD       = 0.0f;
 
