@@ -1,6 +1,7 @@
 #include "Vision/vision.hpp"
 
 #include "custom_stm.h"
+#include <cmath>
 
 //
 // External variables.
@@ -49,7 +50,11 @@ void Vision::process() {
     // Turn off the emitter.
     set_emitter(m_sensor, GPIO_PIN_RESET);
 
-    m_readings[m_sensor] = m_raw_readings[m_sensor];
+    {
+      const uint8_t& reading = m_raw_readings[m_sensor];
+      m_readings[m_sensor]   = reading;
+      m_distances[m_sensor]  = calculate_distance_mm(float(reading));
+    }
 
     // Next sensor.
     m_sensor = static_cast<Sensor>((m_sensor + 1) % 4);
@@ -74,12 +79,37 @@ void Vision::set_emitter(Sensor sensor, GPIO_PinState state) {
   HAL_GPIO_WritePin(EMIT_PORTS[sensor], EMIT_PINS[sensor], state);
 }
 
+float Vision::calculate_distance_mm(const float& R) {
+  if (R < 1.5f) return std::numeric_limits<float>::infinity();
+
+  const float known_distance_mm = 115.f;
+  const float known_intensity   = 5.f;
+
+  const float K = known_intensity * 4 * (known_distance_mm * known_distance_mm);
+
+  // The light intensity emitted gets weaker as the distance increases (by the
+  // inverse square law). The distance is actually double, since it needs to
+  // travel away from the robot and back after being reflected.
+  //
+  // R = 1 / (2d)^2
+  //
+  // To solve for distance, use a known intensity and distance to solve for K.
+  //
+  // K = R * (2d)^2
+  //
+  // Solve for d.
+  //
+  // d = sqrt(K / (4 * R))
+  const float d = std::sqrt(K / (4.f * R));
+
+  return d;
+}
+
 void Vision::read_complete_handler() { m_adc_ready = true; }
 
 void Vision::send_feedback() {
   if (!m_enabled) return;
 
-  Custom_STM_App_Update_Char(CUSTOM_STM_VISION_DATA_CHAR, m_readings);
 }
 
 #include "Basic/robot.hpp"

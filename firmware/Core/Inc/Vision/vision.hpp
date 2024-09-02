@@ -18,6 +18,7 @@ public:
 private:
   uint8_t m_raw_readings[4]; // From ADC DMA.
   uint8_t m_readings[4];
+  float m_distances[4];
 
   Sensor m_sensor = Sensor::FAR_RIGHT;
 
@@ -38,10 +39,13 @@ public:
   void set_enabled(bool enabled) { m_enabled = enabled; };
   bool enabled() const { return m_enabled; };
 
-  float get_reading(Sensor sensor) const { return m_readings[sensor]; };
+  uint8_t get_raw_reading(Sensor sensor) const { return m_readings[sensor]; };
+  float get_distance_mm(Sensor sensor) const { return m_distances[sensor]; };
 
 private:
   void set_emitter(Sensor sensor, GPIO_PinState state);
+
+  static float calculate_distance_mm(const float& intensity_reading);
 
 private:
   friend void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef*);
