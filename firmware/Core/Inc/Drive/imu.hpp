@@ -56,7 +56,7 @@ public:
         _50_HZ   = 0b0000'1010,
         _25_HZ   = 0b0000'1011,
         _12_5_HZ = 0b0000'1100,
-      } sample_rate = Gyro::SampleRate::_800_HZ;
+      } sample_rate = Gyro::SampleRate::_50_HZ;
 
       //
       // PWR_MGMT0 register (Page 55).
@@ -97,7 +97,7 @@ public:
         _6_25_HZ   = 0b0000'1101, // LP mode
         _3_125_HZ  = 0b0000'1110, // LP mode
         _1_5625_HZ = 0b0000'1111, // LP mode
-      } sample_rate = Accelerometer::SampleRate::_800_HZ;
+      } sample_rate = Accelerometer::SampleRate::_50_HZ;
 
       //
       // PWR_MGMT0 register (Page 55).
