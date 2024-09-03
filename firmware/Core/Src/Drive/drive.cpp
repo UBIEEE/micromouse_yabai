@@ -229,6 +229,8 @@ void Drive::send_feedback() {
 
   Custom_STM_App_Update_Char(CUSTOM_STM_DRIVE_DATA_CHAR,
                              reinterpret_cast<uint8_t*>(&m_drive_data));
+
+  m_imu.send_readings();
 }
 
 void Drive::on_connect_send_feedback() {
