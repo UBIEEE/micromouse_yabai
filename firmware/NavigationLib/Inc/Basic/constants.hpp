@@ -4,7 +4,7 @@
 
 class Constants {
 public:
-  class RobotDimensions {
+  class RobotMeasurements {
   public:
     static constexpr float LENGTH_MM = 100.f;
     static constexpr float WIDTH_MM  = 70.f;
@@ -33,7 +33,7 @@ public:
   class RobotCellPositions {
   public:
     static constexpr float BACK_WALL_MM =
-        (RobotDimensions::CENTER_TO_BACK_MM + Cell::WALL_THICKNESS_MM);
+        (RobotMeasurements::CENTER_TO_BACK_MM + Cell::WALL_THICKNESS_MM);
 
     static constexpr float CENTERED_MM = Cell::WIDTH_MM / 2.f;
 

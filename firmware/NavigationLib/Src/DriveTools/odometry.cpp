@@ -8,7 +8,7 @@ using namespace drive;
 void Odometry::update(Pose& pose, const float& delta_left,
                       const float& delta_right) {
 
-  const float& b = Constants::RobotDimensions::TRACK_WIDTH_MM;
+  const float& b = Constants::RobotMeasurements::TRACK_WIDTH_MM;
 
   const float dist        = (delta_right + delta_left) / 2.f;
   const float delta_theta = (delta_right - delta_left) / b;

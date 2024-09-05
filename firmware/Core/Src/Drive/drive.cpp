@@ -177,7 +177,7 @@ void Drive::update_pid_controllers() {
   {
     const float w  = deg_to_rad(control_data.final_angular_dps);
     const float& v = control_data.target_linear_mmps;
-    const float& b = Constants::RobotDimensions::TRACK_WIDTH_MM;
+    const float& b = Constants::RobotMeasurements::TRACK_WIDTH_MM;
 
     const float v_r = v + (w * b) / 2.f;
     const float v_l = v - (w * b) / 2.f;

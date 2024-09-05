@@ -19,7 +19,7 @@ TEST(Odometry, TestUpdate) {
 
   const float ANGLE_90_DEG = std::numbers::pi_v<float> / 2.f;
   // s = θr
-  const float DIST_90_DEG = ANGLE_90_DEG * Constants::RobotDimensions::TRACK_WIDTH_MM;
+  const float DIST_90_DEG = ANGLE_90_DEG * Constants::RobotMeasurements::TRACK_WIDTH_MM;
 
   // Left 90 degree turn.
 
@@ -46,7 +46,7 @@ TEST(Odometry, TestUpdate) {
 
   const float ANGLE_180_DEG = std::numbers::pi_v<float>;
   // s = θr
-  const float DIST_180_DEG = ANGLE_180_DEG * Constants::RobotDimensions::TRACK_WIDTH_MM;
+  const float DIST_180_DEG = ANGLE_180_DEG * Constants::RobotMeasurements::TRACK_WIDTH_MM;
 
   // Left 360 degree turn (in place).
 
