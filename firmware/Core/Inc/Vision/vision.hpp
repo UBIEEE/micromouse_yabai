@@ -19,6 +19,7 @@ private:
   uint16_t m_raw_readings[4]; // From ADC DMA.
   float m_readings[4];
   float m_distances[4];
+  float m_adjusted_distances[4];
 
   Sensor m_sensor = Sensor::FAR_RIGHT;
 
@@ -44,6 +45,11 @@ public:
   // Distance to object directly in front of respective sensor.
   float get_distance_mm(Sensor sensor) const { return m_distances[sensor]; };
 
+  // Distance from the sensor to object (accounting for the sensor's angle).
+  float get_adjusted_distance_mm(Sensor sensor) const {
+    return m_adjusted_distances[sensor];
+  }
+
 private:
   void set_emitter(Sensor sensor, GPIO_PinState state);
 
@@ -54,6 +60,9 @@ private:
   // Intensity should range between 0 and 1 (1 being the maximum intensity
   // capable of being read).
   static float calculate_distance_mm(const float& intensity_reading);
+
+  // Adjusts a distance reading to account for the angle of the sensor.
+  static float adjust_distance_mm(const float& distance, Sensor sensor);
 
 private:
   friend void HAL_ADC_ConvCpltCallback(ADC_HandleTypeDef*);

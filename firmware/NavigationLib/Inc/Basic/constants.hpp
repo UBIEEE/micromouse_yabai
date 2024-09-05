@@ -14,6 +14,10 @@ public:
 
     // Distance between the left and right wheels.
     static constexpr float TRACK_WIDTH_MM = 50.4f;
+
+    // Angles clockwise from center forwards.
+    static constexpr float MID_PHOTOTRANSISTOR_ANGLE_DEG = 45.f;
+    static constexpr float FAR_PHOTOTRANSISTOR_ANGLE_DEG = 5.f;
   };
 
   class Maze {

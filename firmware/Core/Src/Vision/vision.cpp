@@ -54,6 +54,8 @@ void Vision::process() {
 
     m_readings[m_sensor] = m_raw_readings[m_sensor] / 1024.f; // 10-Bit reading.
     m_distances[m_sensor] = calculate_distance_mm(m_readings[m_sensor]);
+    m_adjusted_distances[m_sensor] =
+        adjust_distance_mm(m_distances[m_sensor], m_sensor);
 
     // Next sensor.
     m_sensor = static_cast<Sensor>((m_sensor + 1) % 4);
@@ -108,6 +110,19 @@ float Vision::calculate_distance_mm(const float& R) {
   return d;
 }
 
+float Vision::adjust_distance_mm(const float& distance, Sensor sensor) {
+  const float& sensor_angle_deg = [&sensor] {
+    if (sensor == FAR_RIGHT || sensor == FAR_LEFT) {
+      return Constants::RobotMeasurements::FAR_PHOTOTRANSISTOR_ANGLE_DEG;
+    }
+    return Constants::RobotMeasurements::MID_PHOTOTRANSISTOR_ANGLE_DEG;
+  }();
+
+  const float sensor_angle_rad = deg_to_rad(sensor_angle_deg);
+
+  return std::cos(sensor_angle_rad) * distance;
+}
+
 void Vision::read_complete_handler() { m_adc_ready = true; }
 
 void Vision::send_feedback() {
@@ -116,7 +131,7 @@ void Vision::send_feedback() {
   Custom_STM_App_Update_Char(CUSTOM_STM_VISION_RAWDATA_CHAR,
                              (uint8_t*)m_readings);
   Custom_STM_App_Update_Char(CUSTOM_STM_VISION_NORMALIZEDDATA_CHAR,
-                             (uint8_t*)m_distances);
+                             (uint8_t*)m_adjusted_distances);
 }
 
 #include "Basic/robot.hpp"
