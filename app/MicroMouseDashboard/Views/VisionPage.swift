@@ -32,7 +32,7 @@ struct VisionPage: View {
               .foregroundColor(.secondary)
           }
         }
-        Section("Raw Sensor Readings") {
+        Section("Raw Sensor Readings (% of Max Intensity)") {
           VStack(alignment: .leading) {
             Text("\(btManager.visionService.rawFarLeftReading)")
             Text("Left Edge")

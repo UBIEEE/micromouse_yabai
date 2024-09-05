@@ -83,7 +83,7 @@ typedef struct{
 /* Private variables ---------------------------------------------------------*/
 uint8_t SizeMusic_Playsong_Char = 1;
 uint8_t SizeMusic_Isplaying_Char = 1;
-uint8_t SizeVision_Rawdata_Char = 4;
+uint8_t SizeVision_Rawdata_Char = 4*4;
 uint8_t SizeVision_Normalizeddata_Char = 4*4;
 uint8_t SizeMain_Task_Char = 2;
 uint8_t SizeMain_Appready_Char = 1;

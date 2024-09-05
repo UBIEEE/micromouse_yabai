@@ -119,22 +119,22 @@ class BluetoothManager: NSObject, ObservableObject,
   //
   
   struct VisionService {
-    var rawSensorData = Data([0, 0, 0, 0])
+    var rawSensorData        = [Float32](repeating: 0, count: 4)
     var normalizedSensorData = [Float32](repeating: 0, count: 4)
 
-    var rawFarRightReading: UInt8 {
+    var rawFarRightReading: Float32 {
       get { return rawSensorData[0] }
     }
     
-    var rawMidRightReading: UInt8 {
+    var rawMidRightReading: Float32 {
       get { return rawSensorData[1] }
     }
     
-    var rawMidLeftReading: UInt8 {
+    var rawMidLeftReading: Float32 {
       get { return rawSensorData[2] }
     }
     
-    var rawFarLeftReading: UInt8 {
+    var rawFarLeftReading: Float32 {
       get { return rawSensorData[3] }
     }
     
@@ -375,7 +375,7 @@ class BluetoothManager: NSObject, ObservableObject,
       
     // Vision service
     case AppConstants.Bluetooth.VisionService.RawDataUUID:
-      visionService.rawSensorData = ch.value![0..<4]
+      visionService.rawSensorData = getFloatValues(ch.value!, numValues: 4)
     case AppConstants.Bluetooth.VisionService.NormalizedDataUUID:
       visionService.normalizedSensorData = getFloatValues(ch.value!, numValues: 4)
 

@@ -16,8 +16,8 @@ public:
   };
 
 private:
-  uint8_t m_raw_readings[4]; // From ADC DMA.
-  uint8_t m_readings[4];
+  uint16_t m_raw_readings[4]; // From ADC DMA.
+  float m_readings[4];
   float m_distances[4];
 
   Sensor m_sensor = Sensor::FAR_RIGHT;
@@ -40,11 +40,19 @@ public:
   bool enabled() const { return m_enabled; };
 
   uint8_t get_raw_reading(Sensor sensor) const { return m_readings[sensor]; };
+
+  // Distance to object directly in front of respective sensor.
   float get_distance_mm(Sensor sensor) const { return m_distances[sensor]; };
 
 private:
   void set_emitter(Sensor sensor, GPIO_PinState state);
 
+  // Compensate for the inverse square law and calculate the distance to an
+  // object based on the intensity of light received back from the
+  // phototransistor.
+  //
+  // Intensity should range between 0 and 1 (1 being the maximum intensity
+  // capable of being read).
   static float calculate_distance_mm(const float& intensity_reading);
 
 private:

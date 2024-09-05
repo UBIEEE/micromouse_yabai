@@ -1,5 +1,7 @@
 #include "Vision/vision.hpp"
 
+#include "Basic/constants.hpp"
+#include "Utilities/math.hpp"
 #include "custom_stm.h"
 #include <cmath>
 
@@ -50,11 +52,8 @@ void Vision::process() {
     // Turn off the emitter.
     set_emitter(m_sensor, GPIO_PIN_RESET);
 
-    {
-      const uint8_t& reading = m_raw_readings[m_sensor];
-      m_readings[m_sensor]   = reading;
-      m_distances[m_sensor]  = calculate_distance_mm(float(reading));
-    }
+    m_readings[m_sensor] = m_raw_readings[m_sensor] / 1024.f; // 10-Bit reading.
+    m_distances[m_sensor] = calculate_distance_mm(m_readings[m_sensor]);
 
     // Next sensor.
     m_sensor = static_cast<Sensor>((m_sensor + 1) % 4);
@@ -80,12 +79,13 @@ void Vision::set_emitter(Sensor sensor, GPIO_PinState state) {
 }
 
 float Vision::calculate_distance_mm(const float& R) {
-  if (R < 1.5f) return std::numeric_limits<float>::infinity();
+  if (R < 0.001f) return std::numeric_limits<float>::infinity();
 
-  const float known_distance_mm = 115.f;
-  const float known_intensity   = 5.f;
-
-  const float K = known_intensity * 4 * (known_distance_mm * known_distance_mm);
+  // Measurements:
+  // 120mm: 0.047852
+  // 160mm: 0.027344
+  const float known_distance_mm = 120.f;
+  const float known_intensity   = 0.047852f;
 
   // The light intensity emitted gets weaker as the distance increases (by the
   // inverse square law). The distance is actually double, since it needs to
@@ -100,6 +100,9 @@ float Vision::calculate_distance_mm(const float& R) {
   // Solve for d.
   //
   // d = sqrt(K / (4 * R))
+
+  const float K = known_intensity * 4 * (known_distance_mm * known_distance_mm);
+
   const float d = std::sqrt(K / (4.f * R));
 
   return d;
@@ -110,7 +113,8 @@ void Vision::read_complete_handler() { m_adc_ready = true; }
 void Vision::send_feedback() {
   if (!m_enabled) return;
 
-  Custom_STM_App_Update_Char(CUSTOM_STM_VISION_RAWDATA_CHAR, m_readings);
+  Custom_STM_App_Update_Char(CUSTOM_STM_VISION_RAWDATA_CHAR,
+                             (uint8_t*)m_readings);
   Custom_STM_App_Update_Char(CUSTOM_STM_VISION_NORMALIZEDDATA_CHAR,
                              (uint8_t*)m_distances);
 }
