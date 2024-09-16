@@ -107,3 +107,26 @@ Direction Maze::smallest_neighbor(Coordinate center_coord) const {
 
   return smallest;
 }
+
+bool Maze::path_between_cells(Coordinate from, Coordinate to) {
+  if (from < 0 || to < 0 || from > Constants::Maze::TOTAL_CELLS ||
+      to > Constants::Maze::TOTAL_CELLS) {
+    return false
+  }
+  Cell fromCell = this->cell(from);
+  Cell toCell   = this->cell(to);
+
+  if ((from == to + 1) && (~fromCell.is_west() & ~toCell.is_east())) {
+    return true;
+  } else if ((from == to - 1) && (~fromCell.is_east() & ~toCell.is_west())) {
+    return true;
+  } else if ((from == to + Constants::Maze::WIDTH_CELLS) &&
+             (~fromCell.is_north() & ~toCell.is_south())) {
+    return true;
+  } else if ((from == to - Constants::Maze::WIDTH_CELLS)) && (~fromCell.is_south() & ~toCell.is_north())) {
+      return true;
+  }
+  else {
+    return false;
+  }
+}

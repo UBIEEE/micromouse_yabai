@@ -1,0 +1,16 @@
+{
+  "ExpandedNodes": [
+    "",
+    "\\firmware",
+    "\\firmware\\NavigationLib",
+    "\\firmware\\NavigationLib\\Inc",
+    "\\firmware\\NavigationLib\\Inc\\Maze",
+    "\\firmware\\NavigationLib\\Inc\\Solver",
+    "\\firmware\\NavigationLib\\Src",
+    "\\firmware\\NavigationLib\\Src\\DriveTools",
+    "\\firmware\\NavigationLib\\Src\\Maze",
+    "\\firmware\\NavigationLib\\Src\\Solver"
+  ],
+  "SelectedNode": "\\firmware\\NavigationLib\\Inc\\Maze\\coordinate.hpp",
+  "PreviewInSolutionExplorer": false
+}

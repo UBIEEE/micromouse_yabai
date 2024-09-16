@@ -151,7 +151,10 @@ public:
     m_cell_values[coord] = value;
   }
 
+
+
   Direction smallest_neighbor(Coordinate coord) const;
+  bool path_between_cells(Coordinate from, Coordinate to);
 
 private:
   // Places walls around the perimeter of the maze.
